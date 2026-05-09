@@ -33,20 +33,22 @@ header .user-info span { font-size: 0.9em; opacity: 0.9; }
 .login-footer a { color: #1a237e; cursor: pointer; text-decoration: underline; }
 
 .dashboard { max-width: 1400px; margin: 20px auto; padding: 0 20px; }
-.dashboard-header { display: flex; gap: 12px; margin-bottom: 25px; flex-wrap: wrap; align-items: center; }
-.search-box { flex: 1; min-width: 250px; display: flex; gap: 10px; }
-.search-box input { flex: 1; padding: 10px 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.95em; }
+.dashboard-header { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+.dashboard-header .toolbar-row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.dashboard-header .toolbar-row.toolbar-buttons { gap: 4px; }
+.search-box { flex: 1; min-width: 200px; display: flex; gap: 6px; }
+.search-box input { flex: 1; padding: 7px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.85em; }
 .search-box input:focus { outline: none; border-color: #1a237e; }
-.btn-search, .btn-add { padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-size: 0.9em; transition: all 0.3s; }
+.btn-search, .btn-add { padding: 7px 14px; border: none; border-radius: 6px; cursor: pointer; font-size: 0.82em; transition: all 0.3s; white-space: nowrap; }
 .btn-search { background: #1a237e; color: white; }
-.btn-add { background: #2e7d32; color: white; white-space: nowrap; }
+.btn-add { background: #2e7d32; color: white; }
 .btn-search:hover { opacity: 0.9; }
 .btn-add:hover { opacity: 0.9; }
-.btn-action { background: #1565c0; color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-size: 0.9em; white-space: nowrap; transition: all 0.3s; }
+.btn-action { color: white; padding: 5px 10px; border: none; border-radius: 5px; cursor: pointer; font-size: 0.78em; white-space: nowrap; transition: all 0.3s; }
 .btn-action:hover { opacity: 0.9; }
-.btn-emergency { background: #c62828; color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-size: 0.9em; white-space: nowrap; transition: all 0.3s; }
+.btn-emergency { color: white; padding: 5px 10px; border: none; border-radius: 5px; cursor: pointer; font-size: 0.78em; white-space: nowrap; transition: all 0.3s; }
 .btn-emergency:hover { opacity: 0.9; }
-.archive-toggle { background: #6a1b9a; color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-size: 0.9em; white-space: nowrap; transition: all 0.3s; }
+.archive-toggle { background: #6a1b9a; color: white; padding: 5px 10px; border: none; border-radius: 5px; cursor: pointer; font-size: 0.78em; white-space: nowrap; transition: all 0.3s; }
 .archive-toggle:hover { opacity: 0.9; }
 .archive-toggle.active { background: #e65100; }
 
@@ -268,7 +270,7 @@ tr:last-child td { border-bottom: none; }
 
 /* ===== PRINT ===== */
 @media print {
-  header, .dashboard-header, .tabs, .btn-edit, .btn-view, .btn-archive, .btn-small, .btn-action, .btn-emergency, .btn-add, .archive-toggle, #btnDoctorConfig { display: none !important; }
+  header, .dashboard-header, .toolbar-row, .tabs, .btn-edit, .btn-view, .btn-archive, .btn-small, .btn-action, .btn-emergency, .btn-add, .archive-toggle, #btnDoctorConfig { display: none !important; }
   .patient-detail { display: block !important; }
   .tab-pane { display: block !important; }
   .tab-content { box-shadow: none; padding: 10px 0; }
@@ -323,22 +325,26 @@ tr:last-child td { border-bottom: none; }
 <!-- DASHBOARD -->
 <div class="dashboard hidden" id="dashboardContainer">
   <div class="dashboard-header">
-    <div class="search-box">
-      <input type="text" id="searchInput" placeholder="Buscar por nombre, apellidos o DNI..." onkeydown="if(event.key==='Enter')searchPatients()">
-      <button class="btn-search" onclick="searchPatients()">Buscar</button>
+    <div class="toolbar-row">
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Buscar por nombre, apellidos o DNI..." onkeydown="if(event.key==='Enter')searchPatients()">
+        <button class="btn-search" onclick="searchPatients()">Buscar</button>
+      </div>
+      <button class="btn-add" onclick="openNewPatient()">+ Nuevo paciente</button>
+      <button class="btn-action" style="background:#1565c0;" onclick="showPublicSearch()">&#x1f50d; Búsqueda pública</button>
+      <button class="archive-toggle" id="archiveToggleBtn" onclick="toggleArchived()">&#x1f4c2; Archivados</button>
     </div>
-    <button class="btn-add" onclick="openNewPatient()">+ Nuevo paciente</button>
-    <button class="btn-action" onclick="showPublicSearch()">&#x1f50d; Búsqueda pública</button>
-    <button class="btn-emergency" onclick="showEmergencySection()">&#x1f691; Informes de emergencia</button>
-    <button class="btn-emergency" style="background:#b71c1c;" onclick="openQuickEmergency()">&#x26a1; Emergencia rápida</button>
-    <button class="btn-action" style="background:#1565c0;" onclick="showStats()">&#x1f4ca; Estadísticas</button>
-    <button class="btn-action" style="background:#6a1b9a;" onclick="showInternalNotes()">&#x1f4dd; Notas internas</button>
-    <button class="btn-action" style="background:#00695c;" onclick="showInventory()">&#x1f4e6; Insumos</button>
-    <button class="btn-action" style="background:#37474f;" onclick="showProtocols()">&#x1fa7a; Protocolos</button>
-    <button class="btn-action" style="background:#4a148c;" onclick="showCalendar()">&#x1f4c5; Guardias</button>
-    <button class="btn-action" style="background:#f57c00;" id="btnDoctorConfig" onclick="showDoctorConfig()">&#x2699; Médicos</button>
-    <button class="btn-action" style="background:#455a64;" onclick="showBackup()">&#x1f4be; Respaldo</button>
-    <button class="archive-toggle" id="archiveToggleBtn" onclick="toggleArchived()">&#x1f4c2; Ver archivados</button>
+    <div class="toolbar-row toolbar-buttons">
+      <button class="btn-emergency" style="background:#c62828;" onclick="showEmergencySection()">&#x1f691; Emergencias</button>
+      <button class="btn-emergency" style="background:#b71c1c;" onclick="openQuickEmergency()">&#x26a1; Emergencia rápida</button>
+      <button class="btn-action" style="background:#1a237e;" onclick="showStats()">&#x1f4ca; Stats</button>
+      <button class="btn-action" style="background:#6a1b9a;" onclick="showInternalNotes()">&#x1f4dd; Notas</button>
+      <button class="btn-action" style="background:#00695c;" onclick="showInventory()">&#x1f4e6; Insumos</button>
+      <button class="btn-action" style="background:#37474f;" onclick="showProtocols()">&#x1fa7a; Protocolos</button>
+      <button class="btn-action" style="background:#4a148c;" onclick="showCalendar()">&#x1f4c5; Guardias</button>
+      <button class="btn-action" style="background:#f57c00;" id="btnDoctorConfig" onclick="showDoctorConfig()">&#x2699; Médicos</button>
+      <button class="btn-action" style="background:#455a64;" onclick="showBackup()">&#x1f4be; Respaldo</button>
+    </div>
   </div>
 
   <!-- Patient List View -->
@@ -353,13 +359,13 @@ tr:last-child td { border-bottom: none; }
 
   <!-- Emergency Reports Section -->
   <div id="emergencySectionView" style="display:none;">
-    <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;align-items:center;">
-      <div class="search-box" style="max-width:400px;">
+    <div class="toolbar-row" style="margin-bottom:15px;">
+      <div class="search-box" style="max-width:350px;">
         <input type="text" id="emergSearchInput" placeholder="Buscar por paciente o DNI..." onkeydown="if(event.key==='Enter')searchEmergencies()">
         <button class="btn-search" onclick="searchEmergencies()">Buscar</button>
       </div>
-      <button class="btn-emergency" onclick="openNewEmergency()">+ Nuevo informe</button>
-      <button class="btn-emergency" style="background:#b71c1c;" onclick="openQuickEmergency()">&#x26a1; Emergencia rápida</button>
+      <button class="btn-emergency" style="background:#c62828;padding:7px 14px;font-size:0.82em;" onclick="openNewEmergency()">+ Nuevo informe</button>
+      <button class="btn-emergency" style="background:#b71c1c;padding:7px 14px;font-size:0.82em;" onclick="openQuickEmergency()">&#x26a1; Emergencia rápida</button>
     </div>
     <div class="table-container">
       <h3>&#x1f691; Informes de atención de emergencia</h3>
