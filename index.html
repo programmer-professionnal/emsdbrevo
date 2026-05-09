@@ -668,6 +668,7 @@ function renderPatientList(patients) {
   let html = '<table><thead><tr><th>DNI</th><th>Nombre</th><th>Teléfono</th><th>Acciones</th></tr></thead><tbody>';
   patients.forEach(p => {
     const isArchived = p.archived;
+    const isLVargas = currentDoctor && currentDoctor.username === 'LVargas';
     html += '<tr class="' + (isArchived ? 'archived-row' : '') + '">' +
       '<td>' + escHtml(p.citizenNumber) + (isArchived ? ' &#x1f4c2;' : '') + '</td>' +
       '<td><strong>' + escHtml(p.firstName + ' ' + p.lastName) + '</strong>' + (isArchived ? ' <span style="color:#999;font-size:0.8em;">(archivado)</span>' : '') + '</td>' +
@@ -676,7 +677,8 @@ function renderPatientList(patients) {
         '<button class="btn-view" onclick="viewPatient(' + p.id + ')">Ver</button>' +
         '<button class="btn-edit" onclick="editPatient(' + p.id + ')">Editar</button>' +
         (isArchived
-          ? '<button class="btn-archive" onclick="restorePatient(' + p.id + ')">Restaurar</button>'
+          ? '<button class="btn-archive" onclick="restorePatient(' + p.id + ')">Restaurar</button>' +
+            (isLVargas ? '<button class="btn-archive" style="background:#ffebee;color:#d32f2f;" onclick="deletePatient(' + p.id + ')">Eliminar</button>' : '')
           : '<button class="btn-archive" onclick="archivePatient(' + p.id + ')">Archivar</button>') +
       '</td>' +
       '</tr>';
@@ -700,6 +702,22 @@ function restorePatient(id) {
   const p = data.patients.find(x => x.id === id);
   if (p) { p.archived = false; addAuditLog('Paciente ' + p.firstName + ' ' + p.lastName + ' restaurado'); }
   saveData(data);
+  searchPatients();
+}
+
+function deletePatient(id) {
+  if (!currentDoctor || currentDoctor.username !== 'LVargas') { alert('Solo el Dr. Lucas Vargas puede eliminar expedientes definitivamente.'); return; }
+  if (!confirm('¿Eliminar PERMANENTEMENTE este expediente? Esta acción no se puede deshacer.')) return;
+  const data = getData();
+  const p = data.patients.find(x => x.id === id);
+  if (!p) return;
+  addAuditLog('Paciente ELIMINADO: ' + p.firstName + ' ' + p.lastName + ' (DNI: ' + p.citizenNumber + ')');
+  data.patients = data.patients.filter(x => x.id !== id);
+  if (data.emergencyReports) {
+    data.emergencyReports = data.emergencyReports.filter(function(r) { return r.patientId !== id; });
+  }
+  saveData(data);
+  if (currentPatientId === id) { currentPatientId = null; showDashboard(); }
   searchPatients();
 }
 
