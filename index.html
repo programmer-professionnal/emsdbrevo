@@ -367,12 +367,21 @@ async function loadDataFromFirebase() {
 }
 
 function getData() {
-  if (dataCache) return dataCache;
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if (raw) {
-    try { dataCache = JSON.parse(raw); return dataCache; } catch(e) {}
+  if (!dataCache) {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      try { dataCache = JSON.parse(raw); } catch(e) {}
+    }
+    if (!dataCache) {
+      dataCache = { doctors: [], patients: [], nextPatientId: 1, nextDoctorId: 1, nextEmergencyId: 1 };
+    }
   }
-  dataCache = { doctors: [], patients: [], nextPatientId: 1, nextDoctorId: 1, nextEmergencyId: 1 };
+  if (!dataCache.patients) dataCache.patients = [];
+  if (!dataCache.doctors) dataCache.doctors = [];
+  if (!dataCache.nextPatientId) dataCache.nextPatientId = 1;
+  if (!dataCache.nextDoctorId) dataCache.nextDoctorId = 1;
+  if (!dataCache.nextEmergencyId) dataCache.nextEmergencyId = 1;
+  if (!dataCache.emergencyReports) dataCache.emergencyReports = [];
   return dataCache;
 }
 
