@@ -1,8 +1,12 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1a237e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>RevoRP SAMS - Sistema de Atención Médica</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
@@ -414,6 +418,67 @@ body { background: var(--bg); color: var(--text); }
   .public-search-box .search-row { flex-direction: column; }
   .form-row { flex-direction: column; gap: 0; }
 }
+
+/* ===== FACTURAS MÉDICAS ===== */
+.inv-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+.inv-card .inv-info { flex: 1; }
+.inv-card .inv-patient { font-weight: 600; font-size: 0.9em; color: var(--text); }
+.inv-card .inv-date { font-size: 0.78em; color: var(--text-muted); }
+.inv-card .inv-amount { font-size: 1.1em; font-weight: 700; color: #1a237e; }
+.inv-status { display: inline-block; padding: 2px 10px; border-radius: 10px; font-size: 0.72em; font-weight: 600; }
+.inv-emitida { background: #fff3e0; color: #f57c00; }
+.inv-pagada { background: #e8f5e9; color: #2e7d32; }
+.inv-cancelada { background: #ffebee; color: #d32f2f; }
+
+/* ===== ÓRDENES DE LABORATORIO ===== */
+.lab-card { background: var(--item-bg); border-radius: 8px; padding: 12px 15px; margin-bottom: 8px; border-left: 3px solid #00695c; }
+.lab-card .lab-date { color: #00695c; font-weight: 600; font-size: 0.82em; }
+.lab-card .lab-test { font-weight: 600; font-size: 0.9em; color: var(--text); margin: 4px 0; }
+.lab-result { display: inline-block; padding: 2px 10px; border-radius: 4px; font-size: 0.78em; font-weight: 600; }
+.lab-normal { background: #e8f5e9; color: #2e7d32; }
+.lab-anormal { background: #ffebee; color: #d32f2f; }
+.lab-pendiente { background: #fff3e0; color: #f57c00; }
+
+/* ===== PORTAL PACIENTE ===== */
+.portal-login { max-width: 400px; margin: 60px auto; background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); padding: 40px; text-align: center; }
+.portal-login h2 { color: #1a237e; margin-bottom: 10px; }
+.portal-login .subtitle { color: #666; margin-bottom: 25px; font-size: 0.85em; }
+.portal-login .form-group { text-align: left; }
+.portal-view { max-width: 900px; margin: 20px auto; padding: 0 20px; }
+.portal-header { background: linear-gradient(135deg, #1a237e, #0d47a1); color: white; border-radius: 12px; padding: 30px; margin-bottom: 20px; }
+.portal-header h2 { margin: 0 0 5px; font-size: 1.3em; }
+.portal-header p { opacity: 0.85; font-size: 0.85em; }
+.portal-section { background: var(--card-bg); border-radius: 12px; padding: 20px; margin-bottom: 16px; box-shadow: 0 2px 10px var(--card-shadow); }
+.portal-section h3 { color: var(--text); font-size: 1em; margin-bottom: 12px; border-bottom: 2px solid var(--border); padding-bottom: 8px; }
+.portal-section .item { background: var(--item-bg); border-radius: 8px; padding: 10px 14px; margin-bottom: 6px; font-size: 0.85em; }
+.portal-section .item .item-date { color: #1a237e; font-weight: 600; font-size: 0.82em; }
+.portal-btn-back { background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 8px 18px; border-radius: 6px; cursor: pointer; font-size: 0.85em; }
+
+/* ===== FÁRMACOS DB ===== */
+.drug-search { margin-bottom: 12px; }
+.drug-search input { width: 100%; padding: 10px 14px; border: 1px solid var(--input-border); border-radius: 8px; font-size: 0.9em; background: var(--input-bg); color: var(--text); }
+.drug-list { max-height: 400px; overflow-y: auto; }
+.drug-item { padding: 10px 14px; border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.15s; }
+.drug-item:hover { background: var(--hover-bg); }
+.drug-item .drug-name { font-weight: 600; color: var(--text); font-size: 0.9em; }
+.drug-item .drug-generic { font-size: 0.78em; color: var(--text-muted); }
+.drug-item .drug-dose { font-size: 0.82em; color: var(--text-secondary); margin-top: 2px; }
+.drug-item .drug-cat { display: inline-block; background: #e8eaf6; color: #1a237e; padding: 1px 8px; border-radius: 4px; font-size: 0.7em; font-weight: 600; margin-top: 3px; }
+.drug-count { font-size: 0.82em; color: var(--text-muted); margin-bottom: 8px; }
+
+/* ===== CHART.JS ===== */
+.chart-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 15px 0; }
+.chart-box { background: var(--item-bg); border-radius: 10px; padding: 12px; }
+.chart-box h5 { color: var(--text-secondary); font-size: 0.82em; margin-bottom: 8px; text-align: center; }
+.chart-box canvas { width: 100% !important; max-height: 180px; }
+@media (max-width: 768px) { .chart-row { grid-template-columns: 1fr; } }
+
+/* ===== INTERACCIONES ===== */
+.interaction-warning { background: #ffebee; border: 1px solid #d32f2f; border-radius: 6px; padding: 12px; margin-bottom: 12px; }
+.interaction-warning .int-severity { display: inline-block; padding: 1px 10px; border-radius: 4px; font-size: 0.75em; font-weight: 700; }
+.int-grave { background: #d32f2f; color: white; }
+.int-moderada { background: #f57c00; color: white; }
+.int-leve { background: #fdd835; color: #333; }
 </style>
 </head>
 <body>
@@ -472,6 +537,9 @@ body { background: var(--bg); color: var(--text); }
       <button class="btn-action" style="background:#4a148c;" onclick="showCalendar()">&#x1f4c5; Guardias</button>
       <button class="btn-action" style="background:#f57c00;" id="btnDoctorConfig" onclick="showDoctorConfig()">&#x2699; Médicos</button>
       <button class="btn-action" style="background:#455a64;" onclick="showBackup()">&#x1f4be; Respaldo</button>
+      <button class="btn-action" style="background:#0d47a1;" onclick="showInvoices()">&#x1f4b0; Facturas</button>
+      <button class="btn-action" style="background:#00695c;" onclick="showDrugDB()">&#x1f48a; Fármacos</button>
+      <button class="btn-action" style="background:#4a148c;" onclick="showPatientPortal()">&#x1f465; Portal Paciente</button>
     </div>
   </div>
 
@@ -541,6 +609,8 @@ body { background: var(--bg); color: var(--text); }
       <button class="tab" data-tab="appointments" onclick="switchTab('appointments')">Citas</button>
       <button class="tab" data-tab="emergency" onclick="switchTab('emergency')" style="color:#c62828;">&#x1f691; Emergencias</button>
       <button class="tab" data-tab="timeline" onclick="switchTab('timeline')">&#x1f4c8; Línea de tiempo</button>
+      <button class="tab" data-tab="laborders" onclick="switchTab('laborders')" style="color:#00695c;">&#x1f9ea; Laboratorio</button>
+      <button class="tab" data-tab="invoices" onclick="switchTab('invoices')" style="color:#0d47a1;">&#x1f4b0; Facturas</button>
     </div>
 
     <div class="tab-content">
@@ -579,6 +649,18 @@ body { background: var(--bg); color: var(--text); }
         </div>
         <div id="timelineContainer"><div class="no-data">Seleccione un paciente para ver su historial.</div></div>
       </div>
+      <div class="tab-pane" id="tab-laborders">
+        <h4>&#x1f9ea; Órdenes de laboratorio
+          <button class="btn-small btn-small-add" onclick="openAddLabOrder()">+ Nueva orden</button>
+        </h4>
+        <div id="labOrdersList"><div class="no-data">Sin órdenes de laboratorio.</div></div>
+      </div>
+      <div class="tab-pane" id="tab-invoices">
+        <h4>&#x1f4b0; Facturas
+          <button class="btn-small btn-small-add" onclick="openAddInvoiceForPatient()" style="background:#0d47a1;">+ Nueva factura</button>
+        </h4>
+        <div id="patientInvoicesList"><div class="no-data">Sin facturas registradas.</div></div>
+      </div>
     </div>
   </div>
 </div>
@@ -596,6 +678,35 @@ body { background: var(--bg); color: var(--text); }
   </div>
   <div class="doctor-login-link">
     <a onclick="showLogin()">&#x1f512; Acceso para médicos</a>
+  </div>
+</div>
+
+<!-- PATIENT PORTAL -->
+<div class="public-container hidden" id="portalContainer">
+  <div id="portalLoginView">
+    <div class="portal-login">
+      <h2>&#x1f465; Portal del Paciente</h2>
+      <p class="subtitle">Ingrese su DNI y fecha de nacimiento para consultar su expediente</p>
+      <div class="form-group" style="text-align:left;">
+        <label for="portalDNI">DNI / Nº Ciudadano</label>
+        <input type="text" id="portalDNI" placeholder="Ej: 123456" onkeydown="if(event.key==='Enter')doPortalLogin()">
+      </div>
+      <div class="form-group" style="text-align:left;">
+        <label for="portalBirth">Fecha de nacimiento</label>
+        <input type="date" id="portalBirth" onkeydown="if(event.key==='Enter')doPortalLogin()">
+      </div>
+      <button class="btn-primary" onclick="doPortalLogin()">Consultar expediente</button>
+      <div class="login-error" id="portalError"></div>
+      <div class="doctor-login-link" style="margin-top:20px;">
+        <a onclick="showLogin()">&#x1f512; Acceso para médicos</a> | <a onclick="showPublicSearch()">&#x1f50d; Búsqueda sin login</a>
+      </div>
+    </div>
+  </div>
+  <div id="portalPatientView" class="hidden">
+    <div style="text-align:right;margin-bottom:10px;">
+      <button class="btn-logout" onclick="showPatientPortal()" style="color:#1a237e;background:#e8eaf6;border-color:#1a237e;">Cerrar sesión</button>
+    </div>
+    <div id="portalPatientContent"></div>
   </div>
 </div>
 
@@ -617,6 +728,7 @@ body { background: var(--bg); color: var(--text); }
 
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 <script>
 // ===== CONFIGURACIÓN DE FIREBASE =====
 // Los valores reales se inyectan automáticamente mediante GitHub Actions.
@@ -736,10 +848,13 @@ function getData() {
   if (!dataCache.missionNextId) dataCache.missionNextId = 1;
   if (!dataCache.followUpNextId) dataCache.followUpNextId = 1;
   if (!dataCache.triageNextId) dataCache.triageNextId = 1;
+  if (!dataCache.invoices) dataCache.invoices = [];
+  if (!dataCache.invoiceNextId) dataCache.invoiceNextId = 1;
   dataCache.patients.forEach(function(p) {
     if (p.insuranceProvider === undefined) p.insuranceProvider = '';
     if (p.insuranceNumber === undefined) p.insuranceNumber = '';
     if (p.coverageType === undefined) p.coverageType = '';
+    if (!p.labOrders) p.labOrders = [];
   });
   (dataCache.emergencyReports || []).forEach(function(r) {
     if (r.createdAt === undefined) r.createdAt = r.date ? new Date(r.date + 'T' + (r.time || '00:00')).toISOString() : new Date().toISOString();
@@ -1412,6 +1527,7 @@ function viewEmergency(id) {
     (r.treatment ? '<p><strong>Tratamiento aplicado:</strong> ' + escHtml(r.treatment) + '</p>' : '') +
     outcomeHtml + derivationHtml +
     (r.observations ? '<p><strong>Observaciones:</strong> ' + escHtml(r.observations) + '</p>' : '') +
+    (r.signedConsent ? '<p style="margin-top:8px;"><span style="display:inline-block;background:#e8f5e9;color:#2e7d32;padding:2px 10px;border-radius:4px;font-weight:600;">✓ Firmado digitalmente</span> <span style="font-size:0.82em;color:#666;">por ' + escHtml(r.signedConsent.doctor) + ' el ' + escHtml(r.signedConsent.date ? r.signedConsent.date.split('T')[0] : '') + '</span></p>' : '<p style="margin-top:8px;"><span style="display:inline-block;background:#fff3e0;color:#e65100;padding:2px 10px;border-radius:4px;font-weight:600;">✗ Sin firma digital</span></p>') +
     '<p style="font-size:0.85em;color:#999;margin-top:8px;">Atendido por: ' + escHtml(r.doctor) + '</p></div>';
   openModal('Informe de emergencia', html, null);
 }
@@ -1659,6 +1775,14 @@ function saveEmergencyModal() {
     var savedId = editingEmergencyId || (data.emergencyReports[data.emergencyReports.length - 1].id);
     processEmergencyFollowUp(savedId, patientId, followUpDate.value);
   }
+  // Digital signature
+  var sigCb = document.getElementById('fEmergSigned');
+  if (sigCb && sigCb.checked && currentDoctor) {
+    var targetR = editingEmergencyId ? (data.emergencyReports || []).find(x => x.id === editingEmergencyId) : data.emergencyReports[data.emergencyReports.length - 1];
+    if (targetR) {
+      targetR.signedConsent = { doctor: currentDoctor.name, date: new Date().toISOString() };
+    }
+  }
   saveData(data);
   closeModal();
   searchEmergencies();
@@ -1715,6 +1839,7 @@ function editEmergency(id) {
     '</select></div>' +
     '<div class="form-group"><label><input type="checkbox" id="fEmergFollowUp"' + (r.requiresFollowUp ? ' checked' : '') + '> Requiere seguimiento</label></div>' +
     '<div class="form-group" id="fEmergFollowUpDateGroup" style="display:' + (r.requiresFollowUp ? 'block' : 'none') + ';"><label>Fecha de seguimiento</label><input type="date" id="fEmergFollowUpDate" value="' + escAttr(r.followUpDate || '') + '"></div>' +
+    '<div class="form-group" style="margin-top:12px;"><label><input type="checkbox" id="fEmergSigned"' + (r.signedConsent ? ' checked' : '') + '> Firma digital del médico — <span style="font-size:0.82em;color:#666;">Certifico que la información registrada es veraz y completa</span></label><div id="fEmergSignedInfo" style="font-size:0.82em;color:#666;margin-top:4px;' + (r.signedConsent ? '' : 'display:none') + ';">Firmado por: ' + escHtml(r.signedConsent ? r.signedConsent.doctor : '') + ' el ' + escHtml(r.signedConsent ? r.signedConsent.date : '') + '</div></div>' +
     '<div class="form-group"><label>Observaciones</label><textarea id="fEmergObs" rows="2">' + escHtml(r.observations || '') + '</textarea></div>';
   openModal('Editar informe de emergencia', html, function() { saveEmergencyModal(); });
   document.getElementById('modalSaveBtn').textContent = 'Guardar cambios';
@@ -1725,6 +1850,13 @@ function editEmergency(id) {
       cb.addEventListener('change', function() {
         var g = document.getElementById('fEmergFollowUpDateGroup');
         if (g) g.style.display = this.checked ? 'block' : 'none';
+      });
+    }
+    var sigCb = document.getElementById('fEmergSigned');
+    if (sigCb) {
+      sigCb.addEventListener('change', function() {
+        var info = document.getElementById('fEmergSignedInfo');
+        if (info) info.style.display = this.checked ? 'block' : 'none';
       });
     }
   }, 100);
@@ -1865,7 +1997,7 @@ function savePatientModal() {
         insuranceNumber: insuranceNumber || '',
         coverageType: coverageType || '',
         avatar: avatarDataUrl || null,
-        diagnoses: [], prescriptions: [], appointments: []
+        diagnoses: [], prescriptions: [], appointments: [], labOrders: []
       });
       addAuditLog('Paciente ' + firstName + ' ' + lastName + ' creado');
     }
@@ -1957,7 +2089,7 @@ function openAddPrescription() {
   editPrescriptionIndex = -1;
   var html = '<div id="fRxAllergyInfo"></div>' +
     '<div class="form-group"><label>Fecha</label><input type="date" id="fRxDate"></div>' +
-    '<div class="form-group"><label>Medicamento</label><input type="text" id="fRxMed" placeholder="Nombre del fármaco"></div>' +
+    '<div class="form-group"><label>Medicamento</label><div style="display:flex;gap:6px"><input type="text" id="fRxMed" placeholder="Nombre del fármaco" style="flex:1"><button type="button" onclick="openDrugFromPrescription()" style="padding:6px 12px;background:#00695c;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:0.85em">📖</button></div></div>' +
     '<div class="form-group"><label>Dosis / Concentración</label><input type="text" id="fRxDosage" placeholder="Ej: 500mg, 1 comprimido"></div>' +
     '<div class="form-group"><label>Instrucciones</label><textarea id="fRxInst" rows="2" placeholder="Ej: Cada 8 horas por 7 días"></textarea></div>';
   openModal('Nueva receta', html, () => savePrescriptionModal());
@@ -1973,7 +2105,7 @@ function editPrescription(idx) {
   const r = p.prescriptions[idx];
   var html = '<div id="fRxAllergyInfo"></div>' +
     '<div class="form-group"><label>Fecha</label><input type="date" id="fRxDate" value="' + escAttr(r.date) + '"></div>' +
-    '<div class="form-group"><label>Medicamento</label><input type="text" id="fRxMed" value="' + escAttr(r.medication) + '"></div>' +
+    '<div class="form-group"><label>Medicamento</label><div style="display:flex;gap:6px"><input type="text" id="fRxMed" value="' + escAttr(r.medication) + '" style="flex:1"><button type="button" onclick="openDrugFromPrescription()" style="padding:6px 12px;background:#00695c;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:0.85em">📖</button></div></div>' +
     '<div class="form-group"><label>Dosis / Concentración</label><input type="text" id="fRxDosage" value="' + escAttr(r.dosage) + '"></div>' +
     '<div class="form-group"><label>Instrucciones</label><textarea id="fRxInst" rows="2">' + escHtml(r.instructions || '') + '</textarea></div>';
   openModal('Editar receta', html, () => savePrescriptionModal());
@@ -1987,6 +2119,7 @@ function savePrescriptionModal() {
   const instructions = document.getElementById('fRxInst').value.trim();
   if (!date || !medication || !dosage) { alert('Fecha, medicamento y dosis son obligatorios.'); return; }
   if (checkAllergyConflict(medication)) return;
+  checkDrugInteractions(medication);
   const data = getData();
   const p = data.patients.find(x => x.id === currentPatientId);
   if (!p) return;
@@ -2145,6 +2278,8 @@ function doPublicSearch() {
 }
 
 // ===== STATISTICS =====
+var statCharts = [];
+
 function showStats() {
   const data = getData();
   const totalPatients = data.patients.length;
@@ -2153,18 +2288,11 @@ function showStats() {
   const totalDoctors = data.doctors.length;
   const onDuty = data.doctors.filter(function(d) { return d.onDuty; }).length;
 
-  // Response time stats
-  var totalRespMins = 0;
-  var respCount = 0;
+  var totalRespMins = 0, respCount = 0;
   var respByTriage = { rojo: { total: 0, count: 0 }, amarillo: { total: 0, count: 0 }, verde: { total: 0, count: 0 } };
   (data.emergencyReports || []).forEach(function(r) {
     var mins = getResponseTime(r);
-    if (mins !== null) {
-      totalRespMins += mins;
-      respCount++;
-      var t = r.triage || 'amarillo';
-      if (respByTriage[t]) { respByTriage[t].total += mins; respByTriage[t].count++; }
-    }
+    if (mins !== null) { totalRespMins += mins; respCount++; var t = r.triage || 'amarillo'; if (respByTriage[t]) { respByTriage[t].total += mins; respByTriage[t].count++; } }
   });
   var avgResp = respCount > 0 ? Math.round(totalRespMins / respCount) : 0;
   var avgRespRojo = respByTriage.rojo.count > 0 ? Math.round(respByTriage.rojo.total / respByTriage.rojo.count) : 0;
@@ -2174,37 +2302,59 @@ function showStats() {
   var typeCounts = {};
   (data.emergencyReports || []).forEach(function(r) { typeCounts[r.type] = (typeCounts[r.type] || 0) + 1; });
   var typeHtml = '';
-  Object.keys(typeCounts).sort().forEach(function(t) {
-    typeHtml += '<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:0.85em;border-bottom:1px solid #f0f0f0;"><span>' + escHtml(t) + '</span><strong>' + typeCounts[t] + '</strong></div>';
-  });
+  Object.keys(typeCounts).sort().forEach(function(t) { typeHtml += '<div style="display:flex;justify-content:space-between;padding:3px 0;font-size:0.82em;border-bottom:1px solid var(--border);"><span>' + escHtml(t) + '</span><strong>' + typeCounts[t] + '</strong></div>'; });
 
-  // Últimas acciones del log de auditoría
   var auditHtml = '';
   var log = data.auditLog || [];
   var recent = log.slice(-10).reverse();
-  if (recent.length > 0) {
-    recent.forEach(function(a) {
-      auditHtml += '<div class="audit-item"><span class="audit-date">' + escHtml(a.date) + '</span><span class="audit-user">' + escHtml(a.user) + '</span> — ' + escHtml(a.action) + '</div>';
-    });
-  } else {
-    auditHtml = '<div style="color:#999;font-size:0.85em;">Sin actividad registrada.</div>';
-  }
+  if (recent.length > 0) { recent.forEach(function(a) { auditHtml += '<div class="audit-item"><span class="audit-date">' + escHtml(a.date) + '</span><span class="audit-user">' + escHtml(a.user) + '</span> — ' + escHtml(a.action) + '</div>'; }); }
+  else { auditHtml = '<div style="color:#999;font-size:0.85em;">Sin actividad registrada.</div>'; }
+
+  // Month-by-month emergency counts for chart
+  var monthLabels = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  var monthCounts = new Array(12).fill(0);
+  var triageCounts = { rojo: 0, amarillo: 0, verde: 0 };
+  (data.emergencyReports || []).forEach(function(r) {
+    if (r.date) { try { var m = new Date(r.date).getMonth(); if (m >= 0 && m < 12) monthCounts[m]++; } catch(e) {} }
+    triageCounts[r.triage || 'amarillo']++;
+  });
+
+  var chartId1 = 'chartMonthly_' + Date.now();
+  var chartId2 = 'chartTriage_' + Date.now();
+  var chartId3 = 'chartType_' + Date.now();
 
   const html =
     '<div class="stats-grid">' +
-    '<div class="stat-card stat-patients"><div class="stat-number">' + totalPatients + '</div><div class="stat-label">Total pacientes</div><div style="font-size:0.78em;color:#999;">' + activePatients + ' activos</div></div>' +
+    '<div class="stat-card stat-patients"><div class="stat-number">' + totalPatients + '</div><div class="stat-label">Total pacientes</div><div style="font-size:0.78em;color:var(--text-muted);">' + activePatients + ' activos</div></div>' +
     '<div class="stat-card stat-emerg"><div class="stat-number">' + totalEmergencies + '</div><div class="stat-label">Informes de emergencia</div></div>' +
     '<div class="stat-card stat-doctors"><div class="stat-number">' + totalDoctors + '</div><div class="stat-label">Médicos registrados</div></div>' +
     '<div class="stat-card stat-duty"><div class="stat-number">' + onDuty + '</div><div class="stat-label">Médicos de guardia</div></div>' +
-    '<div class="stat-card" style="border-top:3px solid #1a237e;"><div class="stat-number">' + formatResponseTime(avgResp) + '</div><div class="stat-label">Tiempo resp. promedio</div><div style="font-size:0.72em;color:#999;">Rojo: ' + formatResponseTime(avgRespRojo) + ' | Amarillo: ' + formatResponseTime(avgRespAmarillo) + ' | Verde: ' + formatResponseTime(avgRespVerde) + '</div></div>' +
+    '<div class="stat-card" style="border-top:3px solid #1a237e;"><div class="stat-number">' + formatResponseTime(avgResp) + '</div><div class="stat-label">Tiempo resp. promedio</div><div style="font-size:0.72em;color:var(--text-muted);">Rojo: ' + formatResponseTime(avgRespRojo) + ' | Amarillo: ' + formatResponseTime(avgRespAmarillo) + ' | Verde: ' + formatResponseTime(avgRespVerde) + '</div></div>' +
     '</div>' +
-    '<h5 style="margin:20px 0 10px;color:#333;">Emergencias por tipo</h5>' +
+    '<div class="chart-row">' +
+    '<div class="chart-box"><h5>Emergencias por mes</h5><canvas id="' + chartId1 + '"></canvas></div>' +
+    '<div class="chart-box"><h5>Distribución por triaje</h5><canvas id="' + chartId2 + '"></canvas></div>' +
+    '</div>' +
+    '<h5 style="margin:15px 0 8px;color:var(--text);font-size:0.9em;">Emergencias por tipo</h5>' +
     (typeHtml || '<div style="color:#999;font-size:0.85em;">Sin emergencias registradas.</div>') +
-    '<h5 style="margin:20px 0 10px;color:#333;">Actividad reciente</h5>' +
-    '<div style="max-height:250px;overflow-y:auto;">' + auditHtml + '</div>';
+    '<h5 style="margin:15px 0 8px;color:var(--text);font-size:0.9em;">Actividad reciente</h5>' +
+    '<div style="max-height:200px;overflow-y:auto;">' + auditHtml + '</div>';
 
   openModal('&#x1f4ca; Estadísticas del sistema', html, null);
   document.getElementById('modalSaveBtn').style.display = 'none';
+
+  // Render charts after modal opens
+  setTimeout(function() {
+    statCharts.forEach(function(c) { try { c.destroy(); } catch(e) {} }); statCharts = [];
+    var ctx1 = document.getElementById(chartId1);
+    var ctx2 = document.getElementById(chartId2);
+    if (ctx1 && typeof Chart !== 'undefined') {
+      statCharts.push(new Chart(ctx1, { type: 'bar', data: { labels: monthLabels, datasets: [{ label: 'Emergencias', data: monthCounts, backgroundColor: '#1a237e', borderRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } } }));
+    }
+    if (ctx2 && typeof Chart !== 'undefined') {
+      statCharts.push(new Chart(ctx2, { type: 'doughnut', data: { labels: ['Rojo', 'Amarillo', 'Verde'], datasets: [{ data: [triageCounts.rojo, triageCounts.amarillo, triageCounts.verde], backgroundColor: ['#d32f2f', '#f57c00', '#388e3c'] }] }, options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, padding: 8 } } } } }));
+    }
+  }, 100);
 }
 
 // ===== INTERNAL NOTES =====
@@ -2297,6 +2447,7 @@ function openQuickEmergency() {
     '<div class="form-group"><label>Tipo</label><select id="fQType"><option value="Accidente">Accidente</option><option value="Paro cardíaco">Paro cardíaco</option><option value="Traumatismo">Traumatismo</option><option value="Quemadura">Quemadura</option><option value="Intoxicación">Intoxicación</option><option value="Agresión">Agresión</option><option value="Otro">Otro</option></select></div>' +
     '<div class="form-group"><label>Descripción</label><textarea id="fQDesc" rows="2" placeholder="Breve descripción..."></textarea></div>' +
     '<div class="form-group"><label>Tratamiento</label><textarea id="fQTreatment" rows="2" placeholder="Tratamiento aplicado..."></textarea></div>' +
+    '<div class="form-group" style="margin-top:10px;"><label><input type="checkbox" id="fQSigned"> Firma digital del médico — <span style="font-size:0.82em;color:#666;">Certifico que la información es veraz</span></label></div>' +
     '<h5 style="color:#333;margin:12px 0 8px;">Signos vitales (opcional)</h5>' +
     '<div class="form-row"><div class="form-group"><label>PA</label><input type="text" id="fQBP" placeholder="120/80"></div>' +
     '<div class="form-group"><label>FC</label><input type="text" id="fQHR" placeholder="80 lpm"></div></div>';
@@ -2343,7 +2494,8 @@ function saveQuickEmergency() {
     vitalSigns: { bp: bp, hr: hr, temp: '', sat: '', rr: '' },
     treatment: treatment, outcome: '', derivation: '', bodyParts: [],
     observations: '',
-    doctor: currentDoctor.name
+    doctor: currentDoctor.name,
+    signedConsent: (document.getElementById('fQSigned') && document.getElementById('fQSigned').checked && currentDoctor) ? { doctor: currentDoctor.name, date: new Date().toISOString() } : null
   });
   addAuditLog('Informe de emergencia creado para ' + firstName + ' ' + lastName);
   saveData(data);
@@ -3187,7 +3339,841 @@ function exportPatientPDF(id) {
   setTimeout(function() { win.print(); }, 300);
 }
 
-// ===== KEYBOARD SHORTCUTS =====
+// ===== FACTURAS MÉDICAS =====
+function showInvoices() {
+  const data = getData();
+  if (!data.invoices) data.invoices = [];
+  var html = '<div style="margin-bottom:12px;"><strong>Facturas emitidas</strong> <span style="color:var(--text-muted);font-size:0.82em;">(' + data.invoices.length + ')</span></div>';
+  if (data.invoices.length === 0) {
+    html += '<div class="no-data" style="padding:15px;">No hay facturas registradas.</div>';
+  } else {
+    var sorted = data.invoices.slice().sort(function(a, b) { return b.date < a.date ? -1 : 1; });
+    sorted.forEach(function(f) {
+      var p = data.patients.find(function(x) { return x.id === f.patientId; });
+      var pName = p ? escHtml(p.firstName + ' ' + p.lastName) : 'Desconocido';
+      var statusClass = 'inv-' + (f.status || 'emitida');
+      var statusLabel = { emitida: 'Emitida', pagada: 'Pagada', cancelada: 'Cancelada' }[f.status] || 'Emitida';
+      html += '<div class="inv-card"><div class="inv-info"><div class="inv-patient">' + pName + '</div><div class="inv-date">' + escHtml(f.date) + ' | ' + escHtml(f.concept || '-') + '</div></div>' +
+        '<div style="text-align:right;"><div class="inv-amount">$' + escHtml(f.amount || '0') + '</div><span class="inv-status ' + statusClass + '">' + statusLabel + '</span></div></div>';
+    });
+  }
+  html += '<hr style="margin:15px 0;border:none;border-top:1px solid var(--border);">' +
+    '<h5 style="margin-bottom:10px;">Nueva factura</h5>' +
+    '<div class="form-row"><div class="form-group"><label>Paciente</label><select id="fInvPatient"><option value="">Seleccionar...</option>';
+  data.patients.forEach(function(p) { html += '<option value="' + p.id + '">' + escHtml(p.firstName + ' ' + p.lastName + ' (DNI: ' + p.citizenNumber + ')') + '</option>'; });
+  html += '</select></div><div class="form-group"><label>Fecha</label><input type="date" id="fInvDate"></div></div>' +
+    '<div class="form-row"><div class="form-group"><label>Concepto</label><input type="text" id="fInvConcept" placeholder="Ej: Consulta, procedimiento..."></div><div class="form-group"><label>Monto ($)</label><input type="number" id="fInvAmount" placeholder="0" step="0.01" min="0"></div></div>' +
+    '<div class="form-row"><div class="form-group"><label>Método pago</label><select id="fInvPayment"><option value="Efectivo">Efectivo</option><option value="Tarjeta crédito">Tarjeta crédito</option><option value="Tarjeta débito">Tarjeta débito</option><option value="Seguro">Seguro / Obra social</option><option value="Transferencia">Transferencia</option></select></div>' +
+    '<div class="form-group"><label>Estado</label><select id="fInvStatus"><option value="emitida">Emitida</option><option value="pagada">Pagada</option><option value="cancelada">Cancelada</option></select></div></div>' +
+    '<button class="btn-add" onclick="addInvoice()">+ Emitir factura</button>';
+  openModal('&#x1f4b0; Facturas médicas', html, null);
+  document.getElementById('modalSaveBtn').style.display = 'none';
+  document.getElementById('fInvDate').value = new Date().toISOString().split('T')[0];
+}
+
+function addInvoice() {
+  var patientId = parseInt(document.getElementById('fInvPatient').value);
+  var date = document.getElementById('fInvDate').value;
+  var concept = document.getElementById('fInvConcept').value.trim();
+  var amount = parseFloat(document.getElementById('fInvAmount').value) || 0;
+  var payment = document.getElementById('fInvPayment').value;
+  var status = document.getElementById('fInvStatus').value;
+  if (!patientId || !date || !concept || amount <= 0) { alert('Paciente, fecha, concepto y monto son obligatorios.'); return; }
+  const data = getData();
+  if (!data.invoices) data.invoices = [];
+  if (!data.invoiceNextId) data.invoiceNextId = 1;
+  data.invoices.push({ id: data.invoiceNextId++, patientId: patientId, date: date, concept: concept, amount: amount.toFixed(2), paymentMethod: payment, status: status, doctor: currentDoctor ? currentDoctor.name : '', createdAt: new Date().toISOString() });
+  addAuditLog('Factura creada: $' + amount.toFixed(2) + ' - ' + concept);
+  saveData(data);
+  showInvoices();
+}
+
+function openAddInvoiceForPatient() {
+  if (!currentPatientId) return;
+  document.getElementById('fInvPatient').value = currentPatientId;
+  showInvoices();
+}
+
+function renderPatientInvoices() {
+  const data = getData();
+  var list = document.getElementById('patientInvoicesList');
+  var invoices = (data.invoices || []).filter(function(f) { return f.patientId === currentPatientId; });
+  if (invoices.length === 0) { list.innerHTML = '<div class="no-data">Sin facturas registradas.</div>'; return; }
+  var html = '';
+  invoices.forEach(function(f) {
+    var statusClass = 'inv-' + (f.status || 'emitida');
+    var statusLabel = { emitida: 'Emitida', pagada: 'Pagada', cancelada: 'Cancelada' }[f.status] || 'Emitida';
+    html += '<div class="inv-card"><div class="inv-info"><div class="inv-date">' + escHtml(f.date) + '</div><div>' + escHtml(f.concept) + '</div></div>' +
+      '<div style="text-align:right;"><div class="inv-amount">$' + escHtml(f.amount) + '</div><span class="inv-status ' + statusClass + '">' + statusLabel + '</span></div></div>';
+  });
+  list.innerHTML = html;
+}
+
+// ===== LABORATORIO =====
+function openAddLabOrder() {
+  if (!currentPatientId) { alert('Seleccione un paciente primero.'); return; }
+  var html = '<div class="form-group"><label>Fecha</label><input type="date" id="fLabDate"></div>' +
+    '<div class="form-group"><label>Prueba / Análisis</label><input type="text" id="fLabTest" placeholder="Ej: Hemograma completo, Glucosa, PCR..."></div>' +
+    '<div class="form-group"><label>Resultado</label><textarea id="fLabResult" rows="2" placeholder="Resultado del análisis..."></textarea></div>' +
+    '<div class="form-group"><label>Rango normal</label><input type="text" id="fLabRange" placeholder="Ej: 70-110 mg/dL"></div>' +
+    '<div class="form-group"><label>Estado</label><select id="fLabStatus"><option value="pendiente">Pendiente</option><option value="normal">Normal</option><option value="anormal">Anormal</option></select></div>';
+  openModal('Nueva orden de laboratorio', html, function() { saveLabOrder(); });
+  document.getElementById('fLabDate').value = new Date().toISOString().split('T')[0];
+}
+
+function saveLabOrder() {
+  var date = document.getElementById('fLabDate').value;
+  var test = document.getElementById('fLabTest').value.trim();
+  var result = document.getElementById('fLabResult').value.trim();
+  var normalRange = document.getElementById('fLabRange').value.trim();
+  var status = document.getElementById('fLabStatus').value;
+  if (!date || !test) { alert('Fecha y prueba son obligatorias.'); return; }
+  const data = getData();
+  var p = data.patients.find(function(x) { return x.id === currentPatientId; });
+  if (!p) return;
+  if (!p.labOrders) p.labOrders = [];
+  p.labOrders.push({ date: date, test: test, result: result, normalRange: normalRange, status: status, doctor: currentDoctor ? currentDoctor.name : '' });
+  addAuditLog('Orden laboratorio: ' + test + ' para ' + p.firstName + ' ' + p.lastName);
+  saveData(data);
+  closeModal();
+  renderLabOrders();
+}
+
+function renderLabOrders() {
+  const data = getData();
+  var p = data.patients.find(function(x) { return x.id === currentPatientId; });
+  var list = document.getElementById('labOrdersList');
+  if (!p || !p.labOrders || p.labOrders.length === 0) { list.innerHTML = '<div class="no-data">Sin órdenes de laboratorio.</div>'; return; }
+  var html = '';
+  p.labOrders.forEach(function(o, i) {
+    var statusClass = 'lab-' + (o.status || 'pendiente');
+    var statusLabel = { pendiente: 'Pendiente', normal: 'Normal', anormal: 'Anormal' }[o.status] || 'Pendiente';
+    html += '<div class="lab-card"><div class="lab-date">' + escHtml(o.date) + ' | ' + escHtml(o.doctor) + '</div>' +
+      '<div class="lab-test">' + escHtml(o.test) + ' <span class="lab-result ' + statusClass + '">' + statusLabel + '</span></div>' +
+      (o.result ? '<div style="font-size:0.85em;color:var(--text-secondary);margin:4px 0;"><strong>Resultado:</strong> ' + escHtml(o.result) + '</div>' : '') +
+      (o.normalRange ? '<div style="font-size:0.78em;color:var(--text-muted);">Rango normal: ' + escHtml(o.normalRange) + '</div>' : '') +
+      '<div style="margin-top:6px;"><button class="btn-small btn-small-edit" onclick="editLabOrder(' + i + ')">Editar</button> <button class="btn-small btn-small-delete" onclick="deleteLabOrder(' + i + ')">Eliminar</button></div></div>';
+  });
+  list.innerHTML = html;
+}
+
+function editLabOrder(idx) {
+  const data = getData();
+  var p = data.patients.find(function(x) { return x.id === currentPatientId; });
+  if (!p || !p.labOrders || !p.labOrders[idx]) return;
+  var o = p.labOrders[idx];
+  var html = '<div class="form-group"><label>Fecha</label><input type="date" id="fLabDate" value="' + escAttr(o.date) + '"></div>' +
+    '<div class="form-group"><label>Prueba</label><input type="text" id="fLabTest" value="' + escAttr(o.test) + '"></div>' +
+    '<div class="form-group"><label>Resultado</label><textarea id="fLabResult" rows="2">' + escHtml(o.result || '') + '</textarea></div>' +
+    '<div class="form-group"><label>Rango normal</label><input type="text" id="fLabRange" value="' + escAttr(o.normalRange || '') + '"></div>' +
+    '<div class="form-group"><label>Estado</label><select id="fLabStatus"><option value="pendiente"' + (o.status === 'pendiente' ? ' selected' : '') + '>Pendiente</option><option value="normal"' + (o.status === 'normal' ? ' selected' : '') + '>Normal</option><option value="anormal"' + (o.status === 'anormal' ? ' selected' : '') + '>Anormal</option></select></div>';
+  window._editLabIdx = idx;
+  openModal('Editar orden de laboratorio', html, function() { saveEditedLabOrder(); });
+}
+
+function saveEditedLabOrder() {
+  var date = document.getElementById('fLabDate').value;
+  var test = document.getElementById('fLabTest').value.trim();
+  var result = document.getElementById('fLabResult').value.trim();
+  var normalRange = document.getElementById('fLabRange').value.trim();
+  var status = document.getElementById('fLabStatus').value;
+  if (!date || !test) return;
+  const data = getData();
+  var p = data.patients.find(function(x) { return x.id === currentPatientId; });
+  if (!p || !p.labOrders || !p.labOrders[window._editLabIdx]) return;
+  p.labOrders[window._editLabIdx] = { date: date, test: test, result: result, normalRange: normalRange, status: status, doctor: currentDoctor ? currentDoctor.name : '' };
+  saveData(data);
+  closeModal();
+  renderLabOrders();
+}
+
+function deleteLabOrder(idx) {
+  if (!confirm('¿Eliminar esta orden de laboratorio?')) return;
+  const data = getData();
+  var p = data.patients.find(function(x) { return x.id === currentPatientId; });
+  if (!p || !p.labOrders) return;
+  p.labOrders.splice(idx, 1);
+  saveData(data);
+  renderLabOrders();
+}
+
+// ===== PORTAL DEL PACIENTE =====
+function showPatientPortal() {
+  document.getElementById('loginContainer').classList.add('hidden');
+  document.getElementById('dashboardContainer').classList.add('hidden');
+  document.getElementById('publicContainer').classList.add('hidden');
+  document.getElementById('portalContainer').classList.remove('hidden');
+  document.getElementById('portalLoginView').classList.remove('hidden');
+  document.getElementById('portalPatientView').classList.add('hidden');
+  document.getElementById('portalDNI').value = '';
+  document.getElementById('portalBirth').value = '';
+  document.getElementById('portalError').textContent = '';
+}
+
+function doPortalLogin() {
+  var dni = document.getElementById('portalDNI').value.trim();
+  var birth = document.getElementById('portalBirth').value;
+  var errEl = document.getElementById('portalError');
+  errEl.textContent = '';
+  if (!dni || !birth) { errEl.textContent = 'Ingrese DNI y fecha de nacimiento.'; return; }
+  const data = getData();
+  var matches = data.patients.filter(function(p) { return !p.archived && p.citizenNumber === dni && p.dateOfBirth === birth; });
+  if (matches.length === 0) { errEl.textContent = 'No se encontró un paciente con esos datos.'; return; }
+  var p = matches[0];
+  document.getElementById('portalLoginView').classList.add('hidden');
+  document.getElementById('portalPatientView').classList.remove('hidden');
+  renderPortalPatientView(p);
+}
+
+function renderPortalPatientView(p) {
+  var html = '<div class="portal-header"><h2>' + escHtml(p.firstName + ' ' + p.lastName) + '</h2><p>DNI: ' + escHtml(p.citizenNumber) + ' | FN: ' + escHtml(p.dateOfBirth || '-') + (p.phone ? ' | Tel: ' + escHtml(p.phone) : '') + '</p></div>';
+
+  if (p.allergies && p.allergies.length > 0) {
+    html += '<div class="portal-section"><h3>&#x26a0;&#xfe0f; Alergias</h3>';
+    p.allergies.forEach(function(a) { html += '<span class="allergy-tag">' + escHtml(a) + '</span>'; });
+    html += '</div>';
+  }
+  if (p.chronicConditions && p.chronicConditions.length > 0) {
+    html += '<div class="portal-section"><h3>&#x1f9a0; Condiciones crónicas</h3>';
+    p.chronicConditions.forEach(function(c) { html += '<span class="chronic-tag">' + escHtml(c) + '</span>'; });
+    html += '</div>';
+  }
+
+  html += '<div class="portal-section"><h3>&#x1f4cb; Diagnósticos</h3>';
+  if (p.diagnoses && p.diagnoses.length > 0) {
+    p.diagnoses.forEach(function(d) { html += '<div class="item"><span class="item-date">' + escHtml(d.date) + '</span> — <strong>' + escHtml(d.description) + '</strong>' + (d.notes ? '<br><span style="color:var(--text-muted);">' + escHtml(d.notes) + '</span>' : '') + '</div>'; });
+  } else { html += '<div style="color:var(--text-muted);font-size:0.85em;">No hay diagnósticos registrados.</div>'; }
+  html += '</div>';
+
+  html += '<div class="portal-section"><h3>&#x1f48a; Recetas activas</h3>';
+  if (p.prescriptions && p.prescriptions.length > 0) {
+    p.prescriptions.forEach(function(r) { html += '<div class="item"><span class="item-date">' + escHtml(r.date) + '</span> — <strong>' + escHtml(r.medication) + '</strong> ' + escHtml(r.dosage) + (r.instructions ? '<br><span style="color:var(--text-muted);">' + escHtml(r.instructions) + '</span>' : '') + '</div>'; });
+  } else { html += '<div style="color:var(--text-muted);font-size:0.85em;">No hay recetas registradas.</div>'; }
+  html += '</div>';
+
+  html += '<div class="portal-section"><h3>&#x1f4c5; Citas</h3>';
+  if (p.appointments && p.appointments.length > 0) {
+    p.appointments.forEach(function(c) {
+      var statusColor = c.status === 'Completada' ? '#2e7d32' : c.status === 'Cancelada' ? '#d32f2f' : '#f57c00';
+      html += '<div class="item"><span class="item-date">' + escHtml(c.date) + ' ' + escHtml(c.time || '') + '</span> — ' + escHtml(c.reason) + ' <span style="color:' + statusColor + ';font-weight:600;">(' + escHtml(c.status) + ')</span></div>';
+    });
+  } else { html += '<div style="color:var(--text-muted);font-size:0.85em;">No hay citas programadas.</div>'; }
+  html += '</div>';
+
+  html += '<div style="text-align:center;margin-top:12px;"><button class="btn-view" onclick="printPortalRecord()" style="padding:10px 24px;">&#x1f5a8; Imprimir expediente</button></div>';
+
+  document.getElementById('portalPatientContent').innerHTML = html;
+}
+
+function printPortalRecord() {
+  var nameEl = document.querySelector('#portalPatientContent .portal-header h2');
+  if (!nameEl) return;
+  window.print();
+}
+
+// ===== BASE DE DATOS DE FÁRMACOS =====
+var DRUG_DB = [
+  { name: 'Adrenalina', genericName: 'Epinefrina', category: 'Vasopresor', commonDosage: '0.3-0.5 mg IM/IV', presentation: 'Ampolla 1 mg/mL', indications: 'Paro cardíaco, anafilaxia, shock', notes: 'Vía IV en paro, IM en anafilaxia. Evitar en shock hipovolémico' },
+  { name: 'Noradrenalina', genericName: 'Norepinefrina', category: 'Vasopresor', commonDosage: '0.05-0.5 mcg/kg/min IV', presentation: 'Ampolla 1 mg/mL', indications: 'Shock séptico, hipotensión severa', notes: 'Vasoconstrictor potente, extravasación causa necrosis' },
+  { name: 'Dobutamina', genericName: 'Dobutamina', category: 'Vasopresor', commonDosage: '2.5-20 mcg/kg/min IV', presentation: 'Ampolla 250 mg/20 mL', indications: 'Insuficiencia cardíaca, shock cardiogénico', notes: 'Inotrópico positivo, taquicardia posible' },
+  { name: 'Dopamina', genericName: 'Dopamina', category: 'Vasopresor', commonDosage: '2-20 mcg/kg/min IV', presentation: 'Ampolla 200 mg/5 mL', indications: 'Shock, hipotensión, bradicardia', notes: 'Dosis bajas: efecto dopaminérgico; dosis altas: alfa' },
+  { name: 'Vasopresina', genericName: 'Vasopresina', category: 'Vasopresor', commonDosage: '0.01-0.04 U/min IV', presentation: 'Ampolla 20 U/mL', indications: 'Shock vasodilatador, diabetes insípida', notes: 'Usar como segundo vasopresor en shock séptico' },
+  { name: 'Fenilefrina', genericName: 'Fenilefrina', category: 'Vasopresor', commonDosage: '0.1-0.5 mg IV bolo', presentation: 'Ampolla 10 mg/mL', indications: 'Hipotensión, taquicardia supraventricular', notes: 'Alfa agonista puro, causa bradicardia refleja' },
+  { name: 'Efedrina', genericName: 'Efedrina', category: 'Vasopresor', commonDosage: '5-25 mg IV', presentation: 'Ampolla 50 mg/mL', indications: 'Hipotensión durante anestesia', notes: 'Taquifilaxia, cruza barrera hematoencefálica' },
+  { name: 'Milrinona', genericName: 'Milrinona', category: 'Vasopresor', commonDosage: '0.375-0.75 mcg/kg/min IV', presentation: 'Ampolla 10 mg/10 mL', indications: 'Insuficiencia cardíaca avanzada', notes: 'Inodilatador, riesgo de arritmias' },
+  { name: 'Isoproterenol', genericName: 'Isoproterenol', category: 'Vasopresor', commonDosage: '0.5-10 mcg/min IV', presentation: 'Ampolla 0.2 mg/mL', indications: 'Bradicardia, torsade de pointes', notes: 'Beta agonista no selectivo, taquicardia' },
+  { name: 'Morfina', genericName: 'Morfina', category: 'Analgésico', commonDosage: '2-10 mg IV/IM c/4h', presentation: 'Ampolla 10 mg/mL', indications: 'Dolor moderado a severo, IAM', notes: 'Depresión respiratoria, hipotensión, náuseas' },
+  { name: 'Fentanilo', genericName: 'Fentanilo', category: 'Analgésico', commonDosage: '25-100 mcg IV', presentation: 'Ampolla 50 mcg/mL', indications: 'Dolor severo, inducción anestésica', notes: '100x más potente que morfina, rigidez torácica' },
+  { name: 'Tramadol', genericName: 'Tramadol', category: 'Analgésico', commonDosage: '50-100 mg VO/IV c/6h', presentation: 'Tableta 50 mg, ampolla 100 mg', indications: 'Dolor moderado', notes: 'Riesgo de convulsiones, no en IMAO' },
+  { name: 'Codeína', genericName: 'Codeína', category: 'Analgésico', commonDosage: '30-60 mg VO c/6h', presentation: 'Tableta 30 mg', indications: 'Dolor leve a moderado, tos', notes: 'Metabolizada a morfina, estreñimiento' },
+  { name: 'Oxicodona', genericName: 'Oxicodona', category: 'Analgésico', commonDosage: '5-15 mg VO c/4-6h', presentation: 'Tableta 5, 10, 15 mg', indications: 'Dolor moderado a severo', notes: 'Alto potencial de abuso, liberación prolongada' },
+  { name: 'Hidromorfona', genericName: 'Hidromorfona', category: 'Analgésico', commonDosage: '1-4 mg IV c/4h', presentation: 'Ampolla 2 mg/mL', indications: 'Dolor severo', notes: '5-7x más potente que morfina' },
+  { name: 'Metadona', genericName: 'Metadona', category: 'Analgésico', commonDosage: '2.5-10 mg VO c/8h', presentation: 'Tableta 5, 10 mg', indications: 'Dolor crónico, desintoxicación opioides', notes: 'Riesgo de prolongación QT, acumulación' },
+  { name: 'Meperidina', genericName: 'Petidina', category: 'Analgésico', commonDosage: '50-150 mg IM/IV c/4h', presentation: 'Ampolla 50 mg/mL', indications: 'Dolor, escalofríos por transfusiones', notes: 'Evitar en IRC, metabolitos neurotóxicos' },
+  { name: 'Buprenorfina', genericName: 'Buprenorfina', category: 'Analgésico', commonDosage: '0.3-0.6 mg IM/IV c/6h', presentation: 'Ampolla 0.3 mg/mL', indications: 'Dolor moderado a severo, TUD', notes: 'Efecto techo, antagonista parcial' },
+  { name: 'Nalbufina', genericName: 'Nalbufina', category: 'Analgésico', commonDosage: '10-20 mg IV/IM c/4h', presentation: 'Ampolla 10 mg/mL', indications: 'Dolor moderado a severo', notes: 'Agonista kappa, menos depresión respiratoria' },
+  { name: 'Tapentadol', genericName: 'Tapentadol', category: 'Analgésico', commonDosage: '50-100 mg VO c/4-6h', presentation: 'Tableta 50, 75, 100 mg', indications: 'Dolor moderado a severo', notes: 'Dual: agonista mu e inhibidor recaptura NE' },
+  { name: 'Ibuprofeno', genericName: 'Ibuprofeno', category: 'Analgésico', commonDosage: '400-800 mg VO c/6-8h', presentation: 'Tableta 400, 600 mg', indications: 'Dolor leve a moderado, fiebre, inflamación', notes: 'Riesgo GI, renal; evitar en asmáticos' },
+  { name: 'Naproxeno', genericName: 'Naproxeno', category: 'Analgésico', commonDosage: '250-500 mg VO c/12h', presentation: 'Tableta 250, 500 mg', indications: 'Dolor, inflamación, dismenorrea', notes: 'Menor riesgo CV que otros AINES' },
+  { name: 'Diclofenaco', genericName: 'Diclofenaco', category: 'Analgésico', commonDosage: '50-100 mg VO/IM c/12h', presentation: 'Tableta 50 mg, ampolla 75 mg', indications: 'Dolor musculoesquelético, artritis', notes: 'Riesgo hepático, trombosis CV' },
+  { name: 'Ketorolaco', genericName: 'Ketorolaco', category: 'Analgésico', commonDosage: '15-30 mg IV/IM c/6h', presentation: 'Ampolla 30 mg/mL', indications: 'Dolor agudo moderado a severo', notes: 'No usar >5 días, riesgo GI y renal' },
+  { name: 'Indometacina', genericName: 'Indometacina', category: 'Analgésico', commonDosage: '25-50 mg VO c/8h', presentation: 'Cápsula 25, 50 mg', indications: 'Artritis, gota aguda, cierre ductus', notes: 'Altos efectos GI, cefalea' },
+  { name: 'Meloxicam', genericName: 'Meloxicam', category: 'Analgésico', commonDosage: '7.5-15 mg VO c/24h', presentation: 'Tableta 7.5, 15 mg', indications: 'Artrosis, artritis reumatoide', notes: 'COX-2 selectivo, menor riesgo GI' },
+  { name: 'Celecoxib', genericName: 'Celecoxib', category: 'Analgésico', commonDosage: '100-200 mg VO c/12h', presentation: 'Cápsula 100, 200 mg', indications: 'Artritis, dolor musculoesquelético', notes: 'COX-2 selectivo, riesgo CV, sulfa' },
+  { name: 'Piroxicam', genericName: 'Piroxicam', category: 'Analgésico', commonDosage: '10-20 mg VO c/24h', presentation: 'Cápsula 10, 20 mg', indications: 'Artritis reumatoide, osteoartritis', notes: 'Vida media larga, riesgo GI' },
+  { name: 'Ácido acetilsalicílico', genericName: 'Ácido acetilsalicílico', category: 'Analgésico', commonDosage: '500-1000 mg VO c/6-8h', presentation: 'Tableta 500 mg', indications: 'Dolor leve, fiebre, antiagregante', notes: 'Riesgo GI, síndrome de Reye en niños' },
+  { name: 'Paracetamol', genericName: 'Acetaminofén', category: 'Analgésico', commonDosage: '500-1000 mg VO c/6h', presentation: 'Tableta 500, 650 mg', indications: 'Dolor leve a moderado, fiebre', notes: 'Hepatotoxicidad >4g/día, antídoto: N-acetilcisteína' },
+  { name: 'Dipirona', genericName: 'Metamizol', category: 'Analgésico', commonDosage: '500 mg-1g VO/IV c/6-8h', presentation: 'Tableta 500 mg, ampolla 1g', indications: 'Dolor severo, fiebre alta', notes: 'Agranulocitosis, evitar en algunos países' },
+  { name: 'Gabapentina', genericName: 'Gabapentina', category: 'Analgésico', commonDosage: '300-1200 mg VO c/8h', presentation: 'Cápsula 300, 400 mg', indications: 'Dolor neuropático, epilepsia', notes: 'Ajustar en IR, mareos, somnolencia' },
+  { name: 'Pregabalina', genericName: 'Pregabalina', category: 'Analgésico', commonDosage: '75-300 mg VO c/12h', presentation: 'Cápsula 75, 150 mg', indications: 'Dolor neuropático, fibromialgia, ansiedad', notes: 'Mareos, somnolencia, riesgo de abuso' },
+  { name: 'Amitriptilina', genericName: 'Amitriptilina', category: 'Analgésico', commonDosage: '25-150 mg VO c/24h', presentation: 'Tableta 25, 50 mg', indications: 'Dolor neuropático, migraña, depresión', notes: 'Anticolinérgico, sedación, arritmias' },
+  { name: 'Lidocaína tópica', genericName: 'Lidocaína', category: 'Analgésico', commonDosage: 'Parche 5% c/24h', presentation: 'Parche 5%, gel 2%', indications: 'Dolor neuropático localizado', notes: 'Aplicar en piel intacta, no más de 3 parches' },
+  { name: 'Capsaicina tópica', genericName: 'Capsaicina', category: 'Analgésico', commonDosage: 'Crema 0.025-0.075% c/6-8h', presentation: 'Crema 0.025%, 0.075%', indications: 'Dolor neuropático, artrosis', notes: 'Ardor inicial, lavarse las manos' },
+  { name: 'Ibuprofeno pediátrico', genericName: 'Ibuprofeno', category: 'Antipirético', commonDosage: '5-10 mg/kg VO c/6-8h', presentation: 'Suspensión 100 mg/5mL', indications: 'Fiebre, dolor leve', notes: 'No usar en varicela, riesgo GI' },
+  { name: 'Paracetamol pediátrico', genericName: 'Acetaminofén', category: 'Antipirético', commonDosage: '10-15 mg/kg VO c/4-6h', presentation: 'Suspensión 120 mg/5mL', indications: 'Fiebre, dolor leve', notes: 'No exceder 5 dosis/día, hepatotoxicidad' },
+  { name: 'Ácido acetilsalicílico pediátrico', genericName: 'Ácido acetilsalicílico', category: 'Antipirético', commonDosage: '10-15 mg/kg VO c/6h', presentation: 'Tableta 100 mg', indications: 'Fiebre, dolor leve, antiagregante', notes: 'No en niños <12 años por Reye' },
+  { name: 'Metamizol pediátrico', genericName: 'Metamizol', category: 'Antipirético', commonDosage: '10-15 mg/kg VO/IV c/6-8h', presentation: 'Gotas 500 mg/mL', indications: 'Fiebre refractaria, dolor severo', notes: 'Agranulocitosis, no en <3 meses' },
+  { name: 'Difenhidramina', genericName: 'Difenhidramina', category: 'Antihistamínico', commonDosage: '25-50 mg VO/IV c/6-8h', presentation: 'Cápsula 25, 50 mg; ampolla 50 mg', indications: 'Alergia, urticaria, náuseas, insomnio', notes: 'Sedación, anticolinérgico, no en niños pequeños' },
+  { name: 'Loratadina', genericName: 'Loratadina', category: 'Antihistamínico', commonDosage: '10 mg VO c/24h', presentation: 'Tableta 10 mg', indications: 'Rinitis alérgica, urticaria crónica', notes: 'Antihistamínico no sedante' },
+  { name: 'Cetirizina', genericName: 'Cetirizina', category: 'Antihistamínico', commonDosage: '10 mg VO c/24h', presentation: 'Tableta 10 mg', indications: 'Rinitis alérgica, urticaria', notes: 'Metabolito activo hidroxicina, leve sedación' },
+  { name: 'Levocetirizina', genericName: 'Levocetirizina', category: 'Antihistamínico', commonDosage: '5 mg VO c/24h', presentation: 'Tableta 5 mg', indications: 'Rinitis alérgica, urticaria', notes: 'Enantiómero activo de cetirizina' },
+  { name: 'Desloratadina', genericName: 'Desloratadina', category: 'Antihistamínico', commonDosage: '5 mg VO c/24h', presentation: 'Tableta 5 mg', indications: 'Rinitis alérgica, urticaria', notes: 'Metabolito activo de loratadina' },
+  { name: 'Fexofenadina', genericName: 'Fexofenadina', category: 'Antihistamínico', commonDosage: '120-180 mg VO c/24h', presentation: 'Tableta 120, 180 mg', indications: 'Rinitis alérgica estacional, urticaria', notes: 'No sedante, no cruza BHE' },
+  { name: 'Hidroxicina', genericName: 'Hidroxicina', category: 'Antihistamínico', commonDosage: '25-100 mg VO c/6-8h', presentation: 'Cápsula 25, 50 mg', indications: 'Prurito, ansiedad, urticaria, náuseas', notes: 'Sedación, anticolinérgico, prolongación QT' },
+  { name: 'Clemastina', genericName: 'Clemastina', category: 'Antihistamínico', commonDosage: '1-2 mg VO c/12h', presentation: 'Tableta 1 mg', indications: 'Rinitis alérgica, urticaria', notes: 'Sedación, efectos anticolinérgicos' },
+  { name: 'Clorfenamina', genericName: 'Clorfeniramina', category: 'Antihistamínico', commonDosage: '4-12 mg VO c/6-12h', presentation: 'Tableta 4 mg', indications: 'Rinitis, urticaria, resfriado común', notes: 'Sedación, anticolinérgico' },
+  { name: 'Clorfenamina inyectable', genericName: 'Clorfeniramina', category: 'Antihistamínico', commonDosage: '5-20 mg IM/IV c/6-8h', presentation: 'Ampolla 10 mg/mL', indications: 'Reacciones alérgicas agudas', notes: 'Hipotensión si rápida IV' },
+  { name: 'Ketotifeno', genericName: 'Ketotifeno', category: 'Antihistamínico', commonDosage: '1 mg VO c/12h', presentation: 'Tableta 1 mg', indications: 'Profilaxis asma, alergia, conjuntivitis', notes: 'Sedación, aumento de peso' },
+  { name: 'Cromoglicato', genericName: 'Cromoglicato sódico', category: 'Antihistamínico', commonDosage: '2-4 gotas c/6h', presentation: 'Colirio 2%, inhalador 5 mg', indications: 'Conjuntivitis alérgica, asma, rinitis', notes: 'Estabilizador mastocitos, uso profiláctico' },
+  { name: 'Montelukast', genericName: 'Montelukast', category: 'Antihistamínico', commonDosage: '10 mg VO c/24h', presentation: 'Tableta 10 mg', indications: 'Asma, rinitis alérgica', notes: 'Antileucotrieno, cambios neuropsiquiátricos' },
+  { name: 'Ranitidina', genericName: 'Ranitidina', category: 'Antihistamínico', commonDosage: '150 mg VO c/12h', presentation: 'Tableta 150 mg', indications: 'Alergia como anti-H2, úlcera péptica', notes: 'Anti-H2, retirada por NDMA en algunos países' },
+  { name: 'Famotidina', genericName: 'Famotidina', category: 'Antihistamínico', commonDosage: '20-40 mg VO c/24h', presentation: 'Tableta 20, 40 mg', indications: 'Urticaria crónica como anti-H2', notes: 'Usado con anti-H1 para urticaria refractaria' },
+  { name: 'Midazolam', genericName: 'Midazolam', category: 'Sedante/Hipnótico', commonDosage: '1-5 mg IV/IM', presentation: 'Ampolla 5 mg/mL, 15 mg/3mL', indications: 'Sedación consciente, inducción anestesia', notes: 'Depresión respiratoria, amnesia anterógrada' },
+  { name: 'Diazepam', genericName: 'Diazepam', category: 'Sedante/Hipnótico', commonDosage: '2-10 mg VO/IV c/6-8h', presentation: 'Tableta 5, 10 mg; ampolla 10 mg', indications: 'Ansiedad, convulsiones, alcoholismo', notes: 'Larga vida media, dependencia, sedación' },
+  { name: 'Lorazepam', genericName: 'Lorazepam', category: 'Sedante/Hipnótico', commonDosage: '1-4 mg VO/IV c/6-8h', presentation: 'Tableta 1, 2 mg; ampolla 4 mg', indications: 'Ansiedad, estado epiléptico, insomnio', notes: 'Metabolitos inactivos, preferible en IRC' },
+  { name: 'Clonazepam', genericName: 'Clonazepam', category: 'Sedante/Hipnótico', commonDosage: '0.5-2 mg VO c/8-12h', presentation: 'Tableta 0.5, 1, 2 mg', indications: 'Ansiedad, pánico, epilepsia, trastorno movimiento', notes: 'Dependencia, tolerancia, sedación' },
+  { name: 'Alprazolam', genericName: 'Alprazolam', category: 'Sedante/Hipnótico', commonDosage: '0.25-1 mg VO c/8h', presentation: 'Tableta 0.25, 0.5, 1 mg', indications: 'Ansiedad, pánico', notes: 'Alto potencial dependencia, abstinencia severa' },
+  { name: 'Zolpidem', genericName: 'Zolpidem', category: 'Sedante/Hipnótico', commonDosage: '5-10 mg VO c/24h', presentation: 'Tableta 5, 10 mg', indications: 'Insomnio de corta duración', notes: 'Sonambulismo, dependencia, no >4 semanas' },
+  { name: 'Zopiclona', genericName: 'Eszopiclona', category: 'Sedante/Hipnótico', commonDosage: '5-7.5 mg VO c/24h', presentation: 'Tableta 5, 7.5 mg', indications: 'Insomnio', notes: 'Sabor metálico, dependencia' },
+  { name: 'Temazepam', genericName: 'Temazepam', category: 'Sedante/Hipnótico', commonDosage: '15-30 mg VO c/24h', presentation: 'Cápsula 15, 30 mg', indications: 'Insomnio de corta duración', notes: 'Solo hipnótico, vida media intermedia' },
+  { name: 'Hidrato de cloral', genericName: 'Hidrato de cloral', category: 'Sedante/Hipnótico', commonDosage: '500-1000 mg VO', presentation: 'Solución 100 mg/mL', indications: 'Sedación procedimientos pediátricos', notes: 'Irritante GI, carcinógeno potencial' },
+  { name: 'Dexmedetomidina', genericName: 'Dexmedetomidina', category: 'Sedante/Hipnótico', commonDosage: '0.2-0.7 mcg/kg/h IV', presentation: 'Ampolla 100 mcg/mL', indications: 'Sedación UCI, procedimientos', notes: 'Sedación consciente sin depresión respiratoria' },
+  { name: 'Propofol', genericName: 'Propofol', category: 'Sedante/Hipnótico', commonDosage: '1-2.5 mg/kg IV inducción', presentation: 'Emulsión 10 mg/mL', indications: 'Inducción anestesia, sedación UCI', notes: 'Depresión respiratoria, hipotensión, dolor al administrar' },
+  { name: 'Etomidato', genericName: 'Etomidato', category: 'Sedante/Hipnótico', commonDosage: '0.2-0.6 mg/kg IV', presentation: 'Ampolla 2 mg/mL', indications: 'Inducción anestesia secuencia rápida', notes: 'Supresión adrenal transitoria, mioclonías' },
+  { name: 'Ketamina', genericName: 'Ketamina', category: 'Sedante/Hipnótico', commonDosage: '1-4.5 mg/kg IV/IM', presentation: 'Ampolla 50 mg/mL', indications: 'Anestesia disociativa, sedación, analgesia', notes: 'Alucinaciones, emergencia, hipertensión intracraneal' },
+  { name: 'Ácido valproico', genericName: 'Valproato', category: 'Anticonvulsivante', commonDosage: '500-2000 mg VO c/8-12h', presentation: 'Tableta 250, 500 mg', indications: 'Epilepsia, migraña, bipolar', notes: 'Hepatotoxicidad, pancreatitis, teratógeno' },
+  { name: 'Fenitoína', genericName: 'Fenitoína', category: 'Anticonvulsivante', commonDosage: '300-400 mg VO c/24h', presentation: 'Cápsula 100 mg; ampolla 250 mg', indications: 'Crisis tónico-clónicas, estado epiléptico', notes: 'Cinética no lineal, nistagmo, ataxia, HGO' },
+  { name: 'Carbamazepina', genericName: 'Carbamazepina', category: 'Anticonvulsivante', commonDosage: '200-1200 mg VO c/8-12h', presentation: 'Tableta 200, 400 mg', indications: 'Epilepsia, neuralgia trigémino, bipolar', notes: 'Inductor enzimático, agranulocitosis, Stevens-Johnson' },
+  { name: 'Lamotrigina', genericName: 'Lamotrigina', category: 'Anticonvulsivante', commonDosage: '100-400 mg VO c/12-24h', presentation: 'Tableta 25, 50, 100 mg', indications: 'Epilepsia, bipolar', notes: 'Síndrome Stevens-Johnson, titulación lenta' },
+  { name: 'Levetiracetam', genericName: 'Levetiracetam', category: 'Anticonvulsivante', commonDosage: '500-1500 mg VO c/12h', presentation: 'Tableta 500, 750 mg', indications: 'Epilepsia focal y generalizada', notes: 'Irritabilidad, somnolencia, ajuste en IR' },
+  { name: 'Topiramato', genericName: 'Topiramato', category: 'Anticonvulsivante', commonDosage: '50-400 mg VO c/12h', presentation: 'Tableta 25, 50, 100 mg', indications: 'Epilepsia, migraña', notes: 'Pérdida peso, acidosis metabólica, cálculo renal' },
+  { name: 'Oxcarbazepina', genericName: 'Oxcarbazepina', category: 'Anticonvulsivante', commonDosage: '600-2400 mg VO c/12h', presentation: 'Tableta 300, 600 mg', indications: 'Epilepsia focal', notes: 'Hiponatremia, alergia cruzada con carbamazepina' },
+  { name: 'Fenobarbital', genericName: 'Fenobarbital', category: 'Anticonvulsivante', commonDosage: '60-200 mg VO c/24h', presentation: 'Tableta 60, 100 mg; ampolla 200 mg', indications: 'Crisis generalizadas, estado epiléptico', notes: 'Sedación, dependencia, inductor enzimático' },
+  { name: 'Primidona', genericName: 'Primidona', category: 'Anticonvulsivante', commonDosage: '250-750 mg VO c/8h', presentation: 'Tableta 250 mg', indications: 'Crisis tónico-clónicas', notes: 'Metabolitos activos, sedación' },
+  { name: 'Etosuximida', genericName: 'Etosuximida', category: 'Anticonvulsivante', commonDosage: '500-1500 mg VO c/12h', presentation: 'Cápsula 250 mg', indications: 'Crisis de ausencia', notes: 'Náuseas, anorexia, lupus inducido' },
+  { name: 'Clobazam', genericName: 'Clobazam', category: 'Anticonvulsivante', commonDosage: '10-40 mg VO c/24h', presentation: 'Tableta 10, 20 mg', indications: 'Epilepsia, ansiedad', notes: 'Benzodiacepina, síndrome Lennox-Gastaut' },
+  { name: 'Vigabatrina', genericName: 'Vigabatrina', category: 'Anticonvulsivante', commonDosage: '2000-3000 mg VO c/12h', presentation: 'Tableta 500 mg', indications: 'Espasmos infantiles, epilepsia refractaria', notes: 'Defectos del campo visual irreversibles' },
+  { name: 'Lacosamida', genericName: 'Lacosamida', category: 'Anticonvulsivante', commonDosage: '100-400 mg VO c/12h', presentation: 'Tableta 50, 100, 200 mg', indications: 'Epilepsia focal', notes: 'Prolongación PR, mareos, diplopía' },
+  { name: 'Rufinamida', genericName: 'Rufinamida', category: 'Anticonvulsivante', commonDosage: '200-800 mg VO c/12h', presentation: 'Tableta 200, 400 mg', indications: 'Síndrome Lennox-Gastaut', notes: 'Acortamiento QT, somnolencia' },
+  { name: 'Zonisamida', genericName: 'Zonisamida', category: 'Anticonvulsivante', commonDosage: '100-400 mg VO c/24h', presentation: 'Cápsula 25, 50, 100 mg', indications: 'Epilepsia parcial', notes: 'Oligohidrosis, cálculo renal, somnolencia' },
+  { name: 'Perampanel', genericName: 'Perampanel', category: 'Anticonvulsivante', commonDosage: '4-12 mg VO c/24h', presentation: 'Tableta 2, 4, 6, 8 mg', indications: 'Epilepsia focal, tónico-clónica', notes: 'Irritabilidad, caídas, riesgo abuso' },
+  { name: 'Tiagabina', genericName: 'Tiagabina', category: 'Anticonvulsivante', commonDosage: '15-56 mg VO c/8-12h', presentation: 'Tableta 2, 4, 12, 16 mg', indications: 'Epilepsia parcial', notes: 'Mareos, temblor, convulsiones si abrupta' },
+  { name: 'Haloperidol', genericName: 'Haloperidol', category: 'Antipsicótico', commonDosage: '2-10 mg VO/IV c/8-12h', presentation: 'Tableta 5 mg; ampolla 5 mg', indications: 'Esquizofrenia, agitación, Tourette', notes: 'EPS, discinesia tardía, prolongación QT' },
+  { name: 'Clorpromazina', genericName: 'Clorpromazina', category: 'Antipsicótico', commonDosage: '25-100 mg VO c/6-8h', presentation: 'Tableta 25 mg; ampolla 25 mg', indications: 'Esquizofrenia, hipo, náuseas', notes: 'Sedación, hipotensión, fotosensibilidad' },
+  { name: 'Risperidona', genericName: 'Risperidona', category: 'Antipsicótico', commonDosage: '2-8 mg VO c/24h', presentation: 'Tableta 1, 2, 3 mg', indications: 'Esquizofrenia, bipolar, autismo', notes: 'Hiperprolactinemia, EPS dosis-dependiente' },
+  { name: 'Olanzapina', genericName: 'Olanzapina', category: 'Antipsicótico', commonDosage: '5-20 mg VO c/24h', presentation: 'Tableta 5, 7.5, 10 mg', indications: 'Esquizofrenia, bipolar, agitación', notes: 'Aumento peso, dislipidemia, síndrome metabólico' },
+  { name: 'Quetiapina', genericName: 'Quetiapina', category: 'Antipsicótico', commonDosage: '150-800 mg VO c/12-24h', presentation: 'Tableta 25, 100, 200 mg', indications: 'Esquizofrenia, bipolar, insomnio', notes: 'Sedación, hipotensión ortostática, aumento peso' },
+  { name: 'Aripiprazol', genericName: 'Aripiprazol', category: 'Antipsicótico', commonDosage: '10-30 mg VO c/24h', presentation: 'Tableta 5, 10, 15, 20 mg', indications: 'Esquizofrenia, bipolar, autismo', notes: 'Menor efecto metabólico, acatisia' },
+  { name: 'Clozapina', genericName: 'Clozapina', category: 'Antipsicótico', commonDosage: '200-600 mg VO c/12-24h', presentation: 'Tableta 25, 100 mg', indications: 'Esquizofrenia refractaria', notes: 'Agranulocitosis, monitoreo, miocarditis' },
+  { name: 'Ziprasidona', genericName: 'Ziprasidona', category: 'Antipsicótico', commonDosage: '40-160 mg VO c/12h', presentation: 'Cápsula 40, 60, 80 mg', indications: 'Esquizofrenia, manía bipolar', notes: 'QT, tomar con alimentos' },
+  { name: 'Paliperidona', genericName: 'Paliperidona', category: 'Antipsicótico', commonDosage: '3-12 mg VO c/24h', presentation: 'Tableta 3, 6, 9 mg', indications: 'Esquizofrenia, esquizoafectivo', notes: 'EPS, hiperprolactinemia, taquicardia' },
+  { name: 'Lurasidona', genericName: 'Lurasidona', category: 'Antipsicótico', commonDosage: '40-160 mg VO c/24h', presentation: 'Tableta 20, 40, 80 mg', indications: 'Esquizofrenia, depresión bipolar', notes: 'Acatisia, somnolencia, tomar con alimentos' },
+  { name: 'Amisulprida', genericName: 'Amisulprida', category: 'Antipsicótico', commonDosage: '50-800 mg VO c/12-24h', presentation: 'Tableta 50, 100, 200 mg', indications: 'Esquizofrenia', notes: 'EPS, hiperprolactinemia, QT' },
+  { name: 'Flufenazina', genericName: 'Flufenazina', category: 'Antipsicótico', commonDosage: '2.5-10 mg VO c/6-8h', presentation: 'Tableta 1, 2.5, 5 mg', indications: 'Esquizofrenia crónica', notes: 'Altos EPS, discinesia tardía' },
+  { name: 'Tioridazina', genericName: 'Tioridazina', category: 'Antipsicótico', commonDosage: '150-800 mg VO c/24h', presentation: 'Tableta 50, 100 mg', indications: 'Esquizofrenia', notes: 'QT dosis-dependiente, retinopatía' },
+  { name: 'Trifluoperazina', genericName: 'Trifluoperazina', category: 'Antipsicótico', commonDosage: '5-30 mg VO c/12h', presentation: 'Tableta 1, 2, 5 mg', indications: 'Esquizofrenia, ansiedad severa', notes: 'EPS, discinesia, ictericia colestásica' },
+  { name: 'Sulpirida', genericName: 'Sulpirida', category: 'Antipsicótico', commonDosage: '200-800 mg VO c/12h', presentation: 'Tableta 50, 200 mg', indications: 'Esquizofrenia, depresión', notes: 'Hiperprolactinemia, EPS' },
+  { name: 'Asenapina', genericName: 'Asenapina', category: 'Antipsicótico', commonDosage: '5-10 mg SL c/12h', presentation: 'Tableta sublingual 5, 10 mg', indications: 'Esquizofrenia, manía bipolar', notes: 'Hipoestesia oral, aumento peso modesto' },
+  { name: 'Cariprazina', genericName: 'Cariprazina', category: 'Antipsicótico', commonDosage: '1.5-6 mg VO c/24h', presentation: 'Cápsula 1.5, 3, 4.5, 6 mg', indications: 'Esquizofrenia, manía, depresión', notes: 'Acatisia, insomnio, vida media larga' },
+  { name: 'Brexpiprazol', genericName: 'Brexpiprazol', category: 'Antipsicótico', commonDosage: '2-4 mg VO c/24h', presentation: 'Tableta 0.25-4 mg', indications: 'Esquizofrenia, depresión adyuvante', notes: 'Acatisia, aumento peso, agitación' },
+  { name: 'Carbonato de litio', genericName: 'Litio', category: 'Antipsicótico', commonDosage: '300-1200 mg VO c/8-12h', presentation: 'Cápsula 300 mg', indications: 'Trastorno bipolar, manía', notes: 'Monitorizar niveles, nefrotoxicidad, hipotiroidismo' },
+  { name: 'Ondansetrón', genericName: 'Ondansetrón', category: 'Antiemético', commonDosage: '4-8 mg IV/VO c/8h', presentation: 'Tableta 4, 8 mg; ampolla 8 mg', indications: 'Náuseas postoperatorias, quimioterapia', notes: 'Prolongación QT, cefalea, estreñimiento' },
+  { name: 'Metoclopramida', genericName: 'Metoclopramida', category: 'Antiemético', commonDosage: '10 mg IV/IM/VO c/8h', presentation: 'Tableta 10 mg; ampolla 10 mg', indications: 'Náuseas, gastroparesia, reflujo', notes: 'EPS, discinesia tardía, sedación' },
+  { name: 'Domperidona', genericName: 'Domperidona', category: 'Antiemético', commonDosage: '10-20 mg VO c/8h', presentation: 'Tableta 10 mg', indications: 'Náuseas, gastroparesia', notes: 'Prolongación QT, hiperprolactinemia' },
+  { name: 'Dimenhidrinato', genericName: 'Dimenhidrinato', category: 'Antiemético', commonDosage: '50-100 mg VO/IV c/6h', presentation: 'Tableta 50 mg; ampolla 50 mg', indications: 'Mareo por movimiento, náuseas', notes: 'Sedación, anticolinérgico' },
+  { name: 'Hioscina', genericName: 'Escopolamina', category: 'Antiemético', commonDosage: '0.3-0.6 mg IM/IV c/6-8h', presentation: 'Ampolla 0.5 mg/mL', indications: 'Mareo, náuseas, cólico', notes: 'Anticolinérgico, no en glaucoma' },
+  { name: 'Aprepitant', genericName: 'Aprepitant', category: 'Antiemético', commonDosage: '125 mg VO d1, 80 mg d2-3', presentation: 'Cápsula 80, 125 mg', indications: 'Náuseas por quimioterapia', notes: 'Antagonista NK1, interacciones CYP3A4' },
+  { name: 'Granisetrón', genericName: 'Granisetrón', category: 'Antiemético', commonDosage: '1-2 mg VO/IV c/12h', presentation: 'Tableta 1 mg; ampolla 1 mg/mL', indications: 'Náuseas por quimioterapia', notes: 'Antagonista 5-HT3, cefalea' },
+  { name: 'Palonosetrón', genericName: 'Palonosetrón', category: 'Antiemético', commonDosage: '0.25 mg IV dosis única', presentation: 'Ampolla 0.25 mg/5mL', indications: 'Náuseas quimioterapia altamente emetógena', notes: 'Vida media 40h, 5-HT3 segunda generación' },
+  { name: 'Dexametasona antiemética', genericName: 'Dexametasona', category: 'Antiemético', commonDosage: '4-20 mg IV dosis única', presentation: 'Ampolla 4, 8 mg/mL', indications: 'Náuseas por quimioterapia, edema cerebral', notes: 'Hiperglucemia, inmunosupresión' },
+  { name: 'Proclorperazina', genericName: 'Proclorperazina', category: 'Antiemético', commonDosage: '5-10 mg VO/IM c/6-8h', presentation: 'Tableta 5, 10 mg; ampolla 5 mg', indications: 'Náuseas, vértigo', notes: 'EPS, discinesia tardía, sedación' },
+  { name: 'Droperidol', genericName: 'Droperidol', category: 'Antiemético', commonDosage: '0.625-2.5 mg IV/IM', presentation: 'Ampolla 2.5 mg/mL', indications: 'Náuseas postoperatorias, agitación', notes: 'QT, sedación, hipotensión' },
+  { name: 'Bromoprida', genericName: 'Bromoprida', category: 'Antiemético', commonDosage: '10-20 mg VO/IM c/8h', presentation: 'Solución 4 mg/mL', indications: 'Náuseas, reflujo, dispepsia', notes: 'EPS, procinético, hiperprolactinemia' },
+  { name: 'Salbutamol', genericName: 'Albuterol', category: 'Broncodilatador', commonDosage: '2 puff c/4-6h o 2.5 mg neb', presentation: 'Inhalador 100 mcg/puff, solución neb', indications: 'Asma, EPOC, broncoespasmo', notes: 'Beta2 agonista, taquicardia, temblor' },
+  { name: 'Formoterol', genericName: 'Formoterol', category: 'Broncodilatador', commonDosage: '12 mcg inhalación c/12h', presentation: 'Inhalador 12 mcg/dosis', indications: 'Asma, EPOC mantenimiento', notes: 'LABA, no usar en crisis' },
+  { name: 'Salmeterol', genericName: 'Salmeterol', category: 'Broncodilatador', commonDosage: '50 mcg inhalación c/12h', presentation: 'Inhalador 25 mcg/dosis', indications: 'Asma, EPOC mantenimiento', notes: 'LABA, riesgo muerte asma, no monoterapia' },
+  { name: 'Tiotropio', genericName: 'Tiotropio', category: 'Broncodilatador', commonDosage: '2 inhalaciones c/24h', presentation: 'Cápsula inhalación 18 mcg', indications: 'EPOC, asma', notes: 'Anticolinérgico LAMA, boca seca' },
+  { name: 'Ipratropio', genericName: 'Ipratropio', category: 'Broncodilatador', commonDosage: '2-4 puff c/6h o 500 mcg neb', presentation: 'Inhalador 20 mcg/puff, solución neb', indications: 'EPOC, asma aguda', notes: 'Anticolinérgico, poco efecto sistémico' },
+  { name: 'Teofilina', genericName: 'Teofilina', category: 'Broncodilatador', commonDosage: '200-400 mg VO c/12h', presentation: 'Tableta LP 200 mg', indications: 'Asma, EPOC', notes: 'Ventana estrecha, náuseas, arritmias' },
+  { name: 'Aminofilina', genericName: 'Aminofilina', category: 'Broncodilatador', commonDosage: '5-6 mg/kg IV carga', presentation: 'Ampolla 250 mg/10mL', indications: 'Asma aguda severa, EPOC', notes: 'Teofilina, náuseas, convulsiones' },
+  { name: 'Fenoterol', genericName: 'Fenoterol', category: 'Broncodilatador', commonDosage: '1-2 puff c/6-8h', presentation: 'Inhalador 100 mcg/puff', indications: 'Asma, EPOC, broncoespasmo', notes: 'Beta2 agonista, taquicardia' },
+  { name: 'Terbutalina', genericName: 'Terbutalina', category: 'Broncodilatador', commonDosage: '0.25-0.5 mg SC', presentation: 'Ampolla 0.5 mg/mL', indications: 'Asma aguda, tocolítico', notes: 'Beta2, taquicardia, hiperglucemia' },
+  { name: 'Indacaterol', genericName: 'Indacaterol', category: 'Broncodilatador', commonDosage: '150-300 mcg inhalación c/24h', presentation: 'Cápsula inhalación 150 mcg', indications: 'EPOC, asma', notes: 'LABA ultra-larga duración, tos' },
+  { name: 'Glicopirrolato', genericName: 'Glicopirronio', category: 'Broncodilatador', commonDosage: '50 mcg inhalación c/24h', presentation: 'Cápsula inhalación 50 mcg', indications: 'EPOC', notes: 'Anticolinérgico LAMA, boca seca' },
+  { name: 'Omalizumab', genericName: 'Omalizumab', category: 'Broncodilatador', commonDosage: '150-375 mg SC c/2-4 sem', presentation: 'Jeringa 75, 150 mg', indications: 'Asma alérgica severa, urticaria', notes: 'Anti-IgE, reacción anafiláctica, alto costo' },
+  { name: 'Beclometasona inhalada', genericName: 'Beclometasona', category: 'Broncodilatador', commonDosage: '100-400 mcg/día inhalación', presentation: 'Inhalador 50, 100, 250 mcg', indications: 'Asma mantenimiento', notes: 'Corticoide inhalado, candidiasis oral' },
+  { name: 'Budesonida inhalada', genericName: 'Budesonida', category: 'Broncodilatador', commonDosage: '200-800 mcg/día inhalación', presentation: 'Inhalador 100, 200 mcg/dosis', indications: 'Asma, EPOC mantenimiento', notes: 'Corticoide inhalado, enjuagar boca' },
+  { name: 'Fluticasona inhalada', genericName: 'Fluticasona', category: 'Broncodilatador', commonDosage: '88-440 mcg inhalación c/12h', presentation: 'Inhalador 44, 110, 220 mcg', indications: 'Asma, EPOC mantenimiento', notes: 'Corticoide inhalado, supresión adrenal' },
+  { name: 'Hidrocortisona', genericName: 'Hidrocortisona', category: 'Corticosteroide', commonDosage: '100-300 mg IV c/8h', presentation: 'Frasco ampolla 100, 500 mg', indications: 'Insuficiencia suprarrenal, shock, alergias', notes: 'Retención Na, hiperglucemia, inmunosupresión' },
+  { name: 'Prednisona', genericName: 'Prednisona', category: 'Corticosteroide', commonDosage: '5-60 mg VO c/24h', presentation: 'Tableta 5, 20, 50 mg', indications: 'Enf. inflamatorias, autoinmunes, alergia', notes: 'Supresión adrenal, osteoporosis' },
+  { name: 'Prednisolona', genericName: 'Prednisolona', category: 'Corticosteroide', commonDosage: '5-60 mg VO c/24h', presentation: 'Tableta 5, 15, 30 mg', indications: 'Inflamación ocular, autoinmunes', notes: 'Metabolito activo de prednisona' },
+  { name: 'Metilprednisolona', genericName: 'Metilprednisolona', category: 'Corticosteroide', commonDosage: '4-120 mg IV c/6-24h', presentation: 'Ampolla 40, 125, 500 mg', indications: 'Asma severa, LES, rechazo trasplante', notes: 'Pulsos 1g/día en casos graves' },
+  { name: 'Dexametasona', genericName: 'Dexametasona', category: 'Corticosteroide', commonDosage: '4-40 mg IV c/6-24h', presentation: 'Ampolla 4, 8 mg/mL', indications: 'Edema cerebral, COVID-19, QT', notes: 'Potente, larga duración, hiperglucemia' },
+  { name: 'Betametasona', genericName: 'Betametasona', category: 'Corticosteroide', commonDosage: '4-12 mg IM/IA', presentation: 'Ampolla 4 mg/mL', indications: 'Maduración pulmonar fetal, artritis', notes: 'Uso obstétrico, intraarticular' },
+  { name: 'Triamcinolona', genericName: 'Triamcinolona', category: 'Corticosteroide', commonDosage: '40-80 mg IM/IA', presentation: 'Ampolla 40 mg/mL', indications: 'Artritis, bursitis, psoriasis', notes: 'Depósito IM, lipodistrofia local' },
+  { name: 'Fludrocortisona', genericName: 'Fludrocortisona', category: 'Corticosteroide', commonDosage: '0.05-0.2 mg VO c/24h', presentation: 'Tableta 0.1 mg', indications: 'Insuficiencia suprarrenal primaria', notes: 'Mineralocorticoide, HTA, hipopotasemia' },
+  { name: 'Deflazacort', genericName: 'Deflazacort', category: 'Corticosteroide', commonDosage: '6-90 mg VO c/24h', presentation: 'Tableta 6, 30 mg', indications: 'Enf. inflamatorias y autoinmunes', notes: 'Menor retención Na que prednisona' },
+  { name: 'Clobetasol tópico', genericName: 'Clobetasol', category: 'Corticosteroide', commonDosage: 'Aplicar capa fina c/12h', presentation: 'Crema/ungüento 0.05%', indications: 'Dermatitis, psoriasis, eczema severo', notes: 'Alta potencia, usar <2 semanas' },
+  { name: 'Hidrocortisona tópica', genericName: 'Hidrocortisona', category: 'Corticosteroide', commonDosage: 'Aplicar c/6-12h', presentation: 'Crema 0.5-2.5%', indications: 'Dermatitis, eczema, picaduras', notes: 'Baja potencia, seguro niños' },
+  { name: 'Mometasona tópica', genericName: 'Mometasona', category: 'Corticosteroide', commonDosage: 'Aplicar c/24h', presentation: 'Crema/ungüento 0.1%', indications: 'Dermatitis atópica, psoriasis', notes: 'Potencia media, 1 vez al día' },
+  { name: 'Fluocinolona tópica', genericName: 'Fluocinolona', category: 'Corticosteroide', commonDosage: 'Aplicar c/6-12h', presentation: 'Crema 0.01-0.025%', indications: 'Dermatitis seborreica, eczema', notes: 'Baja/media potencia, también oído' },
+  { name: 'Heparina sódica', genericName: 'Heparina no fraccionada', category: 'Anticoagulante/Antiagregante', commonDosage: '80 U/kg bolo, 18 U/kg/h IV', presentation: 'Frasco ampolla 5000 U/mL', indications: 'TVP, IAM, anticoagulación', notes: 'Monitorizar TTPa, riesgo sangrado' },
+  { name: 'Enoxaparina', genericName: 'Enoxaparina', category: 'Anticoagulante/Antiagregante', commonDosage: '1 mg/kg SC c/12h', presentation: 'Jeringa 40, 60, 80 mg', indications: 'TVP, TEP, IAM, profilaxis', notes: 'HBPM, no monitorizar rutina' },
+  { name: 'Warfarina', genericName: 'Warfarina', category: 'Anticoagulante/Antiagregante', commonDosage: '2-10 mg VO c/24h', presentation: 'Tableta 1, 2, 3, 5 mg', indications: 'FA, TVP, prótesis valvular', notes: 'Monitorizar INR, interacción alimentos' },
+  { name: 'Apixabán', genericName: 'Apixabán', category: 'Anticoagulante/Antiagregante', commonDosage: '5 mg VO c/12h', presentation: 'Tableta 2.5, 5 mg', indications: 'FA, TVP, profilaxis TEP', notes: 'Antídoto: andexanet, ajuste IR' },
+  { name: 'Rivaroxabán', genericName: 'Rivaroxabán', category: 'Anticoagulante/Antiagregante', commonDosage: '15-20 mg VO c/24h', presentation: 'Tableta 10, 15, 20 mg', indications: 'FA, TVP, TEP, profilaxis', notes: 'Antídoto: andexanet, con comida' },
+  { name: 'Edoxabán', genericName: 'Edoxabán', category: 'Anticoagulante/Antiagregante', commonDosage: '60 mg VO c/24h', presentation: 'Tableta 15, 30, 60 mg', indications: 'FA, TVP, TEP', notes: 'Antídoto: andexanet, no IR severa' },
+  { name: 'Dabigatrán', genericName: 'Dabigatrán', category: 'Anticoagulante/Antiagregante', commonDosage: '150 mg VO c/12h', presentation: 'Cápsula 110, 150 mg', indications: 'FA, TVP, profilaxis TEP', notes: 'Antídoto: idarucizumab, dispepsia' },
+  { name: 'Clopidogrel', genericName: 'Clopidogrel', category: 'Anticoagulante/Antiagregante', commonDosage: '75 mg VO c/24h', presentation: 'Tableta 75 mg', indications: 'IAM, ACV, stent, EAP', notes: 'Antiagregante, metabolizadores lentos' },
+  { name: 'Ticagrelor', genericName: 'Ticagrelor', category: 'Anticoagulante/Antiagregante', commonDosage: '90 mg VO c/12h', presentation: 'Tableta 90 mg', indications: 'SCA, IAM, stent', notes: 'Antiagregante, disnea, sin metabolismo' },
+  { name: 'Prasugrel', genericName: 'Prasugrel', category: 'Anticoagulante/Antiagregante', commonDosage: '10 mg VO c/24h', presentation: 'Tableta 5, 10 mg', indications: 'SCA, IAM con ICP', notes: 'Antiagregante, no en ACV previo' },
+  { name: 'Dipiridamol', genericName: 'Dipiridamol', category: 'Anticoagulante/Antiagregante', commonDosage: '200 mg VO c/12h', presentation: 'Cápsula 200 mg', indications: 'Prevención ACV, válvulas mecánicas', notes: 'Cefalea, vasodilatación, con aspirina' },
+  { name: 'Cilostazol', genericName: 'Cilostazol', category: 'Anticoagulante/Antiagregante', commonDosage: '100 mg VO c/12h', presentation: 'Tableta 50, 100 mg', indications: 'Claudicación intermitente', notes: 'Cefalea, diarrea, no en ICC' },
+  { name: 'Fondaparinux', genericName: 'Fondaparinux', category: 'Anticoagulante/Antiagregante', commonDosage: '2.5-10 mg SC c/24h', presentation: 'Jeringa 2.5, 5, 7.5, 10 mg', indications: 'TVP, TEP, profilaxis', notes: 'Pentasacárido, sin antídoto específico' },
+  { name: 'Alteplasa', genericName: 'Activador plasminógeno tisular', category: 'Anticoagulante/Antiagregante', commonDosage: '0.9 mg/kg IV máx 90 mg', presentation: 'Frasco ampolla 50, 100 mg', indications: 'ACV isquémico, IAM, TEP masivo', notes: 'Fibrinolítico, ventana 3-4.5h' },
+  { name: 'Amoxicilina', genericName: 'Amoxicilina', category: 'Antibiótico', commonDosage: '500 mg-1g VO c/8h', presentation: 'Cápsula 500 mg', indications: 'Infecciones respiratorias, otitis, urinarias', notes: 'Alergia penicilinas, rash, diarrea' },
+  { name: 'Amoxicilina-clavulánico', genericName: 'Amoxicilina/clavulanato', category: 'Antibiótico', commonDosage: '875/125 mg VO c/12h', presentation: 'Tableta 875/125 mg', indications: 'Infecciones respiratorias, sinusitis, mordeduras', notes: 'Diarrea, alergia penicilinas' },
+  { name: 'Penicilina G sódica', genericName: 'Penicilina G', category: 'Antibiótico', commonDosage: '2-4 millones U IV c/4-6h', presentation: 'Frasco ampolla 5 millones U', indications: 'Neumonía, meningitis, sífilis', notes: 'Alergia, neurotoxicidad altas dosis' },
+  { name: 'Piperacilina-tazobactam', genericName: 'Piperacilina/tazobactam', category: 'Antibiótico', commonDosage: '4.5 g IV c/6-8h', presentation: 'Frasco ampolla 4.5 g', indications: 'Infecciones nosocomiales, neutropenia febril', notes: 'Cubre Pseudomonas, ajuste IR' },
+  { name: 'Ampicilina', genericName: 'Ampicilina', category: 'Antibiótico', commonDosage: '1-2 g IV c/4-6h', presentation: 'Frasco ampolla 1 g', indications: 'Infecciones bacterianas, meningitis', notes: 'Alergia penicilinas, exantema mononucleosis' },
+  { name: 'Cefalexina', genericName: 'Cefalexina', category: 'Antibiótico', commonDosage: '500 mg VO c/6-8h', presentation: 'Cápsula 500 mg', indications: 'Infecciones piel, urinarias, respiratorias', notes: 'Primera generación, alergia cefalosporinas' },
+  { name: 'Cefuroxima', genericName: 'Cefuroxima', category: 'Antibiótico', commonDosage: '250-500 mg VO c/12h', presentation: 'Tableta 250, 500 mg', indications: 'Infecciones respiratorias, urinarias', notes: 'Segunda generación' },
+  { name: 'Ceftriaxona', genericName: 'Ceftriaxona', category: 'Antibiótico', commonDosage: '1-2 g IV c/24h', presentation: 'Frasco ampolla 1 g', indications: 'Neumonía, meningitis, gonorrea', notes: 'Tercera generación, no en neonatos hiperbilirrubinemia' },
+  { name: 'Cefotaxima', genericName: 'Cefotaxima', category: 'Antibiótico', commonDosage: '1-2 g IV c/6-8h', presentation: 'Frasco ampolla 1 g', indications: 'Meningitis, neumonía, sepsis', notes: 'Tercera generación, trombocitopenia' },
+  { name: 'Ceftazidima', genericName: 'Ceftazidima', category: 'Antibiótico', commonDosage: '1-2 g IV c/8h', presentation: 'Frasco ampolla 1 g', indications: 'Pseudomonas, infecciones nosocomiales', notes: 'Tercera generación anti-pseudomonas' },
+  { name: 'Cefepima', genericName: 'Cefepima', category: 'Antibiótico', commonDosage: '1-2 g IV c/8-12h', presentation: 'Frasco ampolla 1, 2 g', indications: 'Infecciones nosocomiales, neutropenia febril', notes: 'Cuarta generación, neurotoxicidad' },
+  { name: 'Ceftarolina', genericName: 'Ceftarolina', category: 'Antibiótico', commonDosage: '600 mg IV c/12h', presentation: 'Frasco ampolla 600 mg', indications: 'Infecciones piel, neumonía adquirida', notes: 'Quinta generación, anti-MRSA' },
+  { name: 'Meropenem', genericName: 'Meropenem', category: 'Antibiótico', commonDosage: '1-2 g IV c/8h', presentation: 'Frasco ampolla 500 mg, 1 g', indications: 'Infecciones graves, sepsis', notes: 'Carbapenémico, convulsiones' },
+  { name: 'Imipenem-cilastatina', genericName: 'Imipenem/cilastatina', category: 'Antibiótico', commonDosage: '250-500 mg IV c/6h', presentation: 'Frasco ampolla 500 mg', indications: 'Infecciones polimicrobianas graves', notes: 'Carbapenémico, convulsiones, ajuste IR' },
+  { name: 'Ertapenem', genericName: 'Ertapenem', category: 'Antibiótico', commonDosage: '1 g IV c/24h', presentation: 'Frasco ampolla 1 g', indications: 'Infecciones intraabdominales, piel', notes: 'Carbapenémico, menos convulsiones' },
+  { name: 'Azitromicina', genericName: 'Azitromicina', category: 'Antibiótico', commonDosage: '500 mg VO c/24h x3d', presentation: 'Tableta 500 mg', indications: 'Infecciones respiratorias, ETS', notes: 'Macrólido, QT, diarrea' },
+  { name: 'Claritromicina', genericName: 'Claritromicina', category: 'Antibiótico', commonDosage: '250-500 mg VO c/12h', presentation: 'Tableta 250, 500 mg', indications: 'Infecciones respiratorias, H. pylori', notes: 'Macrólido, interacción CYP3A4, sabor metálico' },
+  { name: 'Eritromicina', genericName: 'Eritromicina', category: 'Antibiótico', commonDosage: '250-500 mg VO c/6h', presentation: 'Tableta 250, 500 mg', indications: 'Infecciones respiratorias, procinético', notes: 'Macrólido, molestias GI, QT' },
+  { name: 'Doxiciclina', genericName: 'Doxiciclina', category: 'Antibiótico', commonDosage: '100 mg VO c/12h', presentation: 'Cápsula 100 mg', indications: 'Infecciones respiratorias, acné, malaria', notes: 'Tetraciclina, fotosensibilidad, no <8a' },
+  { name: 'Tetraciclina', genericName: 'Tetraciclina', category: 'Antibiótico', commonDosage: '500 mg VO c/6h', presentation: 'Cápsula 250, 500 mg', indications: 'Acné, infecciones respiratorias', notes: 'Fotosensibilidad, quelación Ca' },
+  { name: 'Minociclina', genericName: 'Minociclina', category: 'Antibiótico', commonDosage: '100 mg VO c/12h', presentation: 'Cápsula 50, 100 mg', indications: 'Acné, infecciones piel', notes: 'Tetraciclina, vértigo, hiperpigmentación' },
+  { name: 'Ciprofloxacino', genericName: 'Ciprofloxacino', category: 'Antibiótico', commonDosage: '250-750 mg VO c/12h', presentation: 'Tableta 250, 500 mg', indications: 'Infecciones urinarias, GI, respiratorias', notes: 'Fluoroquinolona, tendinitis, QT' },
+  { name: 'Levofloxacino', genericName: 'Levofloxacino', category: 'Antibiótico', commonDosage: '250-750 mg VO c/24h', presentation: 'Tableta 250, 500, 750 mg', indications: 'Neumonía, infecciones urinarias', notes: 'Fluoroquinolona, tendinitis, disglucemia' },
+  { name: 'Moxifloxacino', genericName: 'Moxifloxacino', category: 'Antibiótico', commonDosage: '400 mg VO c/24h', presentation: 'Tableta 400 mg', indications: 'Infecciones respiratorias, intraabdominales', notes: 'Fluoroquinolona, QT, no en IU' },
+  { name: 'Clindamicina', genericName: 'Clindamicina', category: 'Antibiótico', commonDosage: '150-450 mg VO c/6-8h', presentation: 'Cápsula 150, 300 mg', indications: 'Infecciones anaerobias, piel, hueso', notes: 'Colitis por Clostridium difficile' },
+  { name: 'Metronidazol', genericName: 'Metronidazol', category: 'Antibiótico', commonDosage: '250-500 mg VO/IV c/8h', presentation: 'Tableta 250, 500 mg; ampolla 500 mg', indications: 'Infecciones anaerobias, tricomoniasis', notes: 'Gusto metálico, interacción alcohol' },
+  { name: 'Vancomicina', genericName: 'Vancomicina', category: 'Antibiótico', commonDosage: '15-20 mg/kg IV c/8-12h', presentation: 'Frasco ampolla 500 mg, 1 g', indications: 'MRSA, colitis pseudomembranosa', notes: 'Monitorizar niveles, nefrotoxicidad' },
+  { name: 'Teicoplanina', genericName: 'Teicoplanina', category: 'Antibiótico', commonDosage: '400 mg IV c/12h x3, luego 400 mg c/24h', presentation: 'Frasco ampolla 200, 400 mg', indications: 'MRSA, Gram positivos', notes: 'Similar vancomicina, menos nefrotoxicidad' },
+  { name: 'Linezolid', genericName: 'Linezolid', category: 'Antibiótico', commonDosage: '600 mg VO/IV c/12h', presentation: 'Tableta 600 mg; ampolla 600 mg', indications: 'MRSA, VRE, neumonía', notes: 'Oxazolidinona, trombocitopenia, IMAO' },
+  { name: 'Daptomicina', genericName: 'Daptomicina', category: 'Antibiótico', commonDosage: '4-6 mg/kg IV c/24h', presentation: 'Frasco ampolla 350, 500 mg', indications: 'MRSA, piel, bacteriemia', notes: 'Lipopéptido, inactivado por surfactante' },
+  { name: 'Tigeciclina', genericName: 'Tigeciclina', category: 'Antibiótico', commonDosage: '100 mg IV carga, luego 50 mg c/12h', presentation: 'Frasco ampolla 50 mg', indications: 'Infecciones intraabdominales, piel', notes: 'Glicilciclina, mortalidad aumentada' },
+  { name: 'Colistina', genericName: 'Colistimetato', category: 'Antibiótico', commonDosage: '5 mg/kg IV carga, 2.5-5 mg/kg/día', presentation: 'Frasco ampolla 150 mg', indications: 'Infecciones multirresistentes, Pseudomonas', notes: 'Polimixina, nefrotoxicidad' },
+  { name: 'Fosfomicina', genericName: 'Fosfomicina', category: 'Antibiótico', commonDosage: '3 g VO dosis única', presentation: 'Sobre 3 g', indications: 'Infección urinaria no complicada', notes: 'Bien tolerada, resistencia emergente' },
+  { name: 'Nitrofurantoína', genericName: 'Nitrofurantoína', category: 'Antibiótico', commonDosage: '50-100 mg VO c/6-8h', presentation: 'Cápsula 50, 100 mg', indications: 'Profilaxis y tratamiento ITU', notes: 'Neuropatía periférica, fibrosis pulmonar' },
+  { name: 'Trimetoprima-sulfametoxazol', genericName: 'Cotrimoxazol', category: 'Antibiótico', commonDosage: '800/160 mg VO c/12h', presentation: 'Tableta 800/160 mg', indications: 'ITU, respiratorias, PCP', notes: 'Hiperpotasemia, Stevens-Johnson' },
+  { name: 'Gentamicina', genericName: 'Gentamicina', category: 'Antibiótico', commonDosage: '5-7 mg/kg IV c/24h', presentation: 'Ampolla 80 mg/2mL', indications: 'Infecciones Gram negativas, sepsis', notes: 'Aminoglucósido, nefrotoxicidad' },
+  { name: 'Amikacina', genericName: 'Amikacina', category: 'Antibiótico', commonDosage: '15 mg/kg IV c/24h', presentation: 'Ampolla 500 mg/2mL', indications: 'Infecciones Gram negativas graves', notes: 'Aminoglucósido, nefrotoxicidad' },
+  { name: 'Tobramicina', genericName: 'Tobramicina', category: 'Antibiótico', commonDosage: '7 mg/kg IV c/24h', presentation: 'Ampolla 80 mg/2mL', indications: 'Pseudomonas, fibrosis quística', notes: 'Aminoglucósido, inhalada en FQ' },
+  { name: 'Flumazenilo', genericName: 'Flumazenilo', category: 'Antídoto', commonDosage: '0.2-1 mg IV', presentation: 'Ampolla 0.5 mg/5mL', indications: 'Intoxicación por benzodiacepinas', notes: 'Vida media corta, convulsiones si dependencia' },
+  { name: 'Naloxona', genericName: 'Naloxona', category: 'Antídoto', commonDosage: '0.4-2 mg IV/IM c/2-3 min', presentation: 'Ampolla 0.4 mg/mL', indications: 'Intoxicación por opioides', notes: 'Vida media corta, abstinencia aguda' },
+  { name: 'Naltrexona', genericName: 'Naltrexona', category: 'Antídoto', commonDosage: '50 mg VO c/24h', presentation: 'Tableta 50 mg', indications: 'Dependencia opioides, alcoholismo', notes: 'Antagonista opioide larga duración' },
+  { name: 'N-acetilcisteína', genericName: 'Acetilcisteína', category: 'Antídoto', commonDosage: '140 mg/kg carga, 70 mg/kg c/4h', presentation: 'Solución 200 mg/mL', indications: 'Intoxicación por paracetamol', notes: 'Mucolítico, náuseas, anafilaxia' },
+  { name: 'Vitamina K', genericName: 'Fitomenadiona', category: 'Antídoto', commonDosage: '5-10 mg IV/VO', presentation: 'Ampolla 10 mg/mL', indications: 'Antídoto warfarina, deficiencia vit K', notes: 'IV lenta, reacción anafiláctica' },
+  { name: 'Protamina', genericName: 'Protamina', category: 'Antídoto', commonDosage: '1 mg por 100 U heparina', presentation: 'Ampolla 10 mg/mL', indications: 'Antídoto heparina', notes: 'Hipotensión, bradicardia, alergia' },
+  { name: 'Azul de metileno', genericName: 'Azul de metileno', category: 'Antídoto', commonDosage: '1-2 mg/kg IV', presentation: 'Ampolla 10 mg/mL', indications: 'Metahemoglobinemia, cianuro', notes: 'Orina azul, síndrome serotoninérgico' },
+  { name: 'Carbón activado', genericName: 'Carbón activado', category: 'Antídoto', commonDosage: '25-100 g VO dosis única', presentation: 'Suspensión 25 g/120mL', indications: 'Intoxicaciones agudas', notes: 'No en cáusticos, hidrocarburos' },
+  { name: 'Desferroxamina', genericName: 'Deferoxamina', category: 'Antídoto', commonDosage: '15 mg/kg/h IV', presentation: 'Frasco ampolla 500 mg', indications: 'Sobrecarga de hierro', notes: 'Hipotensión, orina rojiza' },
+  { name: 'Penicilamina', genericName: 'Penicilamina', category: 'Antídoto', commonDosage: '250-1000 mg VO c/24h', presentation: 'Cápsula 250 mg', indications: 'Intoxicación por metales pesados, AR', notes: 'Mielotoxicidad, reacciones autoinmunes' },
+  { name: 'Suero fisiológico', genericName: 'Cloruro de sodio 0.9%', category: 'Electrolito/Líquido', commonDosage: '500-1000 mL IV c/8-24h', presentation: 'Bolsa 500, 1000 mL', indications: 'Hipovolemia, deshidratación', notes: 'Cristaloide, evitar en ICC' },
+  { name: 'Ringer lactato', genericName: 'Lactato de Ringer', category: 'Electrolito/Líquido', commonDosage: '500-1000 mL IV c/8-24h', presentation: 'Bolsa 500, 1000 mL', indications: 'Reanimación, deshidratación, quemados', notes: 'Contiene calcio, no sangre misma línea' },
+  { name: 'Cloruro de sodio 3%', genericName: 'Cloruro de sodio hipertónico', category: 'Electrolito/Líquido', commonDosage: '150-300 mL IV bolo', presentation: 'Bolsa 250, 500 mL', indications: 'Hiponatremia severa, HIC', notes: 'Monitorizar Na, mielinolisis pontina' },
+  { name: 'Bicarbonato de sodio', genericName: 'Bicarbonato de sodio', category: 'Electrolito/Líquido', commonDosage: '1 mEq/kg IV bolo', presentation: 'Ampolla 50 mEq/50mL', indications: 'Acidosis metabólica, hiperpotasemia', notes: 'Alcalosis, hipocalcemia, extravasación' },
+  { name: 'Cloruro de potasio', genericName: 'Potasio cloruro', category: 'Electrolito/Líquido', commonDosage: '10-40 mEq IV lento', presentation: 'Ampolla 10 mEq/10mL', indications: 'Hipopotasemia', notes: 'Nunca bolo IV, arritmias, flebitis' },
+  { name: 'Fosfato de potasio', genericName: 'Potasio fosfato', category: 'Electrolito/Líquido', commonDosage: '15-30 mEq IV', presentation: 'Ampolla 15 mEq/5mL', indications: 'Hipofosfatemia', notes: 'Riesgo calcificación, hipocalcemia' },
+  { name: 'Sulfato de magnesio', genericName: 'Magnesio sulfato', category: 'Electrolito/Líquido', commonDosage: '1-4 g IV', presentation: 'Ampolla 1 g/10mL, 2 g/10mL', indications: 'Hipomagnesemia, preeclampsia, torsade', notes: 'Hipotensión, bradicardia' },
+  { name: 'Gluconato de calcio', genericName: 'Calcio gluconato', category: 'Electrolito/Líquido', commonDosage: '1-2 g IV', presentation: 'Ampolla 1 g/10mL', indications: 'Hipocalcemia, hiperpotasemia', notes: 'Irritante venoso, extravasación' },
+  { name: 'Cloruro de calcio', genericName: 'Calcio cloruro', category: 'Electrolito/Líquido', commonDosage: '500-1000 mg IV', presentation: 'Ampolla 1 g/10mL', indications: 'Hipocalcemia, paro cardíaco', notes: '3x más potente que gluconato' },
+  { name: 'Solución glucosada 5%', genericName: 'Dextrosa 5%', category: 'Electrolito/Líquido', commonDosage: '500-1000 mL IV c/8-24h', presentation: 'Bolsa 500, 1000 mL', indications: 'Hidratación, vehículo medicamentos', notes: 'Aporte calórico mínimo' },
+  { name: 'Solución glucosada 50%', genericName: 'Dextrosa 50%', category: 'Electrolito/Líquido', commonDosage: '25-50 mL IV bolo', presentation: 'Ampolla 50 mL', indications: 'Hipoglucemia severa', notes: 'Irritante venoso, hiperglucemia rebote' },
+  { name: 'Solución glucosalina', genericName: 'Dextrosa 5% con NaCl 0.9%', category: 'Electrolito/Líquido', commonDosage: '500-1000 mL IV c/8-24h', presentation: 'Bolsa 500, 1000 mL', indications: 'Hidratación con aporte calórico', notes: 'Útil en ayuno prolongado' },
+  { name: 'Adenosina', genericName: 'Adenosina', category: 'Urgencias/Cardíaco', commonDosage: '6 mg IV bolo rápido', presentation: 'Ampolla 6 mg/2mL', indications: 'Taquicardia supraventricular paroxística', notes: 'Rubefacción, broncoespasmo' },
+  { name: 'Amiodarona', genericName: 'Amiodarona', category: 'Urgencias/Cardíaco', commonDosage: '150 mg IV bolo, luego infusión', presentation: 'Ampolla 150 mg/3mL', indications: 'Arritmias ventriculares y supraventriculares', notes: 'Fibrosis pulmonar, tiroides, hepático' },
+  { name: 'Lidocaína antiarrítmica', genericName: 'Lidocaína', category: 'Urgencias/Cardíaco', commonDosage: '1-1.5 mg/kg IV bolo', presentation: 'Ampolla 100 mg/5mL', indications: 'Arritmias ventriculares, TV', notes: 'Clase Ib, neurológicos' },
+  { name: 'Atropina', genericName: 'Atropina', category: 'Urgencias/Cardíaco', commonDosage: '0.5-1 mg IV c/3-5 min', presentation: 'Ampolla 1 mg/mL', indications: 'Bradicardia, organofosforados', notes: 'Taquicardia, midriasis, sequedad' },
+  { name: 'Digoxina', genericName: 'Digoxina', category: 'Urgencias/Cardíaco', commonDosage: '0.125-0.25 mg VO c/24h', presentation: 'Tableta 0.125, 0.25 mg', indications: 'IC, FA, aleteo auricular', notes: 'Ventana estrecha, intoxicación, arritmias' },
+  { name: 'Verapamilo', genericName: 'Verapamilo', category: 'Urgencias/Cardíaco', commonDosage: '5-10 mg IV lento', presentation: 'Ampolla 5 mg/2mL', indications: 'TSV, FA, angina, HTA', notes: 'Bloqueo AV, IC, estreñimiento' },
+  { name: 'Diltiazem', genericName: 'Diltiazem', category: 'Urgencias/Cardíaco', commonDosage: '0.25 mg/kg IV bolo', presentation: 'Ampolla 25 mg/5mL', indications: 'FA, aleteo, TSV', notes: 'Bloqueo AV, menos inotropía' },
+  { name: 'Metoprolol', genericName: 'Metoprolol', category: 'Urgencias/Cardíaco', commonDosage: '5 mg IV c/2-5 min x3', presentation: 'Ampolla 5 mg/5mL', indications: 'IAM, FA, taquicardia', notes: 'Beta1 selectivo, IC, asma' },
+  { name: 'Esmolol', genericName: 'Esmolol', category: 'Urgencias/Cardíaco', commonDosage: '500 mcg/kg bolo, 50-200 mcg/kg/min', presentation: 'Ampolla 100 mg/10mL', indications: 'Taquiarritmias, disección aórtica', notes: 'Beta1 ultra-corto, hipotensión' },
+  { name: 'Procainamida', genericName: 'Procainamida', category: 'Urgencias/Cardíaco', commonDosage: '20-50 mg/min IV carga', presentation: 'Ampolla 500 mg/mL', indications: 'Arritmias ventriculares, FA, WPW', notes: 'Ia, lupus inducido, QT' },
+  { name: 'Nitroglicerina', genericName: 'Nitroglicerina', category: 'Urgencias/Cardíaco', commonDosage: '0.3-0.6 mg SL o 5-200 mcg/min IV', presentation: 'Tableta SL 0.3, 0.6 mg; ampolla 50 mg', indications: 'Angina, IAM, ICC, HTA severa', notes: 'Cefalea, tolerancia, no sildenafil' },
+  { name: 'Nitroprusiato', genericName: 'Nitroprusiato de sodio', category: 'Urgencias/Cardíaco', commonDosage: '0.3-10 mcg/kg/min IV', presentation: 'Frasco ampolla 50 mg', indications: 'Crisis hipertensiva, ICC severa', notes: 'Fotosensible, cianuro uso prolongado' },
+  { name: 'Ácido tranexámico', genericName: 'Ácido tranexámico', category: 'Urgencias/Cardíaco', commonDosage: '1 g IV c/8h', presentation: 'Ampolla 500 mg/5mL', indications: 'Hemorragia, trauma, hipermenorrea', notes: 'Antifibrinolítico, riesgo trombosis' },
+  { name: 'Losartán', genericName: 'Losartán', category: 'Antihipertensivo', commonDosage: '25-100 mg VO c/24h', presentation: 'Tableta 25, 50, 100 mg', indications: 'HTA, nefropatía diabética, ICC', notes: 'ARA-II, tos rara, evitar embarazo' },
+  { name: 'Valsartán', genericName: 'Valsartán', category: 'Antihipertensivo', commonDosage: '80-320 mg VO c/24h', presentation: 'Tableta 80, 160, 320 mg', indications: 'HTA, ICC, post-IAM', notes: 'ARA-II, no en embarazo' },
+  { name: 'Irbesartán', genericName: 'Irbesartán', category: 'Antihipertensivo', commonDosage: '150-300 mg VO c/24h', presentation: 'Tableta 75, 150, 300 mg', indications: 'HTA, nefropatía diabética', notes: 'ARA-II, menos interacciones' },
+  { name: 'Candesartán', genericName: 'Candesartán', category: 'Antihipertensivo', commonDosage: '4-32 mg VO c/24h', presentation: 'Tableta 4, 8, 16, 32 mg', indications: 'HTA, ICC', notes: 'ARA-II, inicio gradual' },
+  { name: 'Enalapril', genericName: 'Enalapril', category: 'Antihipertensivo', commonDosage: '5-40 mg VO c/12-24h', presentation: 'Tableta 5, 10, 20 mg', indications: 'HTA, ICC, nefropatía diabética', notes: 'IECA, tos seca, angioedema' },
+  { name: 'Lisinopril', genericName: 'Lisinopril', category: 'Antihipertensivo', commonDosage: '5-40 mg VO c/24h', presentation: 'Tableta 5, 10, 20, 40 mg', indications: 'HTA, ICC, post-IAM', notes: 'IECA, tos, ajuste IR' },
+  { name: 'Ramipril', genericName: 'Ramipril', category: 'Antihipertensivo', commonDosage: '2.5-20 mg VO c/24h', presentation: 'Cápsula 1.25, 2.5, 5, 10 mg', indications: 'HTA, post-IAM, prevención CV', notes: 'IECA, beneficio HOPE' },
+  { name: 'Captopril', genericName: 'Captopril', category: 'Antihipertensivo', commonDosage: '12.5-50 mg VO c/8-12h', presentation: 'Tableta 12.5, 25, 50 mg', indications: 'HTA, ICC, crisis hipertensiva', notes: 'IECA, sabor metálico' },
+  { name: 'Amlodipino', genericName: 'Amlodipino', category: 'Antihipertensivo', commonDosage: '2.5-10 mg VO c/24h', presentation: 'Tableta 2.5, 5, 10 mg', indications: 'HTA, angina', notes: 'Calcioantagonista, edema tobillos' },
+  { name: 'Nifedipino LP', genericName: 'Nifedipino', category: 'Antihipertensivo', commonDosage: '30-90 mg VO c/24h', presentation: 'Tableta LP 30, 60 mg', indications: 'HTA, angina, Raynaud', notes: 'Calcioantagonista, taquicardia refleja' },
+  { name: 'Nicardipino', genericName: 'Nicardipino', category: 'Antihipertensivo', commonDosage: '5-15 mg/h IV', presentation: 'Ampolla 25 mg/10mL', indications: 'Crisis hipertensiva', notes: 'Calcioantagonista IV, taquicardia' },
+  { name: 'Bisoprolol', genericName: 'Bisoprolol', category: 'Antihipertensivo', commonDosage: '2.5-20 mg VO c/24h', presentation: 'Tableta 2.5, 5, 10 mg', indications: 'HTA, ICC, angina', notes: 'Beta1 selectivo, bradicardia' },
+  { name: 'Atenolol', genericName: 'Atenolol', category: 'Antihipertensivo', commonDosage: '25-100 mg VO c/24h', presentation: 'Tableta 25, 50, 100 mg', indications: 'HTA, angina, post-IAM', notes: 'Beta1 selectivo, ajuste IR' },
+  { name: 'Propranolol', genericName: 'Propranolol', category: 'Antihipertensivo', commonDosage: '40-320 mg VO c/12h', presentation: 'Tableta 10, 40, 80 mg', indications: 'HTA, migraña, temblor', notes: 'Beta no selectivo, broncoespasmo' },
+  { name: 'Carvedilol', genericName: 'Carvedilol', category: 'Antihipertensivo', commonDosage: '3.125-50 mg VO c/12h', presentation: 'Tableta 3.125-25 mg', indications: 'ICC, HTA, post-IAM', notes: 'Alfa-beta, hipotensión ortostática' },
+  { name: 'Metildopa', genericName: 'Metildopa', category: 'Antihipertensivo', commonDosage: '250-1000 mg VO c/8-12h', presentation: 'Tableta 250, 500 mg', indications: 'HTA en embarazo', notes: 'Alfa2 agonista, sedación' },
+  { name: 'Clonidina', genericName: 'Clonidina', category: 'Antihipertensivo', commonDosage: '0.1-0.8 mg VO c/12h', presentation: 'Tableta 0.1, 0.2 mg', indications: 'HTA, TDAH, abstinencia opioides', notes: 'Hipertensión rebote al suspender' },
+  { name: 'Prazosina', genericName: 'Prazosina', category: 'Antihipertensivo', commonDosage: '1-15 mg VO c/12h', presentation: 'Cápsula 1, 2, 5 mg', indications: 'HTA, HBP', notes: 'Alfa bloqueador, hipotensión 1ra dosis' },
+  { name: 'Doxazosina', genericName: 'Doxazosina', category: 'Antihipertensivo', commonDosage: '1-16 mg VO c/24h', presentation: 'Tableta 1, 2, 4, 8 mg', indications: 'HTA, HBP', notes: 'Alfa bloqueador, mareos' },
+  { name: 'Hidralazina', genericName: 'Hidralazina', category: 'Antihipertensivo', commonDosage: '10-50 mg VO c/6-8h', presentation: 'Tableta 10, 25, 50 mg', indications: 'HTA, emergencia hipertensiva', notes: 'Taquicardia refleja, LES' },
+  { name: 'Furosemida', genericName: 'Furosemida', category: 'Diurético', commonDosage: '20-80 mg VO/IV c/6-24h', presentation: 'Tableta 20, 40 mg; ampolla 20 mg', indications: 'ICC, edema, HTA, IRC', notes: 'Diurético asa, hipopotasemia' },
+  { name: 'Hidroclorotiazida', genericName: 'Hidroclorotiazida', category: 'Diurético', commonDosage: '12.5-50 mg VO c/24h', presentation: 'Tableta 12.5, 25, 50 mg', indications: 'HTA, edema leve', notes: 'Tiazida, hipopotasemia, fotosensibilidad' },
+  { name: 'Clortalidona', genericName: 'Clortalidona', category: 'Diurético', commonDosage: '12.5-50 mg VO c/24h', presentation: 'Tableta 25, 50 mg', indications: 'HTA, edema', notes: 'Tiazida, vida media larga' },
+  { name: 'Espironolactona', genericName: 'Espironolactona', category: 'Diurético', commonDosage: '25-200 mg VO c/24h', presentation: 'Tableta 25, 50, 100 mg', indications: 'ICC, HTA, hiperaldosteronismo', notes: 'Ahorrador K, ginecomastia' },
+  { name: 'Eplerenona', genericName: 'Eplerenona', category: 'Diurético', commonDosage: '25-100 mg VO c/12-24h', presentation: 'Tableta 25, 50 mg', indications: 'ICC post-IAM, HTA', notes: 'Ahorrador K selectivo' },
+  { name: 'Torsemida', genericName: 'Torsemida', category: 'Diurético', commonDosage: '5-100 mg VO/IV c/24h', presentation: 'Tableta 5, 10, 20, 100 mg', indications: 'Edema, ICC, IRC', notes: 'Diurético asa, mejor biodisponibilidad' },
+  { name: 'Bumetanida', genericName: 'Bumetanida', category: 'Diurético', commonDosage: '0.5-2 mg VO/IV c/8-12h', presentation: 'Tableta 0.5, 1 mg; ampolla 0.25 mg/mL', indications: 'Edema, ICC, IRC', notes: '40x más potente que furosemida' },
+  { name: 'Amilorida', genericName: 'Amilorida', category: 'Diurético', commonDosage: '5-10 mg VO c/24h', presentation: 'Tableta 5 mg', indications: 'HTA, ICC, ahorrador K', notes: 'Hiperpotasemia, náuseas' },
+  { name: 'Sertralina', genericName: 'Sertralina', category: 'Antidepresivo', commonDosage: '50-200 mg VO c/24h', presentation: 'Tableta 50, 100 mg', indications: 'Depresión, ansiedad, TOC, TEPT', notes: 'ISRS, GI, disfunción sexual' },
+  { name: 'Fluoxetina', genericName: 'Fluoxetina', category: 'Antidepresivo', commonDosage: '20-80 mg VO c/24h', presentation: 'Cápsula 10, 20, 40 mg', indications: 'Depresión, TOC, bulimia, pánico', notes: 'ISRS, vida media larga, activación' },
+  { name: 'Paroxetina', genericName: 'Paroxetina', category: 'Antidepresivo', commonDosage: '20-60 mg VO c/24h', presentation: 'Tableta 10, 20, 40 mg', indications: 'Depresión, ansiedad, TOC', notes: 'ISRS, sedación, aumento peso' },
+  { name: 'Citalopram', genericName: 'Citalopram', category: 'Antidepresivo', commonDosage: '20-40 mg VO c/24h', presentation: 'Tableta 10, 20, 40 mg', indications: 'Depresión, ansiedad', notes: 'ISRS, QT dosis-dependiente' },
+  { name: 'Escitalopram', genericName: 'Escitalopram', category: 'Antidepresivo', commonDosage: '10-20 mg VO c/24h', presentation: 'Tableta 5, 10, 20 mg', indications: 'Depresión, ansiedad generalizada', notes: 'ISRS, enantiómero activo' },
+  { name: 'Fluvoxamina', genericName: 'Fluvoxamina', category: 'Antidepresivo', commonDosage: '50-300 mg VO c/24h', presentation: 'Tableta 50, 100 mg', indications: 'TOC, depresión', notes: 'ISRS, interacciones CYP' },
+  { name: 'Venlafaxina', genericName: 'Venlafaxina', category: 'Antidepresivo', commonDosage: '75-225 mg VO c/24h', presentation: 'Tableta 37.5, 75, 150 mg', indications: 'Depresión, ansiedad, pánico', notes: 'IRSN, HTA dosis-dependiente, abstinencia' },
+  { name: 'Desvenlafaxina', genericName: 'Desvenlafaxina', category: 'Antidepresivo', commonDosage: '50-100 mg VO c/24h', presentation: 'Tableta 50, 100 mg', indications: 'Depresión, ansiedad', notes: 'IRSN, metabolito venlafaxina' },
+  { name: 'Duloxetina', genericName: 'Duloxetina', category: 'Antidepresivo', commonDosage: '30-120 mg VO c/24h', presentation: 'Cápsula 30, 60 mg', indications: 'Depresión, dolor neuropático, fibromialgia', notes: 'IRSN, náuseas, hepatotoxicidad' },
+  { name: 'Mirtazapina', genericName: 'Mirtazapina', category: 'Antidepresivo', commonDosage: '15-45 mg VO c/24h', presentation: 'Tableta 15, 30, 45 mg', indications: 'Depresión, insomnio, anorexia', notes: 'NaSSA, sedación, aumento peso' },
+  { name: 'Bupropión', genericName: 'Bupropión', category: 'Antidepresivo', commonDosage: '150-300 mg VO c/24h', presentation: 'Tableta 150 mg LP', indications: 'Depresión, cesación tabaco', notes: 'NDRI, convulsiones, no en TCA' },
+  { name: 'Trazodona', genericName: 'Trazodona', category: 'Antidepresivo', commonDosage: '50-400 mg VO c/24h', presentation: 'Tableta 50, 100 mg', indications: 'Depresión, insomnio', notes: 'SARI, sedación, priapismo' },
+  { name: 'Nortriptilina', genericName: 'Nortriptilina', category: 'Antidepresivo', commonDosage: '25-150 mg VO c/24h', presentation: 'Cápsula 10, 25, 50, 75 mg', indications: 'Depresión, dolor neuropático', notes: 'ATC, arritmias, anticolinérgico' },
+  { name: 'Imipramina', genericName: 'Imipramina', category: 'Antidepresivo', commonDosage: '75-200 mg VO c/24h', presentation: 'Tableta 10, 25, 50 mg', indications: 'Depresión, enuresis, dolor', notes: 'ATC, arritmias, anticolinérgico' },
+  { name: 'Clomipramina', genericName: 'Clomipramina', category: 'Antidepresivo', commonDosage: '75-250 mg VO c/24h', presentation: 'Cápsula 25, 50, 75 mg', indications: 'TOC, depresión', notes: 'ATC, convulsiones' },
+  { name: 'Fenelzina', genericName: 'Fenelzina', category: 'Antidepresivo', commonDosage: '15-90 mg VO c/8-24h', presentation: 'Tableta 15 mg', indications: 'Depresión atípica, pánico', notes: 'IMAO, crisis hipertensiva con tiranina' },
+  { name: 'Tranilcipromina', genericName: 'Tranilcipromina', category: 'Antidepresivo', commonDosage: '10-60 mg VO c/12-24h', presentation: 'Tableta 10 mg', indications: 'Depresión refractaria', notes: 'IMAO, dieta estricta' },
+  { name: 'Vortioxetina', genericName: 'Vortioxetina', category: 'Antidepresivo', commonDosage: '10-20 mg VO c/24h', presentation: 'Tableta 5, 10, 20 mg', indications: 'Depresión mayor', notes: 'Modulador serotonina, náuseas' },
+  { name: 'Agomelatina', genericName: 'Agomelatina', category: 'Antidepresivo', commonDosage: '25-50 mg VO c/24h', presentation: 'Tableta 25 mg', indications: 'Depresión mayor', notes: 'Melatonérgico, toxicidad hepática' },
+  { name: 'Buspirona', genericName: 'Buspirona', category: 'Ansiolítico', commonDosage: '15-60 mg VO c/8-12h', presentation: 'Tableta 5, 10, 15 mg', indications: 'Ansiedad generalizada', notes: 'No benzodiacepina, inicio 2-4 sem' },
+  { name: 'Propranolol ansiolítico', genericName: 'Propranolol', category: 'Ansiolítico', commonDosage: '10-40 mg VO c/8h PRN', presentation: 'Tableta 10, 40 mg', indications: 'Ansiedad desempeño, temblor', notes: 'Beta bloqueador, bradicardia' },
+  { name: 'Oxazepam', genericName: 'Oxazepam', category: 'Ansiolítico', commonDosage: '10-30 mg VO c/6-8h', presentation: 'Cápsula 10, 15, 30 mg', indications: 'Ansiedad, alcoholismo', notes: 'BZD vida media corta, ancianos segura' },
+  { name: 'Clordiazepóxido', genericName: 'Clordiazepóxido', category: 'Ansiolítico', commonDosage: '5-25 mg VO c/6-8h', presentation: 'Cápsula 5, 10, 25 mg', indications: 'Ansiedad, abstinencia alcohólica', notes: 'BZD larga vida media' },
+  { name: 'Hidroxizina ansiolítico', genericName: 'Hidroxizina', category: 'Ansiolítico', commonDosage: '25-100 mg VO c/6-8h', presentation: 'Cápsula 25, 50 mg', indications: 'Ansiedad leve, insomnio', notes: 'Antihistamínico, sedación' },
+  { name: 'Aciclovir', genericName: 'Aciclovir', category: 'Antiviral', commonDosage: '200-800 mg VO c/6-8h o 5-10 mg/kg IV c/8h', presentation: 'Tableta 200, 400, 800 mg; ampolla 250 mg', indications: 'Herpes simple, zóster, VVZ', notes: 'Ajustar IR, hidratación IV' },
+  { name: 'Valaciclovir', genericName: 'Valaciclovir', category: 'Antiviral', commonDosage: '500 mg-1g VO c/8-12h', presentation: 'Tableta 500 mg, 1 g', indications: 'Herpes simple, zóster, CMV', notes: 'Prodrogua aciclovir, mejor absorción' },
+  { name: 'Famciclovir', genericName: 'Famciclovir', category: 'Antiviral', commonDosage: '250-500 mg VO c/8h', presentation: 'Tableta 125, 250, 500 mg', indications: 'Herpes zóster, herpes simple', notes: 'Prodrogua penciclovir' },
+  { name: 'Ganciclovir', genericName: 'Ganciclovir', category: 'Antiviral', commonDosage: '5 mg/kg IV c/12h', presentation: 'Frasco ampolla 500 mg', indications: 'CMV retinitis, colitis, neumonía', notes: 'Mielotoxicidad, neutropenia' },
+  { name: 'Oseltamivir', genericName: 'Oseltamivir', category: 'Antiviral', commonDosage: '75 mg VO c/12h x5d', presentation: 'Cápsula 30, 45, 75 mg', indications: 'Influenza A y B', notes: 'Iniciar <48h síntomas, náuseas' },
+  { name: 'Zanamivir', genericName: 'Zanamivir', category: 'Antiviral', commonDosage: '10 mg inhalación c/12h x5d', presentation: 'Inhalador 5 mg/blister', indications: 'Influenza no complicada', notes: 'Inhalado, broncoespasmo' },
+  { name: 'Remdesivir', genericName: 'Remdesivir', category: 'Antiviral', commonDosage: '200 mg IV día1, luego 100 mg c/24h x4d', presentation: 'Frasco ampolla 100 mg', indications: 'COVID-19, Ébola', notes: 'Análogo nucleótido, elevación transaminasas' },
+  { name: 'Ribavirina', genericName: 'Ribavirina', category: 'Antiviral', commonDosage: '400-1200 mg VO c/12-24h', presentation: 'Cápsula 200 mg; tableta 600 mg', indications: 'VHC, VSR, fiebre hemorrágica', notes: 'Anemia hemolítica, teratógeno' },
+  { name: 'Lamivudina', genericName: 'Lamivudina', category: 'Antiviral', commonDosage: '150-300 mg VO c/12-24h', presentation: 'Tableta 150, 300 mg', indications: 'VIH, VHB', notes: 'ITIAN, bien tolerada' },
+  { name: 'Zidovudina', genericName: 'Zidovudina', category: 'Antiviral', commonDosage: '300 mg VO c/12h', presentation: 'Cápsula 100 mg; tableta 300 mg', indications: 'VIH, profilaxis perinatal', notes: 'ITIAN, mielotoxicidad' },
+  { name: 'Tenofovir disoproxil', genericName: 'Tenofovir', category: 'Antiviral', commonDosage: '300 mg VO c/24h', presentation: 'Tableta 300 mg', indications: 'VIH, VHB', notes: 'ITIAN, nefrotoxicidad' },
+  { name: 'Efavirenz', genericName: 'Efavirenz', category: 'Antiviral', commonDosage: '600 mg VO c/24h', presentation: 'Tableta 200, 600 mg', indications: 'VIH', notes: 'ITINN, sueños vívidos, teratógeno' },
+  { name: 'Abacavir', genericName: 'Abacavir', category: 'Antiviral', commonDosage: '300 mg VO c/12h', presentation: 'Tableta 300 mg', indications: 'VIH', notes: 'ITIAN, HLAB*5701, hipersensibilidad' },
+  { name: 'Entecavir', genericName: 'Entecavir', category: 'Antiviral', commonDosage: '0.5-1 mg VO c/24h', presentation: 'Tableta 0.5, 1 mg', indications: 'VHB', notes: 'Análogo nucleósido, resistencia' },
+  { name: 'Fluconazol', genericName: 'Fluconazol', category: 'Antifúngico', commonDosage: '150-800 mg VO/IV c/24h', presentation: 'Cápsula 150 mg; ampolla 400 mg', indications: 'Candidiasis, criptococosis', notes: 'Azol, ajuste IR, elevación transaminasas' },
+  { name: 'Itraconazol', genericName: 'Itraconazol', category: 'Antifúngico', commonDosage: '100-400 mg VO c/12-24h', presentation: 'Cápsula 100 mg', indications: 'Onicomicosis, aspergilosis, histoplasmosis', notes: 'Azol, absorción con alimentos' },
+  { name: 'Voriconazol', genericName: 'Voriconazol', category: 'Antifúngico', commonDosage: '200-400 mg VO c/12h', presentation: 'Tableta 50, 200 mg; ampolla 200 mg', indications: 'Aspergilosis, candidiasis refractaria', notes: 'Azol, fototoxicidad, alucinaciones' },
+  { name: 'Anfotericina B', genericName: 'Anfotericina B', category: 'Antifúngico', commonDosage: '0.5-1 mg/kg IV c/24h', presentation: 'Frasco ampolla 50 mg', indications: 'Micosis sistémicas graves, leishmaniasis', notes: 'Nefrotoxicidad, hipopotasemia, infusión' },
+  { name: 'Caspofungina', genericName: 'Caspofungina', category: 'Antifúngico', commonDosage: '70 mg IV carga, 50 mg c/24h', presentation: 'Frasco ampolla 50, 70 mg', indications: 'Candidiasis, aspergilosis refractaria', notes: 'Equinocandina, ajuste hepático' },
+  { name: 'Micafungina', genericName: 'Micafungina', category: 'Antifúngico', commonDosage: '100-150 mg IV c/24h', presentation: 'Frasco ampolla 50, 100 mg', indications: 'Candidiasis, profilaxis', notes: 'Equinocandina, bien tolerada' },
+  { name: 'Nistatina', genericName: 'Nistatina', category: 'Antifúngico', commonDosage: '5 mL suspensión c/6h', presentation: 'Suspensión 100,000 U/mL', indications: 'Candidiasis oral, GI, vaginal', notes: 'No absorbe, seguro' },
+  { name: 'Ketoconazol', genericName: 'Ketoconazol', category: 'Antifúngico', commonDosage: '200-400 mg VO c/24h', presentation: 'Tableta 200 mg', indications: 'Candidiasis, dermatofitosis, Cushing', notes: 'Azol, hepatotoxicidad, QT' },
+  { name: 'Clotrimazol tópico', genericName: 'Clotrimazol', category: 'Antifúngico', commonDosage: 'Aplicar c/12h', presentation: 'Crema 1%, óvulos 500 mg', indications: 'Candidiasis vaginal, dermatofitosis', notes: 'Uso tópico, seguro' },
+  { name: 'Terbinafina', genericName: 'Terbinafina', category: 'Antifúngico', commonDosage: '250 mg VO c/24h', presentation: 'Tableta 250 mg', indications: 'Onicomicosis, tiña', notes: 'Alilamina, gusto metálico, hepatotoxicidad' },
+  { name: 'Albendazol', genericName: 'Albendazol', category: 'Antiparasitario', commonDosage: '400 mg VO c/24h', presentation: 'Tableta 200, 400 mg', indications: 'Parasitosis intestinal, hidatidosis', notes: 'Tomar con comida, hepatotoxicidad' },
+  { name: 'Mebendazol', genericName: 'Mebendazol', category: 'Antiparasitario', commonDosage: '100 mg VO c/12h x3d', presentation: 'Tableta 100 mg', indications: 'Oxiuros, áscaris, tricocéfalos', notes: 'Bien tolerado, masticar tableta' },
+  { name: 'Prazicuantel', genericName: 'Prazicuantel', category: 'Antiparasitario', commonDosage: '20-60 mg/kg VO dosis única', presentation: 'Tableta 600 mg', indications: 'Esquistosomiasis, tenias, cisticercosis', notes: 'Mareos, dolor abdominal' },
+  { name: 'Ivermectina', genericName: 'Ivermectina', category: 'Antiparasitario', commonDosage: '150-200 mcg/kg VO dosis única', presentation: 'Tableta 3, 6 mg', indications: 'Oncocercosis, estrongiloidiasis, sarna', notes: 'Mazzotti, no en niños <15 kg' },
+  { name: 'Metronidazol antiparasitario', genericName: 'Metronidazol', category: 'Antiparasitario', commonDosage: '250-750 mg VO c/8h', presentation: 'Tableta 250, 500 mg', indications: 'Amebiasis, giardiasis, tricomoniasis', notes: 'Gusto metálico, no alcohol' },
+  { name: 'Cloroquina', genericName: 'Cloroquina', category: 'Antiparasitario', commonDosage: '600 mg dosis inicial, luego 300 mg', presentation: 'Tableta 150, 300 mg', indications: 'Malaria, amebiasis, LES, AR', notes: 'Retinopatía, QT, hemólisis G6PD' },
+  { name: 'Artemeter-lumefantrina', genericName: 'Artemeter/lumefantrina', category: 'Antiparasitario', commonDosage: '4 comprimidos c/12h x3d', presentation: 'Tableta 20/120 mg', indications: 'Malaria no complicada', notes: 'Tomar con comida, evitar QT' },
+  { name: 'Primaquina', genericName: 'Primaquina', category: 'Antiparasitario', commonDosage: '15-30 mg VO c/24h x14d', presentation: 'Tableta 15 mg', indications: 'Malaria por P. vivax, P. ovale', notes: 'Hemólisis en G6PD, prueba previa' },
+  { name: 'Nitazoxanida', genericName: 'Nitazoxanida', category: 'Antiparasitario', commonDosage: '500 mg VO c/12h x3d', presentation: 'Tableta 500 mg', indications: 'Giardiasis, criptosporidiosis', notes: 'Color orina amarillo, GI' },
+  { name: 'Permetrina tópica', genericName: 'Permetrina', category: 'Antiparasitario', commonDosage: 'Crema 5% en una aplicación', presentation: 'Crema 5%', indications: 'Escabiosis, pediculosis', notes: 'Aplicar cabeza a pies, repetir 7d' },
+  { name: 'Insulina regular', genericName: 'Insulina humana', category: 'Antidiabético', commonDosage: '0.1 U/kg/h IV o 5-10 U SC c/6h', presentation: 'Frasco 100 U/mL', indications: 'Diabetes, CAD, EHH, hiperpotasemia', notes: 'Única insulina para IV' },
+  { name: 'Insulina NPH', genericName: 'Insulina isófana', category: 'Antidiabético', commonDosage: '0.2-1 U/kg SC c/12-24h', presentation: 'Frasco 100 U/mL', indications: 'Diabetes basal', notes: 'Agitar antes de usar, turbia' },
+  { name: 'Insulina glargina', genericName: 'Insulina glargina', category: 'Antidiabético', commonDosage: '0.2-1 U/kg SC c/24h', presentation: 'Pluma 100 U/mL', indications: 'Diabetes basal', notes: 'Larga duración, no mezclar' },
+  { name: 'Insulina lispro', genericName: 'Insulina lispro', category: 'Antidiabético', commonDosage: '0.05-0.2 U/kg SC c/8h', presentation: 'Pluma 100 U/mL', indications: 'Diabetes posprandial', notes: 'Análogo rápido, inicio 15 min' },
+  { name: 'Insulina aspart', genericName: 'Insulina aspart', category: 'Antidiabético', commonDosage: '0.05-0.2 U/kg SC c/8h', presentation: 'Pluma 100 U/mL', indications: 'Diabetes posprandial', notes: 'Análogo rápido, inicio 10-20 min' },
+  { name: 'Metformina', genericName: 'Metformina', category: 'Antidiabético', commonDosage: '500-2000 mg VO c/12h', presentation: 'Tableta 500, 850, 1000 mg', indications: 'Diabetes tipo 2', notes: 'Primera línea, acidosis láctica raro' },
+  { name: 'Glibenclamida', genericName: 'Gliburida', category: 'Antidiabético', commonDosage: '2.5-20 mg VO c/12-24h', presentation: 'Tableta 2.5, 5 mg', indications: 'Diabetes tipo 2', notes: 'Sulfonilurea, hipoglucemia' },
+  { name: 'Glipizida', genericName: 'Glipizida', category: 'Antidiabético', commonDosage: '2.5-20 mg VO c/12-24h', presentation: 'Tableta 5, 10 mg', indications: 'Diabetes tipo 2', notes: 'Sulfonilurea, antes comidas' },
+  { name: 'Gliclazida', genericName: 'Gliclazida', category: 'Antidiabético', commonDosage: '30-120 mg VO c/24h', presentation: 'Tableta LM 30, 60 mg', indications: 'Diabetes tipo 2', notes: 'Sulfonilurea, beneficio CV' },
+  { name: 'Pioglitazona', genericName: 'Pioglitazona', category: 'Antidiabético', commonDosage: '15-45 mg VO c/24h', presentation: 'Tableta 15, 30, 45 mg', indications: 'Diabetes tipo 2', notes: 'TZD, ICC, fracturas' },
+  { name: 'Sitagliptina', genericName: 'Sitagliptina', category: 'Antidiabético', commonDosage: '25-100 mg VO c/24h', presentation: 'Tableta 25, 50, 100 mg', indications: 'Diabetes tipo 2', notes: 'DPP-4, pancreatitis, ajuste IR' },
+  { name: 'Empagliflozina', genericName: 'Empagliflozina', category: 'Antidiabético', commonDosage: '10-25 mg VO c/24h', presentation: 'Tableta 10, 25 mg', indications: 'Diabetes tipo 2, ICC, IRC', notes: 'SGLT2, ITU, cetoacidosis' },
+  { name: 'Dapagliflozina', genericName: 'Dapagliflozina', category: 'Antidiabético', commonDosage: '5-10 mg VO c/24h', presentation: 'Tableta 5, 10 mg', indications: 'Diabetes tipo 2, ICC, IRC', notes: 'SGLT2, ITU' },
+  { name: 'Liraglutida', genericName: 'Liraglutida', category: 'Antidiabético', commonDosage: '0.6-1.8 mg SC c/24h', presentation: 'Pluma 6 mg/mL', indications: 'Diabetes tipo 2, obesidad', notes: 'GLP-1, náuseas, pancreatitis' },
+  { name: 'Semaglutida', genericName: 'Semaglutida', category: 'Antidiabético', commonDosage: '0.5-2 mg SC c/7d', presentation: 'Pluma 0.25-1 mg/dosis', indications: 'Diabetes tipo 2, obesidad', notes: 'GLP-1, pérdida peso, costoso' },
+  { name: 'Ácido fólico', genericName: 'Ácido fólico', category: 'Vitamina/Suplemento', commonDosage: '400 mcg-5 mg VO c/24h', presentation: 'Tableta 400 mcg, 1, 5 mg', indications: 'Prevención defectos tubo neural, anemias', notes: 'Embarazo, enfermedad hemolítica' },
+  { name: 'Sulfato ferroso', genericName: 'Hierro sulfato', category: 'Vitamina/Suplemento', commonDosage: '200-600 mg VO c/24h', presentation: 'Tableta 200 mg, gotas', indications: 'Anemia ferropénica, profilaxis', notes: 'Estreñimiento, heces oscuras, sin leche' },
+  { name: 'Vitamina D', genericName: 'Colecalciferol', category: 'Vitamina/Suplemento', commonDosage: '400-2000 UI VO c/24h', presentation: 'Cápsula 400, 1000, 2000 UI', indications: 'Deficiencia vit D, osteoporosis', notes: 'Toxicidad dosis altas, hipercalcemia' },
+  { name: 'Vitamina B12', genericName: 'Cianocobalamina', category: 'Vitamina/Suplemento', commonDosage: '1000 mcg IM c/mes', presentation: 'Ampolla 1000 mcg/mL', indications: 'Anemia perniciosa, deficiencia B12', notes: 'VO en deficiencia leve' },
+  { name: 'Vitamina C', genericName: 'Ácido ascórbico', category: 'Vitamina/Suplemento', commonDosage: '100-1000 mg VO c/24h', presentation: 'Tableta 100, 500, 1000 mg', indications: 'Deficiencia, escorbuto, antioxidante', notes: 'Diarrea altas dosis, cálculos renales' },
+  { name: 'Tiamina', genericName: 'Vitamina B1', category: 'Vitamina/Suplemento', commonDosage: '100 mg IV/IM c/24h', presentation: 'Ampolla 100 mg/mL', indications: 'Beriberi, alcoholismo, encefalopatía', notes: 'Antes glucosa en alcoholismo' },
+  { name: 'Piridoxina', genericName: 'Vitamina B6', category: 'Vitamina/Suplemento', commonDosage: '50-200 mg VO c/24h', presentation: 'Tableta 50, 100 mg', indications: 'Deficiencia, neuropatía, náuseas embarazo', notes: 'Neuropatía dosis altas' },
+  { name: 'Complejo B', genericName: 'Vitaminas B1, B6, B12', category: 'Vitamina/Suplemento', commonDosage: '1 tableta c/24h', presentation: 'Tableta, ampolla IM', indications: 'Deficiencia B, neuropatía, alcoholismo', notes: 'Orina amarilla con B2' },
+  { name: 'Zinc sulfato', genericName: 'Zinc', category: 'Vitamina/Suplemento', commonDosage: '15-50 mg VO c/24h', presentation: 'Tableta 15, 30, 50 mg', indications: 'Deficiencia zinc, diarrea, acrodermatitis', notes: 'Náuseas, con alimentos' },
+  { name: 'Magnesio óxido', genericName: 'Magnesio', category: 'Vitamina/Suplemento', commonDosage: '250-500 mg VO c/24h', presentation: 'Cápsula 250, 500 mg', indications: 'Hipomagnesemia, estreñimiento, migraña', notes: 'Diarrea, ajuste IR' },
+  { name: 'Calcio carbonato', genericName: 'Calcio', category: 'Vitamina/Suplemento', commonDosage: '500-1500 mg VO c/24h', presentation: 'Tableta 500, 600, 1000 mg', indications: 'Osteoporosis, hipocalcemia', notes: 'Con vit D, estreñimiento' },
+  { name: 'Vitamina A', genericName: 'Retinol', category: 'Vitamina/Suplemento', commonDosage: '10,000-50,000 UI c/sem', presentation: 'Cápsula 10,000, 50,000 UI', indications: 'Deficiencia, xeroftalmia', notes: 'Hepatotoxicidad, teratógeno altas dosis' },
+  { name: 'Vitamina E', genericName: 'Tocoferol', category: 'Vitamina/Suplemento', commonDosage: '400-800 UI VO c/24h', presentation: 'Cápsula 400, 800 UI', indications: 'Deficiencia, antioxidante', notes: 'Anticoagulante altas dosis' },
+  { name: 'Vitamina K2', genericName: 'Menakinona', category: 'Vitamina/Suplemento', commonDosage: '45-180 mcg VO c/24h', presentation: 'Cápsula 45, 90 mcg', indications: 'Osteoporosis, salud ósea', notes: 'Interacción anticoagulantes' },
+  { name: 'Multivitamínico', genericName: 'Multivitaminas y minerales', category: 'Vitamina/Suplemento', commonDosage: '1 tableta c/24h', presentation: 'Tableta, cápsula', indications: 'Suplemento general, déficits múltiples', notes: 'No exceder dosis, variadas formulaciones' },
+  { name: 'Omeprazol', genericName: 'Omeprazol', category: 'Gastrointestinal', commonDosage: '20-40 mg VO c/24h', presentation: 'Cápsula 20, 40 mg', indications: 'ERGE, úlcera péptica, dispepsia', notes: 'IBP, osteoporosis, nefritis intersticial' },
+  { name: 'Pantoprazol', genericName: 'Pantoprazol', category: 'Gastrointestinal', commonDosage: '20-40 mg VO c/24h', presentation: 'Tableta 20, 40 mg; ampolla 40 mg', indications: 'ERGE, úlcera, prevención UGB', notes: 'IBP IV disponible' },
+  { name: 'Esomeprazol', genericName: 'Esomeprazol', category: 'Gastrointestinal', commonDosage: '20-40 mg VO c/24h', presentation: 'Cápsula 20, 40 mg', indications: 'ERGE, úlcera péptica', notes: 'IBP, S-enantiómero de omeprazol' },
+  { name: 'Lansoprazol', genericName: 'Lansoprazol', category: 'Gastrointestinal', commonDosage: '15-30 mg VO c/24h', presentation: 'Cápsula 15, 30 mg', indications: 'ERGE, úlcera, H. pylori', notes: 'IBP, diarrea' },
+  { name: 'Ranitidina', genericName: 'Ranitidina', category: 'Gastrointestinal', commonDosage: '150-300 mg VO c/12-24h', presentation: 'Tableta 150, 300 mg', indications: 'ERGE, úlcera péptica', notes: 'Anti-H2, retirada NDMA' },
+  { name: 'Famotidina GI', genericName: 'Famotidina', category: 'Gastrointestinal', commonDosage: '20-40 mg VO c/12-24h', presentation: 'Tableta 20, 40 mg', indications: 'ERGE, úlcera, dispepsia', notes: 'Anti-H2, seguro, pocas interacciones' },
+  { name: 'Sucralfato', genericName: 'Sucralfato', category: 'Gastrointestinal', commonDosage: '1 g VO c/6h', presentation: 'Tableta 1 g', indications: 'Úlcera péptica, prevención UGB', notes: 'Tomar 2h antes/después otros, estreñimiento' },
+  { name: 'Subsalicilato de bismuto', genericName: 'Bismuto', category: 'Gastrointestinal', commonDosage: '262-524 mg VO c/6h', presentation: 'Tableta 262 mg', indications: 'Dispepsia, diarrea viajero, H. pylori', notes: 'Heces oscuras, no en varicela' },
+  { name: 'Loperamida', genericName: 'Loperamida', category: 'Gastrointestinal', commonDosage: '2-16 mg VO c/24h', presentation: 'Cápsula 2 mg', indications: 'Diarrea aguda y crónica', notes: 'Ileo, no en diarrea infecciosa febril' },
+  { name: 'Lactulosa', genericName: 'Lactulosa', category: 'Gastrointestinal', commonDosage: '15-60 mL VO c/24h', presentation: 'Solución 10 g/15mL', indications: 'Estreñimiento, encefalopatía hepática', notes: 'Flatulencia, distensión' },
+  { name: 'Polietilenglicol', genericName: 'PEG 3350', category: 'Gastrointestinal', commonDosage: '17 g VO c/24h', presentation: 'Sobre 17 g', indications: 'Estreñimiento crónico', notes: 'Bien tolerado, sin absorción' },
+  { name: 'Bisacodilo', genericName: 'Bisacodilo', category: 'Gastrointestinal', commonDosage: '5-10 mg VO c/24h', presentation: 'Tableta 5 mg', indications: 'Estreñimiento, preparación colonoscopia', notes: 'Cólicos, no uso crónico' },
+  { name: 'Senósidos', genericName: 'Sen', category: 'Gastrointestinal', commonDosage: '8.6-17.2 mg VO c/24h', presentation: 'Tableta 8.6 mg', indications: 'Estreñimiento', notes: 'Laxante estimulante, melanosis coli' },
+  { name: 'Docusato sódico', genericName: 'Docusato', category: 'Gastrointestinal', commonDosage: '100-300 mg VO c/24h', presentation: 'Cápsula 100 mg', indications: 'Estreñimiento, ablandador heces', notes: 'Laxante surfactante, efecto leve' },
+  { name: 'Trimebutina', genericName: 'Trimebutina', category: 'Gastrointestinal', commonDosage: '100-200 mg VO c/8h', presentation: 'Tableta 100, 200 mg', indications: 'SII, dispepsia, cólico', notes: 'Regulador motilidad, seguro' },
+  { name: 'Baclofeno', genericName: 'Baclofeno', category: 'Relajante muscular', commonDosage: '10-80 mg VO c/8-12h', presentation: 'Tableta 10, 20 mg', indications: 'Espasticidad, HTP, alcoholismo', notes: 'Sedación, debilidad, ajuste IR' },
+  { name: 'Ciclobenzaprina', genericName: 'Ciclobenzaprina', category: 'Relajante muscular', commonDosage: '5-10 mg VO c/8h', presentation: 'Tableta 5, 10 mg', indications: 'Espasmo muscular agudo', notes: 'Sedación, anticolinérgico, no >3 sem' },
+  { name: 'Tizanidina', genericName: 'Tizanidina', category: 'Relajante muscular', commonDosage: '2-16 mg VO c/8h', presentation: 'Tableta 2, 4 mg', indications: 'Espasticidad, espasmo muscular', notes: 'Sedación, hipotensión, hepatotoxicidad' },
+  { name: 'Metocarbamol', genericName: 'Metocarbamol', category: 'Relajante muscular', commonDosage: '750-1500 mg VO c/6h', presentation: 'Tableta 500, 750 mg', indications: 'Espasmo musculoesquelético agudo', notes: 'Sedación, orina oscura' },
+  { name: 'Carisoprodol', genericName: 'Carisoprodol', category: 'Relajante muscular', commonDosage: '350 mg VO c/6-8h', presentation: 'Tableta 350 mg', indications: 'Espasmo muscular agudo', notes: 'Metabolito meprobamato, abuso potencial' },
+  { name: 'Orfenadrina', genericName: 'Orfenadrina', category: 'Relajante muscular', commonDosage: '50-100 mg VO/IM c/12h', presentation: 'Tableta 50 mg; ampolla 60 mg', indications: 'Espasmo muscular, Parkinson', notes: 'Anticolinérgico, sedación' },
+  { name: 'Rocuronio', genericName: 'Rocuronio', category: 'Relajante muscular', commonDosage: '0.6-1.2 mg/kg IV', presentation: 'Ampolla 50 mg/5mL', indications: 'Parálisis neuromuscular para intubación', notes: 'Bloqueante NM no despolarizante, sugammadex' },
+  { name: 'Succinilcolina', genericName: 'Succinilcolina', category: 'Relajante muscular', commonDosage: '1-1.5 mg/kg IV', presentation: 'Ampolla 100 mg/5mL', indications: 'Intubación secuencia rápida', notes: 'Bloqueante despolarizante, hiperpotasemia' },
+  { name: 'Vecuronio', genericName: 'Vecuronio', category: 'Relajante muscular', commonDosage: '0.08-0.1 mg/kg IV', presentation: 'Frasco ampolla 10 mg', indications: 'Parálisis intraoperatoria', notes: 'Bloqueante NM, vagolítico no' },
+  { name: 'Atracurio', genericName: 'Atracurio', category: 'Relajante muscular', commonDosage: '0.3-0.6 mg/kg IV', presentation: 'Ampolla 25 mg/2.5mL', indications: 'Parálisis intraoperatoria', notes: 'Metabolitos laudanosina, histamina' },
+  { name: 'Sugammadex', genericName: 'Sugammadex', category: 'Relajante muscular', commonDosage: '2-16 mg/kg IV', presentation: 'Ampolla 100, 200, 500 mg', indications: 'Reversión rocuronio, vecuronio', notes: 'Ciclodextrina, reacción alérgica' },
+  { name: 'Lidocaína', genericName: 'Lidocaína', category: 'Anestésico', commonDosage: '1-2% para infiltración, máx 4.5 mg/kg', presentation: 'Ampolla 1%, 2%; vial 10%', indications: 'Anestesia local, epidural, espinal', notes: 'Toxicidad SNC/CV, epinefrina prolonga' },
+  { name: 'Bupivacaína', genericName: 'Bupivacaína', category: 'Anestésico', commonDosage: '0.25-0.5% para bloqueo, máx 2 mg/kg', presentation: 'Ampolla 0.25%, 0.5%', indications: 'Anestesia regional, epidural, espinal', notes: 'Cardiotoxicidad, más potente que lidocaína' },
+  { name: 'Ropivacaína', genericName: 'Ropivacaína', category: 'Anestésico', commonDosage: '0.2-0.75% para bloqueo, máx 3 mg/kg', presentation: 'Ampolla 0.2%, 0.5%, 0.75%', indications: 'Anestesia regional, epidural, analgesia', notes: 'Menos cardiotoxicidad que bupivacaína' },
+  { name: 'Mepivacaína', genericName: 'Mepivacaína', category: 'Anestésico', commonDosage: '1-2% para infiltración, máx 7 mg/kg', presentation: 'Ampolla 1%, 2%', indications: 'Anestesia local, bloques periféricos', notes: 'Inicio rápido, menos vasodilatación' },
+  { name: 'Prilocaína', genericName: 'Prilocaína', category: 'Anestésico', commonDosage: '1-2% para infiltración, máx 8 mg/kg', presentation: 'Ampolla 1%, 2%; crema EMLA', indications: 'Anestesia local, epidural', notes: 'Metahemoglobinemia dosis altas' },
+  { name: 'Articaína', genericName: 'Articaína', category: 'Anestésico', commonDosage: '4% para infiltración dental, máx 7 mg/kg', presentation: 'Ampolla 4% con epinefrina', indications: 'Anestesia dental, infiltración', notes: 'Atraviesa hueso, preferida odontología' },
+  { name: 'Sevoflurano', genericName: 'Sevoflurano', category: 'Anestésico', commonDosage: '0.5-3% inhalación mantenimiento', presentation: 'Líquido para inhalación 250 mL', indications: 'Inducción y mantenimiento anestesia general', notes: 'Inhalatorio, compuesto A con absorventes' },
+  { name: 'Isoflurano', genericName: 'Isoflurano', category: 'Anestésico', commonDosage: '0.5-2% inhalación mantenimiento', presentation: 'Líquido para inhalación 100, 250 mL', indications: 'Mantenimiento anestesia general', notes: 'Irritante vía aérea, vasodilatación' },
+  { name: 'Desflurano', genericName: 'Desflurano', category: 'Anestésico', commonDosage: '3-12% inhalación mantenimiento', presentation: 'Líquido para inhalación 240 mL', indications: 'Mantenimiento anestesia general', notes: 'Requiere vaporizador calentado, irritante' },
+  { name: 'Óxido nitroso', genericName: 'Óxido nitroso', category: 'Anestésico', commonDosage: '40-70% inhalación mezcla', presentation: 'Tanque gas medicinal', indications: 'Analgesia inhalatoria, adyuvante anestesia', notes: 'Difunde cavidades cerradas, deficiencia B12' },
+  { name: 'Tiopental sódico', genericName: 'Tiopental', category: 'Anestésico', commonDosage: '3-5 mg/kg IV', presentation: 'Frasco ampolla 500 mg', indications: 'Inducción anestesia, HIC', notes: 'Barbitúrico, depresión respiratoria, vasodilatación' },
+  { name: 'Halotano', genericName: 'Halotano', category: 'Anestésico', commonDosage: '0.5-2% inhalación', presentation: 'Líquido para inhalación 250 mL', indications: 'Inducción y mantenimiento anestesia', notes: 'Hepatotoxicidad, arritmias, sensibiliza catecolaminas' },
+  { name: 'EMLA crema', genericName: 'Lidocaína/prilocaína', category: 'Anestésico', commonDosage: '2-5 g sobre piel 1-2h antes', presentation: 'Crema 5% (lidocaína 2.5%, prilocaína 2.5%)', indications: 'Anestesia tópica piel intacta', notes: 'Metahemoglobinemia en niños' },
+  { name: 'Haloperidol decanoato', genericName: 'Haloperidol', category: 'Antipsicótico', commonDosage: '50-200 mg IM c/4 sem', presentation: 'Ampolla 50, 100 mg/mL', indications: 'Esquizofrenia crónica mantenimiento', notes: 'Depot, EPS, discinesia tardía' },
+  { name: 'Flufenazina decanoato', genericName: 'Flufenazina', category: 'Antipsicótico', commonDosage: '12.5-50 mg IM c/2-4 sem', presentation: 'Ampolla 25 mg/mL', indications: 'Esquizofrenia crónica', notes: 'Depot, EPS altos' },
+  { name: 'Paliperidona palmitato', genericName: 'Paliperidona', category: 'Antipsicótico', commonDosage: '234-468 mg IM c/4 sem', presentation: 'Jeringa 50-150 mg/mL', indications: 'Esquizofrenia mantenimiento', notes: 'Depot mensual, EPS, prolactina' },
+  { name: 'Aripiprazol depot', genericName: 'Aripiprazol', category: 'Antipsicótico', commonDosage: '300-400 mg IM c/4 sem', presentation: 'Frasco ampolla 300, 400 mg', indications: 'Esquizofrenia mantenimiento', notes: 'Depot mensual, acatisia' },
+  { name: 'Ácido acetilsalicílico 81 mg', genericName: 'Ácido acetilsalicílico', category: 'Anticoagulante/Antiagregante', commonDosage: '81-100 mg VO c/24h', presentation: 'Tableta 81, 100 mg', indications: 'Prevención primaria y secundaria CV', notes: 'Antiagregante, sangrado GI' },
+  { name: 'Tirofibán', genericName: 'Tirofibán', category: 'Anticoagulante/Antiagregante', commonDosage: '0.4 mcg/kg/min IV 30 min, luego 0.1 mcg/kg/min', presentation: 'Ampolla 5 mg/50mL', indications: 'SCA, ICP', notes: 'GP IIb/IIIa, sangrado' },
+  { name: 'Eptifibatida', genericName: 'Eptifibatida', category: 'Anticoagulante/Antiagregante', commonDosage: '180 mcg/kg bolo, 2 mcg/kg/min IV', presentation: 'Ampolla 20 mg/10mL', indications: 'SCA, ICP', notes: 'GP IIb/IIIa, trombocitopenia' },
+  { name: 'Dalteparina', genericName: 'Dalteparina', category: 'Anticoagulante/Antiagregante', commonDosage: '200 UI/kg SC c/24h', presentation: 'Jeringa 2500, 5000 UI', indications: 'TVP, profilaxis quirúrgica', notes: 'HBPM, ajuste IR' },
+  { name: 'Ácido etacrínico', genericName: 'Ácido etacrínico', category: 'Diurético', commonDosage: '25-100 mg VO c/12-24h', presentation: 'Tableta 25, 50 mg', indications: 'Edema, ICC', notes: 'Diurético asa, no sulfa' },
+  { name: 'Triamtereno', genericName: 'Triamtereno', category: 'Diurético', commonDosage: '50-100 mg VO c/12h', presentation: 'Cápsula 50, 100 mg', indications: 'HTA, edema', notes: 'Ahorrador K, cálculo renal' },
+  { name: 'Metolazona', genericName: 'Metolazona', category: 'Diurético', commonDosage: '2.5-10 mg VO c/24h', presentation: 'Tableta 2.5, 5, 10 mg', indications: 'Edema, ICC, IRC avanzada', notes: 'Tiazida-like, con diurético asa' },
+  { name: 'Maprotilina', genericName: 'Maprotilina', category: 'Antidepresivo', commonDosage: '75-225 mg VO c/24h', presentation: 'Tableta 25, 50, 75 mg', indications: 'Depresión mayor', notes: 'ATC tetracíclico, convulsiones' },
+  { name: 'Amoxapina', genericName: 'Amoxapina', category: 'Antidepresivo', commonDosage: '150-300 mg VO c/24h', presentation: 'Tableta 50, 100, 150 mg', indications: 'Depresión, ansiedad', notes: 'ATC, EPS, discinesia tardía' },
+  { name: 'Desipramina', genericName: 'Desipramina', category: 'Antidepresivo', commonDosage: '75-200 mg VO c/24h', presentation: 'Tableta 10, 25, 50 mg', indications: 'Depresión, TDAH', notes: 'ATC, menos sedación, arritmias' },
+  { name: 'Doxepina', genericName: 'Doxepina', category: 'Antidepresivo', commonDosage: '75-300 mg VO c/24h', presentation: 'Cápsula 10, 25, 50, 75, 100 mg', indications: 'Depresión, ansiedad, insomnio, prurito', notes: 'ATC, sedación fuerte, anticolinérgico' },
+  { name: 'Levomilnaciprán', genericName: 'Levomilnaciprán', category: 'Antidepresivo', commonDosage: '40-120 mg VO c/24h', presentation: 'Cápsula 20, 40, 80, 120 mg', indications: 'Depresión mayor', notes: 'IRSN, más noradrenérgico' },
+  { name: 'Telmisartán', genericName: 'Telmisartán', category: 'Antihipertensivo', commonDosage: '20-80 mg VO c/24h', presentation: 'Tableta 20, 40, 80 mg', indications: 'HTA, prevención CV', notes: 'ARA-II, PPAR-gamma' },
+  { name: 'Olmesartán', genericName: 'Olmesartán', category: 'Antihipertensivo', commonDosage: '20-40 mg VO c/24h', presentation: 'Tableta 5, 20, 40 mg', indications: 'HTA', notes: 'ARA-II, enteropatía rara' },
+  { name: 'Fosinopril', genericName: 'Fosinopril', category: 'Antihipertensivo', commonDosage: '10-80 mg VO c/24h', presentation: 'Tableta 10, 20, 40 mg', indications: 'HTA, ICC', notes: 'IECA, doble eliminación' },
+  { name: 'Perindopril', genericName: 'Perindopril', category: 'Antihipertensivo', commonDosage: '4-16 mg VO c/24h', presentation: 'Tableta 2, 4, 8 mg', indications: 'HTA, ICC, prevención CV', notes: 'IECA, beneficio en EUROP' },
+  { name: 'Nebivolol', genericName: 'Nebivolol', category: 'Antihipertensivo', commonDosage: '2.5-10 mg VO c/24h', presentation: 'Tableta 2.5, 5, 10 mg', indications: 'HTA, ICC', notes: 'Beta1 selectivo, vasodilatador NO' },
+  { name: 'Labetalol', genericName: 'Labetalol', category: 'Antihipertensivo', commonDosage: '200-2400 mg VO c/12h o 20-80 mg IV', presentation: 'Tableta 100, 200 mg; ampolla 100 mg', indications: 'HTA, emergencia hipertensiva, embarazo', notes: 'Alfa-beta, HTA embarazo preferido' },
+  { name: 'Minoxidil', genericName: 'Minoxidil', category: 'Antihipertensivo', commonDosage: '5-40 mg VO c/12h', presentation: 'Tableta 2.5, 5, 10 mg', indications: 'HTA refractaria', notes: 'Hirsutismo, retención líquidos' },
+  { name: 'Fosfenitoína', genericName: 'Fosfenitoína', category: 'Anticonvulsivante', commonDosage: '15-20 mg PE/kg IV/IM', presentation: 'Ampolla 500 mg PE/10mL', indications: 'Estado epiléptico, convulsiones', notes: 'Prodrogua fenitoína, puede IM' },
+  { name: 'Estiripentol', genericName: 'Estiripentol', category: 'Anticonvulsivante', commonDosage: '50 mg/kg/día VO c/12h', presentation: 'Cápsula 250, 500 mg', indications: 'Epilepsia, síndrome Dravet', notes: 'Con clobazam, inhibidor CYP' },
+  { name: 'Cannabidiol', genericName: 'CBD', category: 'Anticonvulsivante', commonDosage: '5-20 mg/kg/día VO', presentation: 'Solución oral 100 mg/mL', indications: 'Síndrome Dravet, Lennox-Gastaut', notes: 'Hepatotoxicidad, interacción clobazam' },
+  { name: 'Raltegravir', genericName: 'Raltegravir', category: 'Antiviral', commonDosage: '400 mg VO c/12h', presentation: 'Tableta 400 mg', indications: 'VIH', notes: 'Integrasa, bien tolerado' },
+  { name: 'Dolutegravir', genericName: 'Dolutegravir', category: 'Antiviral', commonDosage: '50 mg VO c/24h', presentation: 'Tableta 10, 25, 50 mg', indications: 'VIH', notes: 'Integrasa, insomnio, aumento peso' },
+  { name: 'Ritonavir', genericName: 'Ritonavir', category: 'Antiviral', commonDosage: '100-600 mg VO c/12h', presentation: 'Tableta 100 mg', indications: 'VIH (potenciador)', notes: 'Potente inhibidor CYP, GI' },
+  { name: 'Lopinavir/ritonavir', genericName: 'Lopinavir/r', category: 'Antiviral', commonDosage: '400/100 mg VO c/12h', presentation: 'Tableta 100/25 mg', indications: 'VIH', notes: 'Proteasa, GI, dislipidemia' },
+  { name: 'Nirmatrelvir/ritonavir', genericName: 'Paxlovid', category: 'Antiviral', commonDosage: '300/100 mg VO c/12h x5d', presentation: 'Tableta combo', indications: 'COVID-19 leve-moderado alto riesgo', notes: 'Proteasa, interacciones CYP3A4' },
+  { name: 'Posaconazol', genericName: 'Posaconazol', category: 'Antifúngico', commonDosage: '200-400 mg VO c/8-12h', presentation: 'Suspensión 40 mg/mL, tableta 100 mg', indications: 'Aspergilosis, candidiasis refractaria, profilaxis', notes: 'Azol, QT, ajuste hepático' },
+  { name: 'Isavuconazol', genericName: 'Isavuconazol', category: 'Antifúngico', commonDosage: '372 mg VO c/8h x6, luego c/24h', presentation: 'Cápsula 186 mg', indications: 'Aspergilosis, mucormicosis', notes: 'Azol, menos QT, buena tolerancia' },
+  { name: 'Micafungina', genericName: 'Micafungina', category: 'Antifúngico', commonDosage: '100-150 mg IV c/24h', presentation: 'Frasco ampolla 50, 100 mg', indications: 'Candidiasis, profilaxis', notes: 'Equinocandina, segura' },
+  { name: 'Anidulafungina', genericName: 'Anidulafungina', category: 'Antifúngico', commonDosage: '200 mg IV carga, luego 100 mg c/24h', presentation: 'Frasco ampolla 50, 100 mg', indications: 'Candidiasis', notes: 'Equinocandina, sin ajuste hepático' },
+  { name: 'Digoxina específica', genericName: 'Digoxina', category: 'Urgencias/Cardíaco', commonDosage: '0.25-0.5 mg IV carga, 0.125-0.25 mg VO mantenimiento', presentation: 'Ampolla 0.5 mg/2mL; tableta 0.125, 0.25 mg', indications: 'FA, aleteo, ICC', notes: 'Niveles séricos, intoxicación' },
+  { name: 'Adenosina trifosfato', genericName: 'ATP', category: 'Urgencias/Cardíaco', commonDosage: '10-20 mg IV bolo rápido', presentation: 'Ampolla 20 mg/2mL', indications: 'TSV paroxística', notes: 'Similar adenosina, más prolongado' },
+  { name: 'Sotalol', genericName: 'Sotalol', category: 'Urgencias/Cardíaco', commonDosage: '80-320 mg VO c/12h', presentation: 'Tableta 80, 120, 160 mg', indications: 'Arritmias ventriculares, FA', notes: 'Beta bloqueador clase III, QT, torsade' },
+  { name: 'Flecainida', genericName: 'Flecainida', category: 'Urgencias/Cardíaco', commonDosage: '50-150 mg VO c/12h', presentation: 'Tableta 50, 100, 150 mg', indications: 'FA, TSV, arritmias ventriculares', notes: 'Clase Ic, no en post-IAM, IC' },
+  { name: 'Propafenona', genericName: 'Propafenona', category: 'Urgencias/Cardíaco', commonDosage: '150-300 mg VO c/8h', presentation: 'Tableta 150, 300 mg', indications: 'FA, TSV, WPW', notes: 'Clase Ic, sabor metálico' },
+  { name: 'Vernakalant', genericName: 'Vernakalant', category: 'Urgencias/Cardíaco', commonDosage: '3 mg/kg IV en 10 min', presentation: 'Ampolla 20 mg/mL', indications: 'Cardioversión FA aguda', notes: 'Multi-canales, solo FA reciente' },
+  { name: 'Nadolol', genericName: 'Nadolol', category: 'Antihipertensivo', commonDosage: '40-320 mg VO c/24h', presentation: 'Tableta 20, 40, 80, 120, 160 mg', indications: 'HTA, angina, migraña', notes: 'Beta no selectivo, vida media larga' },
+  { name: 'Terazosina', genericName: 'Terazosina', category: 'Antihipertensivo', commonDosage: '1-20 mg VO c/24h', presentation: 'Cápsula 1, 2, 5, 10 mg', indications: 'HTA, HBP', notes: 'Alfa bloqueador, hipotensión 1ra dosis' },
+  { name: 'Guanfacina', genericName: 'Guanfacina', category: 'Antihipertensivo', commonDosage: '1-4 mg VO c/24h', presentation: 'Tableta 1, 2 mg', indications: 'HTA, TDAH', notes: 'Alfa2 agonista, sedación' },
+  { name: 'Acetazolamida', genericName: 'Acetazolamida', category: 'Diurético', commonDosage: '250-1000 mg VO c/12-24h', presentation: 'Tableta 250 mg', indications: 'Glaucoma, HIC, alcalosis metabólica', notes: 'Inhibidor anhidrasa carbónica, acidosis' },
+  { name: 'Manitol', genericName: 'Manitol', category: 'Diurético', commonDosage: '0.25-1 g/kg IV', presentation: 'Bolsa 20% 250, 500 mL', indications: 'HIC, edema cerebral, IRA', notes: 'Diurético osmótico, HIC, ICC' },
+  { name: 'Hioscina butilbromuro', genericName: 'Butilbromuro de hioscina', category: 'Gastrointestinal', commonDosage: '10-20 mg VO/IV c/6-8h', presentation: 'Tableta 10 mg; ampolla 20 mg/mL', indications: 'Cólico abdominal, SII, espasmo GI', notes: 'Anticolinérgico, no en glaucoma' },
+  { name: 'Ondansetrón GI', genericName: 'Ondansetrón', category: 'Gastrointestinal', commonDosage: '4-8 mg VO c/8h', presentation: 'Tableta 4, 8 mg', indications: 'Náuseas, vómitos, gastroenteritis', notes: 'Antagonista 5-HT3, QT' },
+  { name: 'Mesalazina', genericName: 'Mesalamina', category: 'Gastrointestinal', commonDosage: '800-4800 mg VO c/24h', presentation: 'Tableta 400, 800, 1200 mg', indications: 'Colitis ulcerosa, Crohn', notes: '5-ASA, nefrotoxicidad, diarrea' },
+  { name: 'Sulfasalazina', genericName: 'Sulfasalazina', category: 'Gastrointestinal', commonDosage: '1-4 g VO c/6-12h', presentation: 'Tableta 500 mg', indications: 'Colitis ulcerosa, AR', notes: 'Sulfa, fotosensibilidad, oligospermia' },
+  { name: 'Metotrexato GI', genericName: 'Metotrexato', category: 'Gastrointestinal', commonDosage: '12.5-25 mg SC/IM c/7d', presentation: 'Ampolla 25 mg/mL; tableta 2.5 mg', indications: 'Crohn, AR, psoriasis', notes: 'Antifólico, hepatotoxicidad, suplementar ác fólico' },
+  { name: 'Azatioprina', genericName: 'Azatioprina', category: 'Gastrointestinal', commonDosage: '1-2.5 mg/kg VO c/24h', presentation: 'Tableta 50 mg', indications: 'Crohn, colitis, autoinmune, trasplante', notes: 'Inmunosupresor, mielotoxicidad, TPMT' },
+  { name: 'Ursodesoxicólico', genericName: 'Ácido ursodesoxicólico', category: 'Gastrointestinal', commonDosage: '10-15 mg/kg VO c/12-24h', presentation: 'Cápsula 250, 300 mg', indications: 'Cirrosis biliar primaria, colelitiasis', notes: 'Hepatoprotector, diarrea' },
+  { name: 'Ondansetrón disolución', genericName: 'Ondansetrón', category: 'Gastrointestinal', commonDosage: '4 mg IV c/8h', presentation: 'Ampolla 4 mg/2mL, 8 mg/4mL', indications: 'Náuseas postoperatorias', notes: 'QT, estreñimiento' },
+  { name: 'Betametasona tópica', genericName: 'Betametasona', category: 'Corticosteroide', commonDosage: 'Aplicar capa fina c/12h', presentation: 'Crema 0.05%', indications: 'Dermatitis, psoriasis, liquen', notes: 'Potencia media-alta' },
+  { name: 'Triamcinolona IA', genericName: 'Triamcinolona', category: 'Corticosteroide', commonDosage: '5-40 mg intraarticular', presentation: 'Ampolla 10, 40 mg/mL', indications: 'Artritis, bursitis, tendinitis', notes: 'Inyección articular, lipoatrofia' },
+  { name: 'Fluocinolona', genericName: 'Fluocinolona', category: 'Corticosteroide', commonDosage: 'Aplicar c/12h', presentation: 'Crema 0.025%', indications: 'Dermatitis atópica, eczema', notes: 'Baja-media potencia' },
+  { name: 'Clobetasol', genericName: 'Clobetasol', category: 'Corticosteroide', commonDosage: 'Aplicar capa fina c/12h', presentation: 'Crema 0.05%', indications: 'Psoriasis, eczema severo', notes: 'Ultra-alta potencia, <2 sem' },
+  { name: 'Neostigmina', genericName: 'Neostigmina', category: 'Antídoto', commonDosage: '0.5-2 mg IV c/2-4h', presentation: 'Ampolla 0.5 mg/mL, 2.5 mg/mL', indications: 'Reversión bloqueo neuromuscular, miastenia gravis', notes: 'Anticolinesterásico, bradicardia, atropina' },
+  { name: 'Pralidoxima', genericName: 'Pralidoxima', category: 'Antídoto', commonDosage: '1-2 g IV c/8-12h', presentation: 'Ampolla 1 g', indications: 'Intoxicación por organofosforados', notes: 'Reactivador colinesterasa, usar con atropina' },
+  { name: 'Fomepizol', genericName: 'Fomepizol', category: 'Antídoto', commonDosage: '15 mg/kg IV carga, luego 10 mg/kg c/12h', presentation: 'Ampolla 1 g/mL', indications: 'Intoxicación por metanol, etilenglicol', notes: 'Inhibidor alcohol deshidrogenasa' },
+  { name: 'Edetato cálcico', genericName: 'EDTA cálcico', category: 'Antídoto', commonDosage: '1-1.5 g/m2 IV c/24h', presentation: 'Ampolla 200 mg/mL', indications: 'Intoxicación por plomo', notes: 'Quelante, nefrotoxicidad' },
+  { name: 'D-penicilamina', genericName: 'Penicilamina', category: 'Antídoto', commonDosage: '250-1500 mg VO c/24h', presentation: 'Cápsula 125, 250 mg', indications: 'Enfermedad Wilson, intoxicación metales', notes: 'Quelante, reacciones autoinmunes' },
+  { name: 'Dantroleno', genericName: 'Dantroleno', category: 'Relajante muscular', commonDosage: '1-2.5 mg/kg IV bolo, hasta 10 mg/kg', presentation: 'Frasco ampolla 20 mg', indications: 'Hipertermia maligna, espasticidad', notes: 'Hepatotoxicidad, debilidad' },
+  { name: 'Aminocapróico', genericName: 'Ácido aminocaproico', category: 'Antídoto', commonDosage: '5 g IV carga, 1 g/h infusión', presentation: 'Ampolla 250 mg/mL, tableta 500 mg', indications: 'Hiperfibrinólisis, hemorragia', notes: 'Antifibrinolítico, riesgo trombosis' },
+  { name: 'Acetato de zinc', genericName: 'Zinc acetato', category: 'Antídoto', commonDosage: '50 mg VO c/8h', presentation: 'Cápsula 25, 50 mg', indications: 'Enfermedad Wilson', notes: 'Interfiere absorción cobre' }
+  { name: 'Metilergonovina', genericName: 'Metilergometrina', category: 'Urgencias/Cardíaco', commonDosage: '0.2 mg IM/IV c/2-4h', presentation: 'Ampolla 0.2 mg/mL', indications: 'Hemorragia postparto, atonía uterina', notes: 'Vasoconstricción, HTA, no en preeclampsia' },
+  { name: 'Oxitocina', genericName: 'Oxitocina', category: 'Urgencias/Cardíaco', commonDosage: '10-40 U en 1000 mL IV', presentation: 'Ampolla 10 U/mL', indications: 'Inducción parto, hemorragia postparto', notes: 'Hipotensión, retención hídrica, hiperestimulación' },
+  { name: 'Carboprost', genericName: 'Carboprost trometamina', category: 'Urgencias/Cardíaco', commonDosage: '0.25 mg IM c/15-90 min', presentation: 'Ampolla 0.25 mg/mL', indications: 'Hemorragia postparto refractaria', notes: 'Análogo PGF2a, broncoespasmo, náuseas' },
+  { name: 'Misoprostol', genericName: 'Misoprostol', category: 'Gastrointestinal', commonDosage: '200 mcg VO c/6h', presentation: 'Tableta 100, 200 mcg', indications: 'Prevención úlcera por AINE, aborto, inducción parto', notes: 'Análogo PGE1, diarrea, abortivo' },
+  { name: 'Homatropina', genericName: 'Homatropina', category: 'Gastrointestinal', commonDosage: '5-10 mg VO c/6-8h', presentation: 'Tableta 5, 10 mg', indications: 'Cólico, SII, espasmo GI', notes: 'Anticolinérgico, visión borrosa' },
+  { name: 'Mebeverina', genericName: 'Mebeverina', category: 'Gastrointestinal', commonDosage: '135 mg VO c/8h', presentation: 'Tableta 135 mg', indications: 'SII, espasmo cólico', notes: 'Antiespasmódico musculotrópico' },
+  { name: 'Domperidona GI', genericName: 'Domperidona', category: 'Gastrointestinal', commonDosage: '10 mg VO c/8h', presentation: 'Tableta 10 mg', indications: 'Gastroparesia, dispepsia, reflujo', notes: 'Procinético, QT, prolactina' },
+  { name: 'Cinitaprida', genericName: 'Cinitaprida', category: 'Gastrointestinal', commonDosage: '1 mg VO c/8h', presentation: 'Tableta 1 mg', indications: 'Dispepsia funcional, reflujo', notes: 'Procinético, EPS, niños' },
+  { name: 'Levosulpirida', genericName: 'Levosulpirida', category: 'Gastrointestinal', commonDosage: '25 mg VO c/8h', presentation: 'Tableta 25 mg; gotas', indications: 'Dispepsia funcional, SII, vómitos', notes: 'Procinético antidopaminérgico, prolactina' },
+  { name: 'Clindamicina vaginal', genericName: 'Clindamicina', category: 'Antibiótico', commonDosage: '100 mg óvulo c/24h x3d', presentation: 'Óvulo 100 mg, crema 2%', indications: 'Vaginosis bacteriana', notes: 'Absorción sistémica mínima' },
+  { name: 'Metronidazol vaginal', genericName: 'Metronidazol', category: 'Antibiótico', commonDosage: '500 mg óvulo c/24h x10d', presentation: 'Óvulo 500 mg, gel 0.75%', indications: 'Vaginosis bacteriana, tricomoniasis', notes: 'Gusto metálico, no alcohol' },
+  { name: 'Mupirocina', genericName: 'Mupirocina', category: 'Antibiótico', commonDosage: 'Aplicar c/8h x5-10d', presentation: 'Ungüento 2%', indications: 'Impétigo, infecciones piel MRSA', notes: 'Tópico, no en heridas abiertas grandes' },
+  { name: 'Ácido fusídico', genericName: 'Ácido fusídico', category: 'Antibiótico', commonDosage: 'Aplicar c/8h', presentation: 'Crema/ungüento 2%', indications: 'Infecciones piel estafilocócicas', notes: 'Tópico, resistencia emergente' },
+  { name: 'Neomicina', genericName: 'Neomicina', category: 'Antibiótico', commonDosage: 'Aplicar c/8h tópico', presentation: 'Crema/ungüento 0.5%', indications: 'Infecciones piel menores, profilaxis', notes: 'Aminoglucósido tópico, dermatitis alérgica' },
+  { name: 'Retapamulina', genericName: 'Retapamulina', category: 'Antibiótico', commonDosage: 'Aplicar c/12h x5d', presentation: 'Ungüento 1%', indications: 'Impétigo, infecciones piel menores', notes: 'Pleuromutilina tópica' },
+  { name: 'Bacitracina', genericName: 'Bacitracina', category: 'Antibiótico', commonDosage: 'Aplicar c/8-12h tópico', presentation: 'Ungüento 500 U/g', indications: 'Profilaxis infecciones piel menores', notes: 'Tópico, nefrotoxicidad sistémica' },
+  { name: 'Polimixina B tópica', genericName: 'Polimixina B', category: 'Antibiótico', commonDosage: 'Aplicar c/8-12h', presentation: 'Crema/ungüento', indications: 'Infecciones piel menores Gram negativos', notes: 'Tópico, neurotoxicidad sistémica' },
+  { name: 'Corticoide inhalado dosis fija', genericName: 'Fluticasona/salmeterol', category: 'Broncodilatador', commonDosage: '1 inhalación c/12h', presentation: 'Inhalador 250/50, 500/50 mcg', indications: 'Asma, EPOC mantenimiento', notes: 'LABA + corticoide, no crisis' },
+  { name: 'Budesonida/formoterol', genericName: 'Budesonida/formoterol', category: 'Broncodilatador', commonDosage: '1-2 inhalaciones c/12h', presentation: 'Inhalador 160/4.5, 320/9 mcg', indications: 'Asma, EPOC mantenimiento', notes: 'Corticoide + LABA, también como rescate' },
+  { name: 'Teofilina LP', genericName: 'Teofilina', category: 'Broncodilatador', commonDosage: '200-600 mg VO c/24h', presentation: 'Cápsula LP 200, 300, 400 mg', indications: 'Asma, EPOC mantenimiento', notes: 'Ventana estrecha 10-20 mcg/mL' },
+  { name: 'Pirbuterol', genericName: 'Pirbuterol', category: 'Broncodilatador', commonDosage: '1-2 puff c/4-6h', presentation: 'Inhalador 200 mcg/puff', indications: 'Asma, broncoespasmo', notes: 'Beta2 agonista, taquicardia' },
+  { name: 'Metaproterenol', genericName: 'Orciprenalina', category: 'Broncodilatador', commonDosage: '10-20 mg VO c/6-8h o inhalación', presentation: 'Tableta 10, 20 mg; inhalador', indications: 'Asma, EPOC, broncoespasmo', notes: 'Beta agonista, menos selectivo' },
+  { name: 'Flunisolida inhalada', genericName: 'Flunisolida', category: 'Broncodilatador', commonDosage: '500-1000 mcg c/12h', presentation: 'Inhalador 250 mcg/dosis', indications: 'Asma mantenimiento', notes: 'Corticoide inhalado' },
+  { name: 'Zileutón', genericName: 'Zileutón', category: 'Broncodilatador', commonDosage: '600 mg VO c/6h', presentation: 'Tableta 600 mg', indications: 'Asma, profilaxis', notes: 'Inhibidor 5-lipooxigenasa, hepatotoxicidad' },
+  { name: 'Octreótido', genericName: 'Octreótido', category: 'Gastrointestinal', commonDosage: '100-600 mcg SC c/8h o IV', presentation: 'Ampolla 50, 100, 500 mcg/mL', indications: 'Hemorragia variceal, acromegalia, tumores neuroendocrinos', notes: 'Análogo somatostatina, colelitiasis' },
+  { name: 'Vasopresina GI', genericName: 'Vasopresina', category: 'Gastrointestinal', commonDosage: '0.2-0.4 U/min IV', presentation: 'Ampolla 20 U/mL', indications: 'Hemorragia variceal esofágica', notes: 'Isquemia mesentérica, coronaria' },
+  { name: 'Propranolol varices', genericName: 'Propranolol', category: 'Gastrointestinal', commonDosage: '40-320 mg VO c/12h', presentation: 'Tableta 10, 40, 80 mg', indications: 'Profilaxis hemorragia variceal', notes: 'Beta no selectivo, reducir FC 25%' },
+  { name: 'Dexametasona oftálmica', genericName: 'Dexametasona', category: 'Corticosteroide', commonDosage: '1-2 gotas c/4-6h', presentation: 'Colirio 0.1%', indications: 'Inflamación ocular, postquirúrgico', notes: 'Glaucoma, catarata, infección ocular' },
+  { name: 'Prednisolona oftálmica', genericName: 'Prednisolona', category: 'Corticosteroide', commonDosage: '1-2 gotas c/2-6h', presentation: 'Colirio 1%', indications: 'Uveítis, inflamación ocular', notes: 'Presión intraocular, cicatrización córnea' },
+  { name: 'Loteprednol oftálmico', genericName: 'Loteprednol', category: 'Corticosteroide', commonDosage: '1-2 gotas c/4-6h', presentation: 'Suspensión 0.2%, 0.5%', indications: 'Inflamación ocular, alergia, postoperatorio', notes: 'Menor elevación PIO' },
+  { name: 'Pilocarpina', genericName: 'Pilocarpina', category: 'Urgencias/Cardíaco', commonDosage: '1-2 gotas c/6-8h', presentation: 'Colirio 1%, 2%, 4%', indications: 'Glaucoma, emergencia oftálmica', notes: 'Agonista muscarínico, miosis, visión borrosa' },
+  { name: 'Timolol oftálmico', genericName: 'Timolol', category: 'Antihipertensivo', commonDosage: '1 gota c/12h', presentation: 'Colirio 0.25%, 0.5%', indications: 'Glaucoma, HTO', notes: 'Beta bloqueador, bradicardia, broncoespasmo' },
+  { name: 'Latanoprost', genericName: 'Latanoprost', category: 'Antihipertensivo', commonDosage: '1 gota c/24h', presentation: 'Colirio 0.005%', indications: 'Glaucoma, HTO', notes: 'Análogo prostaglandina, hiperemia, pestañas' },
+  { name: 'Travoprost', genericName: 'Travoprost', category: 'Antihipertensivo', commonDosage: '1 gota c/24h', presentation: 'Colirio 0.004%', indications: 'Glaucoma, HTO', notes: 'Análogo PGF2a, pigmentación iris' },
+  { name: 'Bimatoprost', genericName: 'Bimatoprost', category: 'Antihipertensivo', commonDosage: '1 gota c/24h', presentation: 'Colirio 0.01%, 0.03%', indications: 'Glaucoma, HTO', notes: 'Análogo prostamida, crecimiento pestañas' },
+  { name: 'Brimonidina', genericName: 'Brimonidina', category: 'Antihipertensivo', commonDosage: '1 gota c/8-12h', presentation: 'Colirio 0.1%, 0.15%, 0.2%', indications: 'Glaucoma, HTO', notes: 'Alfa2 agonista, alergia, fatiga' },
+  { name: 'Brinzolamida', genericName: 'Brinzolamida', category: 'Antihipertensivo', commonDosage: '1 gota c/8h', presentation: 'Colirio 1%', indications: 'Glaucoma, HTO', notes: 'Inhibidor anhidrasa carbónica tópico' },
+  { name: 'Dorzolamida', genericName: 'Dorzolamida', category: 'Antihipertensivo', commonDosage: '1 gota c/8h', presentation: 'Colirio 2%', indications: 'Glaucoma, HTO', notes: 'Inhibidor anhidrasa carbónica tópico' },
+  { name: 'Atropina oftálmica', genericName: 'Atropina', category: 'Urgencias/Cardíaco', commonDosage: '1 gota c/12h', presentation: 'Colirio 0.5%, 1%', indications: 'Uveítis, cicloplejía, ambliopía', notes: 'Midriasis, fotofobia, boca seca' },
+  { name: 'Ciclopentolato', genericName: 'Ciclopentolato', category: 'Urgencias/Cardíaco', commonDosage: '1 gota, repetir 5 min', presentation: 'Colirio 0.5%, 1%', indications: 'Cicloplejía, examen fondo ojo', notes: 'Midriasis, psicosis en niños' },
+  { name: 'Fenilefrina oftálmica', genericName: 'Fenilefrina', category: 'Vasopresor', commonDosage: '1 gota c/5-10 min hasta 3 veces', presentation: 'Colirio 2.5%, 10%', indications: 'Midriasis, examen oftálmico', notes: 'HTA sistémica, arritmias' },
+  { name: 'Fluoresceína', genericName: 'Fluoresceína sódica', category: 'Vitamina/Suplemento', commonDosage: '1-2 gotas o tira', presentation: 'Colirio 2%; tiras', indications: 'Diagnóstico lesiones corneales, angiografía', notes: 'Tinción amarilla, alergia' },
+  { name: 'Hialuronato de sodio', genericName: 'Ácido hialurónico', category: 'Gastrointestinal', commonDosage: '0.1-0.3 mL intraarticular c/7d', presentation: 'Jeringa 10 mg/mL', indications: 'Artrosis de rodilla, lágrimas artificiales', notes: 'Visco suplemento, alergia aviar' },
+  { name: 'Lágrimas artificiales', genericName: 'Carboximetilcelulosa', category: 'Vitamina/Suplemento', commonDosage: '1-2 gotas c/4-6h PRN', presentation: 'Colirio 0.5%', indications: 'Ojo seco, irritación ocular', notes: 'Visión borrosa temporal, conservantes' },
+  { name: 'Gentamicina oftálmica', genericName: 'Gentamicina', category: 'Antibiótico', commonDosage: '1-2 gotas c/2-6h', presentation: 'Colirio 0.3%', indications: 'Conjuntivitis bacteriana, blefaritis', notes: 'Tópico ocular, resistencia' },
+  { name: 'Tobramicina oftálmica', genericName: 'Tobramicina', category: 'Antibiótico', commonDosage: '1-2 gotas c/2-6h', presentation: 'Colirio 0.3%', indications: 'Conjuntivitis bacteriana, queratitis', notes: 'Aminoglucósido tópico' },
+  { name: 'Moxifloxacino oftálmico', genericName: 'Moxifloxacino', category: 'Antibiótico', commonDosage: '1 gota c/8h x7d', presentation: 'Colirio 0.5%', indications: 'Conjuntivitis bacteriana, queratitis', notes: 'Fluoroquinolona tópica' },
+  { name: 'Ciprofloxacino oftálmico', genericName: 'Ciprofloxacino', category: 'Antibiótico', commonDosage: '1-2 gotas c/2-6h', presentation: 'Colirio 0.3%', indications: 'Infecciones oculares bacterianas', notes: 'Fluoroquinolona, precipitado corneal' },
+  { name: 'Levofloxacino oftálmico', genericName: 'Levofloxacino', category: 'Antibiótico', commonDosage: '1-2 gotas c/2-6h', presentation: 'Colirio 0.5%', indications: 'Conjuntivitis bacteriana', notes: 'Fluoroquinolona, buena penetración' },
+  { name: 'Eritromicina oftálmica', genericName: 'Eritromicina', category: 'Antibiótico', commonDosage: 'Aplicar c/6h x7d', presentation: 'Ungüento 0.5%', indications: 'Conjuntivitis, profilaxis neonatal', notes: 'Macrólido tópico, seguro' },
+  { name: 'Aciclovir oftálmico', genericName: 'Aciclovir', category: 'Antiviral', commonDosage: 'Aplicar 5 veces al día', presentation: 'Ungüento 3%', indications: 'Queratitis por herpes simple', notes: 'Antiviral tópico, toxicidad epitelial' },
+  { name: 'Natamicina', genericName: 'Natamicina', category: 'Antifúngico', commonDosage: '1 gota c/1-2h', presentation: 'Colirio 5%', indications: 'Queratitis fúngica, blefaritis', notes: 'Antifúngico tópico, penetración limitada' },
+  { name: 'Olopatadina', genericName: 'Olopatadina', category: 'Antihistamínico', commonDosage: '1 gota c/8-12h', presentation: 'Colirio 0.1%', indications: 'Conjuntivitis alérgica', notes: 'Antihistamínico tópico, estabilizador mastocito' },
+  { name: 'Epinefrina combinada', genericName: 'Epinefrina/prilocaína', category: 'Anestésico', commonDosage: 'Solución dental 1:200,000', presentation: 'Carpule 1.8 mL', indications: 'Anestesia local dental', notes: 'Vasoconstrictor, HTA, tiroides' }
+];
+
+// ===== FÁRMACOS DB =====
+function showDrugDB() {
+  var html = '<div class="drug-search"><input type="text" id="drugSearchInput" placeholder="Buscar por nombre o categoría..." onkeyup="filterDrugDB()" autofocus></div>' +
+    '<div class="drug-count" id="drugCount">Mostrando ' + DRUG_DB.length + ' fármacos</div>' +
+    '<div class="drug-list" id="drugList">';
+  for (var i = 0; i < DRUG_DB.length; i++) {
+    var d = DRUG_DB[i];
+    html += '<div class="drug-item" onclick="selectDrugForPrescription(\'' + d.name.replace(/'/g, "\\'") + '\')">' +
+      '<div class="drug-name">' + escHtml(d.name) + '</div>' +
+      '<div class="drug-generic">' + escHtml(d.genericName) + ' — ' + escHtml(d.category) + '</div>' +
+      '<div class="drug-dose">' + escHtml(d.commonDosage) + ' | ' + escHtml(d.presentation) + '</div>' +
+      '<div class="drug-cat">' + escHtml(d.category) + '</div></div>';
+  }
+  html += '</div></div>';
+  openModal('Base de Datos de Fármacos (' + DRUG_DB.length + ')', html, null);
+  document.getElementById('modalSaveBtn').style.display = 'none';
+  setTimeout(function() { var inp = document.getElementById('drugSearchInput'); if (inp) inp.focus(); }, 200);
+}
+
+function filterDrugDB() {
+  var q = (document.getElementById('drugSearchInput').value || '').toLowerCase();
+  var list = document.getElementById('drugList');
+  if (!list) return;
+  var items = list.getElementsByClassName('drug-item');
+  var count = 0;
+  for (var i = 0; i < items.length; i++) {
+    var match = items[i].textContent.toLowerCase().indexOf(q) !== -1;
+    items[i].style.display = match ? '' : 'none';
+    if (match) count++;
+  }
+  var cnt = document.getElementById('drugCount');
+  if (cnt) cnt.textContent = 'Mostrando ' + count + ' de ' + DRUG_DB.length + ' fármacos';
+}
+
+function selectDrugForPrescription(name) {
+  var inp = document.getElementById('fRxMed');
+  if (inp) { inp.value = name; closeModal(); return; }
+  var pInp = document.getElementById('portalDrugSearch');
+  if (pInp) { pInp.value = name; closeModal(); return; }
+  alert('Seleccionado: ' + name);
+}
+
+function openDrugFromPrescription() {
+  showDrugDB();
+}
+
+// ===== INTERACCIONES FARMACOLÓGICAS =====
+var DRUG_INTERACTIONS = [
+  { drugs: ['Adrenalina', 'Epinefrina'], with: ['Betabloqueantes', 'Propranolol', 'Atenolol'], severity: 'Moderada', effect: 'La epinefrina puede contrarrestar el efecto de betabloqueantes, causando hipertensión severa' },
+  { drugs: ['Morfina', 'Fentanilo', 'Tramadol', 'Codeína', 'Oxicodona', 'Hidromorfona'], with: ['Benzodiacepinas', 'Diazepam', 'Midazolam', 'Lorazepam', 'Alprazolam', 'Alcohol'], severity: 'Alta', effect: 'Depresión respiratoria y sedación excesiva. Riesgo de paro respiratorio' },
+  { drugs: ['Morfina', 'Fentanilo', 'Tramadol', 'Codeína', 'Oxicodona', 'Hidromorfona'], with: ['IMAO', 'Fenelzina', 'Tranilcipromina'], severity: 'Alta', effect: 'Riesgo de síndrome serotoninérgico y depresión respiratoria' },
+  { drugs: ['Ibuprofeno', 'Naproxeno', 'Diclofenaco', 'Ketorolaco', 'Indometacina', 'Meloxicam', 'Celecoxib', 'Piroxicam', 'ASA', 'Ácido acetilsalicílico'], with: ['Anticoagulantes', 'Warfarina', 'Heparina', 'Enoxaparina', 'Rivaroxabán', 'Apixabán'], severity: 'Alta', effect: 'Aumento del riesgo de sangrado gastrointestinal y sistémico' },
+  { drugs: ['Ibuprofeno', 'Naproxeno', 'Diclofenaco', 'Ketorolaco', 'Indometacina', 'Meloxicam', 'Celecoxib', 'Piroxicam'], with: ['IECA', 'Enalapril', 'Lisinopril', 'Captopril', 'Losartán', 'Valsartán'], severity: 'Moderada', effect: 'Reducción del efecto antihipertensivo y riesgo de nefrotoxicidad' },
+  { drugs: ['Warfarina', 'Acenocumarol'], with: ['Antibióticos', 'Ciprofloxacino', 'Levofloxacino', 'Metronidazol', 'Fluconazol', 'Amoxicilina'], severity: 'Alta', effect: 'Aumento del INR y riesgo de sangrado' },
+  { drugs: ['Heparina', 'Enoxaparina'], with: ['Antiagregantes', 'Clopidogrel', 'ASA', 'Ticagrelor', 'Prasugrel'], severity: 'Alta', effect: 'Riesgo de sangrado mayor' },
+  { drugs: ['Digoxina'], with: ['Amiodarona', 'Verapamilo', 'Furosemida', 'Hidroclorotiazida'], severity: 'Alta', effect: 'Aumento de niveles de digoxina, riesgo de toxicidad digitálica' },
+  { drugs: ['Amiodarona'], with: ['Fluoroquinolonas', 'Ciprofloxacino', 'Levofloxacino', 'Moxifloxacino', 'Macrólidos', 'Eritromicina', 'Azitromicina'], severity: 'Alta', effect: 'Prolongación del intervalo QT, riesgo de torsade de pointes' },
+  { drugs: ['Metformina'], with: ['Medios de contraste', 'IECA', 'Furosemida'], severity: 'Moderada', effect: 'Riesgo de acidosis láctica en IRC' },
+  { drugs: ['Litio'], with: ['AINE', 'IECA', 'Diuréticos', 'Furosemida', 'Hidroclorotiazida'], severity: 'Alta', effect: 'Aumento de niveles de litio, riesgo de neurotoxicidad' },
+  { drugs: ['Teofilina'], with: ['Ciprofloxacino', 'Enoxacino', 'Fluvoxamina'], severity: 'Moderada', effect: 'Aumento de niveles de teofilina, riesgo de convulsiones' },
+  { drugs: ['Ciclosporina', 'Tacrolimus'], with: ['Eritromicina', 'Azitromicina', 'Claritromicina', 'Fluconazol', 'Ketoconazol'], severity: 'Alta', effect: 'Aumento de niveles de inmunosupresor, nefrotoxicidad' },
+  { drugs: ['Sildenafilo', 'Tadalafilo', 'Vardenafilo'], with: ['Nitratos', 'Isosorbida', 'Nitroglicerina', 'Nitroprusiato'], severity: 'Contraindicado', effect: 'Hipotensión severa, riesgo de infarto' },
+  { drugs: ['Clopidogrel'], with: ['Omeprazol', 'Esomeprazol'], severity: 'Moderada', effect: 'Reducción del efecto antiagregante plaquetario' },
+  { drugs: ['Levotiroxina'], with: ['Calcio', 'Hierro', 'Omeprazol', 'Sucralfato'], severity: 'Moderada', effect: 'Reducción de absorción de levotiroxina' },
+  { drugs: ['Fluoroquinolonas', 'Ciprofloxacino', 'Levofloxacino', 'Moxifloxacino'], with: ['AINE', 'Corticoides'], severity: 'Moderada', effect: 'Aumento del riesgo de tendinopatía y ruptura tendinosa' },
+  { drugs: ['Furosemida', 'Hidroclorotiazida'], with: ['Corticoides', 'Prednisona', 'Metilprednisolona'], severity: 'Moderada', effect: 'Hipopotasemia severa' },
+  { drugs: ['Potasio', 'Cloruro de potasio'], with: ['IECA', 'Espironolactona', 'Ahorradores de K'], severity: 'Alta', effect: 'Hiperpotasemia severa, riesgo de arritmias' }
+];
+
+function checkDrugInteractions(medication) {
+  if (!medication) return [];
+  var lower = medication.toLowerCase();
+  var results = [];
+  for (var i = 0; i < DRUG_INTERACTIONS.length; i++) {
+    var inter = DRUG_INTERACTIONS[i];
+    for (var j = 0; j < inter.drugs.length; j++) {
+      if (lower.indexOf(inter.drugs[j].toLowerCase()) !== -1) {
+        results.push({ type: 'newDrug', interaction: inter, matchedDrug: inter.drugs[j] });
+        break;
+      }
+    }
+  }
+  if (results.length > 0) {
+    var msg = '⚠ INTERACCIONES DETECTADAS para ' + medication + ':\n';
+    for (var k = 0; k < results.length; k++) {
+      var r = results[k];
+      msg += '\n• ' + r.interaction.severity + ' — ' + r.interaction.effect;
+    }
+    alert(msg);
+  }
+  return results;
+}
+
 document.addEventListener('keydown', function(e) {
   if (e.ctrlKey || e.metaKey) {
     var key = e.key.toLowerCase();
@@ -3302,6 +4288,17 @@ initData().catch(function(e) { console.error('Error en inicialización:', e); })
 document.getElementById('modalOverlay').addEventListener('click', function(e) {
   if (e.target === this) closeModal();
 });
+
+// ===== PWA: SERVICE WORKER =====
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('sw.js').then(function(reg) {
+      console.log('SW registrado correctamente');
+    }).catch(function(err) {
+      console.warn('Error registrando SW:', err);
+    });
+  });
+}
 </script>
 </body>
 </html>
