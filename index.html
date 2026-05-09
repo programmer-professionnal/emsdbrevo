@@ -268,6 +268,11 @@ tr:last-child td { border-bottom: none; }
 .backup-actions .btn-import { background: #e3f2fd; color: #1565c0; }
 .backup-actions .btn-import:hover { background: #bbdefb; }
 
+/* ===== NOTIFICACIONES ===== */
+.btn-notif { background: none; border: none; color: white; cursor: pointer; font-size: 1.2em; position: relative; padding: 4px 8px; transition: opacity 0.3s; }
+.btn-notif:hover { opacity: 0.8; }
+.notif-badge { position: absolute; top: -2px; right: 0; background: #d32f2f; color: white; font-size: 0.55em; font-weight: 700; min-width: 16px; height: 16px; border-radius: 8px; display: flex; align-items: center; justify-content: center; padding: 0 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+
 /* ===== PRINT ===== */
 @media print {
   header, .dashboard-header, .toolbar-row, .tabs, .btn-edit, .btn-view, .btn-archive, .btn-small, .btn-action, .btn-emergency, .btn-add, .archive-toggle, #btnDoctorConfig { display: none !important; }
@@ -297,6 +302,7 @@ tr:last-child td { border-bottom: none; }
   <h1>&#x1fa7a; SAMU <span>| Sistema de Atención Médica</span></h1>
   <div class="user-info" id="headerUserInfo">
     <span id="headerUserName"></span>
+    <button class="btn-notif hidden" id="btnNotifications" onclick="showNotificationPanel()" title="Notificaciones">&#x1f514;<span class="notif-badge hidden" id="notifBadge">0</span></button>
     <button class="btn-back hidden" id="btnBackToDashboard" onclick="showDashboard()">Volver al panel</button>
     <button class="btn-back hidden" id="btnBackFromEmerg" onclick="showDashboard()">Volver al panel</button>
     <button class="btn-logout hidden" id="btnLogout" onclick="logout()">Cerrar sesión</button>
@@ -669,6 +675,8 @@ function setLoggedInUI(doc) {
   document.getElementById('publicContainer').classList.add('hidden');
   document.getElementById('headerUserName').textContent = doc.name + ' (' + doc.specialty + ')';
   document.getElementById('btnLogout').classList.remove('hidden');
+  document.getElementById('btnNotifications').classList.remove('hidden');
+  requestNotifPermission();
   document.getElementById('btnDoctorConfig').style.display = doc.username === 'LVargas' ? 'inline-block' : 'none';
   document.getElementById('btnBackToDashboard').classList.add('hidden');
   document.getElementById('btnBackFromEmerg').classList.add('hidden');
@@ -679,6 +687,13 @@ function setLoggedInUI(doc) {
   document.getElementById('loginPass').value = '';
   document.getElementById('loginError').textContent = '';
   searchPatients();
+  setTimeout(function() {
+    updateNotifBadge();
+    var urgent = checkNotifications().filter(function(n) { return n.urgent; });
+    if (urgent.length > 0) {
+      sendBrowserNotif('SAMU - ' + urgent.length + ' notificaci\u00f3n' + (urgent.length > 1 ? 'es' : '') + ' urgente' + (urgent.length > 1 ? 's' : ''), urgent[0].msg);
+    }
+  }, 500);
 }
 
 function restoreSession() {
@@ -719,6 +734,8 @@ function logout() {
   document.getElementById('publicContainer').classList.add('hidden');
   document.getElementById('headerUserName').textContent = '';
   document.getElementById('btnLogout').classList.add('hidden');
+  document.getElementById('btnNotifications').classList.add('hidden');
+  document.getElementById('notifBadge').classList.add('hidden');
   document.getElementById('btnBackToDashboard').classList.add('hidden');
   document.getElementById('btnBackFromEmerg').classList.add('hidden');
   document.getElementById('patientDetailView').classList.remove('active');
@@ -732,6 +749,8 @@ function showLogin() {
   document.getElementById('dashboardContainer').classList.add('hidden');
   document.getElementById('headerUserName').textContent = '';
   document.getElementById('btnLogout').classList.add('hidden');
+  document.getElementById('btnNotifications').classList.add('hidden');
+  document.getElementById('notifBadge').classList.add('hidden');
 }
 
 function showPublicSearch() {
@@ -740,6 +759,8 @@ function showPublicSearch() {
   document.getElementById('dashboardContainer').classList.add('hidden');
   document.getElementById('headerUserName').textContent = '';
   document.getElementById('btnLogout').classList.add('hidden');
+  document.getElementById('btnNotifications').classList.add('hidden');
+  document.getElementById('notifBadge').classList.add('hidden');
   document.getElementById('publicSearchInput').value = '';
   document.getElementById('publicResult').innerHTML = '';
 }
@@ -887,6 +908,7 @@ function showDashboard() {
   document.getElementById('btnBackToDashboard').classList.add('hidden');
   document.getElementById('btnBackFromEmerg').classList.add('hidden');
   searchPatients();
+  updateNotifBadge();
 }
 
 // ===== TABS =====
@@ -2253,6 +2275,95 @@ function importData(event) {
   };
   reader.readAsText(file);
   event.target.value = '';
+}
+
+// ===== NOTIFICATIONS =====
+var notificationPermission = false;
+
+function requestNotifPermission() {
+  if (!('Notification' in window)) return;
+  if (Notification.permission === 'granted') { notificationPermission = true; return; }
+  if (Notification.permission !== 'denied') {
+    Notification.requestPermission().then(function(p) { notificationPermission = p === 'granted'; });
+  }
+}
+
+function sendBrowserNotif(title, body) {
+  if (!notificationPermission) return;
+  try { new Notification(title, { body: body }); } catch(e) {}
+}
+
+function updateNotifBadge() {
+  var notifs = checkNotifications();
+  var badge = document.getElementById('notifBadge');
+  var btn = document.getElementById('btnNotifications');
+  if (notifs.length > 0) {
+    badge.textContent = notifs.length;
+    badge.classList.remove('hidden');
+  } else {
+    badge.classList.add('hidden');
+  }
+}
+
+function checkNotifications() {
+  const data = getData();
+  var notifs = [];
+  var today = new Date();
+  var todayStr = today.toISOString().split('T')[0];
+  var tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  var tomorrowStr = tomorrow.toISOString().split('T')[0];
+
+  data.patients.forEach(function(p) {
+    if (p.archived) return;
+    (p.appointments || []).forEach(function(a) {
+      if (a.status === 'Cancelada' || a.status === 'Completada') return;
+      if (a.date === todayStr) {
+        notifs.push({ icon: '\u{1f4c5}', msg: 'Cita hoy: ' + escHtml(p.firstName + ' ' + p.lastName) + ' — ' + escHtml(a.reason) + (a.time ? ' ' + a.time : ''), urgent: true });
+      } else if (a.date === tomorrowStr) {
+        notifs.push({ icon: '\u{1f4c5}', msg: 'Cita mañana: ' + escHtml(p.firstName + ' ' + p.lastName) + ' — ' + escHtml(a.reason) + (a.time ? ' ' + a.time : ''), urgent: false });
+      }
+    });
+    (p.prescriptions || []).forEach(function(r) {
+      try {
+        var rxDate = new Date(r.date);
+        var daysSince = Math.floor((today - rxDate) / 86400000);
+        if (daysSince >= 7 && daysSince < 8) {
+          notifs.push({ icon: '\u{1f48a}', msg: 'Receta (' + escHtml(r.medication) + ') para ' + escHtml(p.firstName + ' ' + p.lastName) + ' cumple 7 d\u00edas — evaluar renovaci\u00f3n', urgent: false });
+        }
+      } catch(e) {}
+    });
+  });
+
+  (data.inventory || []).forEach(function(item) {
+    if (item.quantity <= (item.minStock || 0)) {
+      notifs.push({ icon: '\u{26a0}\u{fe0f}', msg: 'Stock bajo: ' + escHtml(item.name) + ' (' + item.quantity + ' uds, m\u00edn ' + (item.minStock || 0) + ')', urgent: item.quantity === 0 });
+    }
+  });
+
+  var onDuty = data.doctors.filter(function(d) { return d.onDuty; });
+  if (onDuty.length > 0) {
+    notifs.push({ icon: '\u{1f4c5}', msg: 'M\u00e9dicos de guardia: ' + onDuty.map(function(d) { return d.name.split(' ')[0]; }).join(', '), urgent: false });
+  }
+
+  notifs.sort(function(a, b) { return a.urgent === b.urgent ? 0 : a.urgent ? -1 : 1; });
+  return notifs;
+}
+
+function showNotificationPanel() {
+  var notifs = checkNotifications();
+  var html = '<div style="margin-bottom:12px;"><strong>Notificaciones</strong> <span style="color:#999;font-size:0.82em;">(' + notifs.length + ')</span></div>';
+  if (notifs.length === 0) {
+    html += '<div style="text-align:center;padding:30px;color:#999;">&#x2705; No hay notificaciones pendientes</div>';
+  } else {
+    notifs.forEach(function(n) {
+      var bg = n.urgent ? '#fff3e0' : '#f8f9fa';
+      var border = n.urgent ? '3px solid #f57c00' : '3px solid #1a237e';
+      html += '<div style="background:' + bg + ';border-left:' + border + ';border-radius:6px;padding:10px 12px;margin-bottom:6px;font-size:0.88em;display:flex;align-items:center;gap:8px;"><span style="font-size:1.2em;">' + n.icon + '</span><span>' + n.msg + '</span></div>';
+    });
+  }
+  openModal('\u{1f514} Notificaciones', html, null);
+  document.getElementById('modalSaveBtn').style.display = 'none';
 }
 
 // ===== KEYBOARD SHORTCUTS =====
