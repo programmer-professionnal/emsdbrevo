@@ -15,6 +15,14 @@ const config = {
   appId: process.env.FIREBASE_APP_ID || null
 };
 
+const doctorsSeedRaw = process.env.DOCTORS_SEED || null;
+let doctorsSeed = null;
+if (doctorsSeedRaw) {
+  try { doctorsSeed = JSON.parse(doctorsSeedRaw); } catch (e) {
+    console.warn('Error al parsear DOCTORS_SEED:', e.message);
+  }
+}
+
 if (!fs.existsSync(distDir)) fs.mkdirSync(distDir, { recursive: true });
 
 let html = fs.readFileSync(src, 'utf8');
@@ -30,6 +38,17 @@ if (hasAllConfig) {
   console.log('Firebase config inyectada desde variables de entorno.');
 } else {
   console.log('Variables de entorno de Firebase no configuradas. Modo local.');
+}
+
+if (doctorsSeed) {
+  const seedJSON = JSON.stringify(doctorsSeed);
+  html = html.replace(
+    'const DOCTORS_SEED = null;',
+    'const DOCTORS_SEED = ' + seedJSON + ';'
+  );
+  console.log('Credenciales de médicos inyectadas desde variable de entorno.');
+} else {
+  console.log('DOCTORS_SEED no configurada. Usando médicos por defecto.');
 }
 
 fs.writeFileSync(dist, html, 'utf8');

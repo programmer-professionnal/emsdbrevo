@@ -320,6 +320,10 @@ tr:last-child td { border-bottom: none; }
 // Si ejecutas localmente, cambia 'null' por tu config de Firebase o se usará modo local.
 const FIREBASE_CONFIG = null;
 
+// ===== CREDENCIALES DE MÉDICOS (inyectadas por GitHub Actions) =====
+// En el repo solo aparece 'null'; los valores reales se inyectan via secrets.
+const DOCTORS_SEED = null;
+
 // ===== DATA LAYER =====
 const STORAGE_KEY = 'samu_ems_db';
 let dataCache = null;
@@ -399,24 +403,68 @@ async function initData() {
   if (dataCache && dataCache.doctors && dataCache.doctors.length > 0) {
     dataInitialized = true;
     console.log(connected ? 'Firebase conectado - datos compartidos' : 'Modo local');
+    restoreSession();
     return;
   }
   const data = getData();
   if (data.doctors.length === 0) {
-    data.doctors.push(
-      { id: 1, username: 'LVargas', password: 'lucasvargas07', name: 'Dr. Lucas Vargas', specialty: 'Medicina General' },
-      { id: 2, username: 'ICortes', password: 'juanma02', name: 'Dr. Ivan Cortés', specialty: 'Emergencias' },
-      { id: 3, username: 'medico3', password: 'medico3', name: 'Dr. Rodríguez', specialty: 'Traumatología' }
-    );
-    data.nextDoctorId = 4;
+    if (DOCTORS_SEED && Array.isArray(DOCTORS_SEED) && DOCTORS_SEED.length > 0) {
+      data.doctors = DOCTORS_SEED.slice();
+      data.nextDoctorId = Math.max(...DOCTORS_SEED.map(d => d.id), 0) + 1;
+    } else {
+      data.doctors.push(
+        { id: 1, username: 'LVargas', password: 'lucasvargas07', name: 'Dr. Lucas Vargas', specialty: 'Medicina General' },
+        { id: 2, username: 'ICortes', password: 'juanma02', name: 'Dr. Ivan Cortés', specialty: 'Emergencias' },
+        { id: 3, username: 'medico3', password: 'medico3', name: 'Dr. Rodríguez', specialty: 'Traumatología' }
+      );
+      data.nextDoctorId = 4;
+    }
     saveData(data);
   }
   dataInitialized = true;
   console.log(connected ? 'Firebase conectado - datos compartidos' : 'Modo local - datos solo en este navegador');
+  restoreSession();
 }
 
 // ===== AUTH =====
 let currentDoctor = null;
+const SESSION_KEY = 'samu_session';
+
+function setLoggedInUI(doc) {
+  currentDoctor = doc;
+  document.getElementById('loginContainer').classList.add('hidden');
+  document.getElementById('dashboardContainer').classList.remove('hidden');
+  document.getElementById('publicContainer').classList.add('hidden');
+  document.getElementById('headerUserName').textContent = doc.name + ' (' + doc.specialty + ')';
+  document.getElementById('btnLogout').classList.remove('hidden');
+  document.getElementById('btnDoctorConfig').style.display = doc.username === 'LVargas' ? 'inline-block' : 'none';
+  document.getElementById('btnBackToDashboard').classList.add('hidden');
+  document.getElementById('btnBackFromEmerg').classList.add('hidden');
+  document.getElementById('patientDetailView').classList.remove('active');
+  document.getElementById('patientListView').style.display = 'block';
+  document.getElementById('emergencySectionView').style.display = 'none';
+  document.getElementById('loginUser').value = '';
+  document.getElementById('loginPass').value = '';
+  document.getElementById('loginError').textContent = '';
+  searchPatients();
+}
+
+function restoreSession() {
+  const raw = localStorage.getItem(SESSION_KEY);
+  if (!raw) return;
+  try {
+    const saved = JSON.parse(raw);
+    if (saved && saved.username) {
+      const data = getData();
+      const doc = data.doctors.find(d => d.username === saved.username);
+      if (doc) {
+        setLoggedInUI(doc);
+        return;
+      }
+    }
+  } catch (e) {}
+  localStorage.removeItem(SESSION_KEY);
+}
 
 function doLogin() {
   const user = document.getElementById('loginUser').value.trim();
@@ -427,25 +475,12 @@ function doLogin() {
   const data = getData();
   const doc = data.doctors.find(d => d.username === user && d.password === pass);
   if (!doc) { errEl.textContent = 'Credenciales inválidas.'; return; }
-  currentDoctor = doc;
-  document.getElementById('loginContainer').classList.add('hidden');
-  document.getElementById('dashboardContainer').classList.remove('hidden');
-  document.getElementById('publicContainer').classList.add('hidden');
-  document.getElementById('headerUserName').textContent = doc.name + ' (' + doc.specialty + ')';
-  document.getElementById('btnLogout').classList.remove('hidden');
-  document.getElementById('btnDoctorConfig').style.display = doc.username === 'LVargas' ? 'inline-block' : 'none';
-  document.getElementById('btnBackToDashboard').classList.add('hidden');
-  document.getElementById('btnBackFromEmerg').classList.add('hidden');
-  document.getElementById('loginUser').value = '';
-  document.getElementById('loginPass').value = '';
-  errEl.textContent = '';
-  document.getElementById('patientDetailView').classList.remove('active');
-  document.getElementById('patientListView').style.display = 'block';
-  document.getElementById('emergencySectionView').style.display = 'none';
-  searchPatients();
+  localStorage.setItem(SESSION_KEY, JSON.stringify({ username: doc.username }));
+  setLoggedInUI(doc);
 }
 
 function logout() {
+  localStorage.removeItem(SESSION_KEY);
   currentDoctor = null;
   document.getElementById('loginContainer').classList.remove('hidden');
   document.getElementById('dashboardContainer').classList.add('hidden');
@@ -1306,6 +1341,17 @@ function escAttr(str) {
 // ===== GLOBAL ERROR HANDLER =====
 window.addEventListener('error', function(e) {
   console.error('Error en la aplicación:', e.message, e.filename, e.lineno);
+});
+
+// ===== CROSS-TAB SYNC =====
+window.addEventListener('storage', function(e) {
+  if (e.key === SESSION_KEY) {
+    if (!e.newValue && currentDoctor) {
+      logout();
+    } else if (e.newValue && !currentDoctor) {
+      restoreSession();
+    }
+  }
 });
 
 // ===== INIT =====
