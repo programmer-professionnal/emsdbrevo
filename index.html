@@ -319,15 +319,14 @@ tr:last-child td { border-bottom: none; }
 // 1. Ve a https://console.firebase.google.com y crea un proyecto
 // 2. Ve a "Realtime Database" > "Crear base de datos" > modo "prueba"
 // 3. En "Configuración del proyecto" > "Tus apps" > "Web" copia los datos aquí:
-const firebaseConfig = {
+const FIREBASE_CONFIG = {
   apiKey: "AIzaSyAu6Bk2dTKyWVLxDwSNNK4xKqBukpWuDME",
   authDomain: "emsdbrevo.firebaseapp.com",
   databaseURL: "https://emsdbrevo-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: "emsdbrevo",
   storageBucket: "emsdbrevo.firebasestorage.app",
   messagingSenderId: "553197209214",
-  appId: "1:553197209214:web:5d17e4ac48664070faba2f",
-  measurementId: "G-TQ17VFH770"
+  appId: "1:553197209214:web:5d17e4ac48664070faba2f"
 };
 
 // ===== DATA LAYER =====
@@ -337,11 +336,11 @@ let firebaseReady = false;
 let firebaseRef = null;
 
 function initFirebase() {
-  if (!firebaseConfig || !firebaseConfig.databaseURL || firebaseConfig.databaseURL.includes('tu-proyecto')) {
+  if (!FIREBASE_CONFIG || !FIREBASE_CONFIG.databaseURL || FIREBASE_CONFIG.databaseURL.includes('tu-proyecto')) {
     return false;
   }
   try {
-    const app = firebase.initializeApp(firebaseConfig);
+    firebase.initializeApp(FIREBASE_CONFIG);
     firebaseRef = firebase.database().ref('samuData');
     firebaseReady = true;
     return true;
@@ -352,7 +351,7 @@ function initFirebase() {
 }
 
 async function loadDataFromFirebase() {
-  if (!firebaseReady) return false;
+  if (!firebaseReady || !firebaseRef) return false;
   try {
     const snapshot = await firebaseRef.once('value');
     const data = snapshot.val();
@@ -379,15 +378,29 @@ function getData() {
 
 function saveData(data) {
   dataCache = data;
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  } catch (e) {
+    console.warn('Error al guardar en localStorage:', e.message);
+  }
   if (firebaseReady && firebaseRef) {
-    firebaseRef.set(data).catch(e => console.warn('Error al guardar en Firebase:', e.message));
+    firebaseRef.set(data).catch(function(err) {
+      console.warn('Error al guardar en Firebase:', err.message);
+      firebaseReady = false;
+    });
   }
 }
+
+var dataInitialized = false;
 
 async function initData() {
   initFirebase();
   const connected = await loadDataFromFirebase();
+  if (dataCache && dataCache.doctors && dataCache.doctors.length > 0) {
+    dataInitialized = true;
+    console.log(connected ? 'Firebase conectado - datos compartidos' : 'Modo local');
+    return;
+  }
   const data = getData();
   if (data.doctors.length === 0) {
     data.doctors.push(
@@ -398,7 +411,8 @@ async function initData() {
     data.nextDoctorId = 4;
     saveData(data);
   }
-  console.log(connected ? 'Firebase conectado - datos compartidos en la nube' : 'Modo local - datos solo en este navegador');
+  dataInitialized = true;
+  console.log(connected ? 'Firebase conectado - datos compartidos' : 'Modo local - datos solo en este navegador');
 }
 
 // ===== AUTH =====
@@ -1289,8 +1303,13 @@ function escAttr(str) {
   return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
+// ===== GLOBAL ERROR HANDLER =====
+window.addEventListener('error', function(e) {
+  console.error('Error en la aplicación:', e.message, e.filename, e.lineno);
+});
+
 // ===== INIT =====
-initData();
+initData().catch(function(e) { console.error('Error en inicialización:', e); });
 
 document.getElementById('modalOverlay').addEventListener('click', function(e) {
   if (e.target === this) closeModal();
