@@ -4178,14 +4178,43 @@ function filterDrugDB() {
 }
 
 function selectDrugForPrescription(name) {
+  // Called directly from drug DB inline (fRxMed still exists in same modal context)
   var inp = document.getElementById('fRxMed');
   if (inp) { inp.value = name; closeModal(); return; }
   var pInp = document.getElementById('portalDrugSearch');
   if (pInp) { pInp.value = name; closeModal(); return; }
+  // Called from prescription flow — reopen prescription form with selected drug
+  if (_pendingPrescriptionData) {
+    var d = _pendingPrescriptionData;
+    _pendingPrescriptionData = null;
+    closeModal();
+    // Rebuild the prescription form with the selected drug
+    var html = '<div id="fRxAllergyInfo"></div>' +
+      '<div class="form-group"><label>Fecha</label><input type="date" id="fRxDate" value="' + escAttr(d.date) + '"></div>' +
+      '<div class="form-group"><label>Medicamento</label><div style="display:flex;gap:6px"><input type="text" id="fRxMed" value="' + escAttr(name) + '" style="flex:1"><button type="button" onclick="openDrugFromPrescription()" style="padding:6px 12px;background:#00695c;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:0.85em">📖</button></div></div>' +
+      '<div class="form-group"><label>Dosis / Concentración</label><input type="text" id="fRxDosage" value="' + escAttr(d.dosage) + '" placeholder="Ej: 500mg, 1 comprimido"></div>' +
+      '<div class="form-group"><label>Instrucciones</label><textarea id="fRxInst" rows="2" placeholder="Ej: Cada 8 horas por 7 días">' + escHtml(d.instructions) + '</textarea></div>';
+    var title = d.editIndex >= 0 ? 'Editar receta' : 'Nueva receta';
+    editPrescriptionIndex = d.editIndex;
+    openModal(title, html, function() { savePrescriptionModal(); });
+    setTimeout(showRxAllergyWarning, 100);
+    return;
+  }
   alert('Seleccionado: ' + name);
 }
 
+var _pendingPrescriptionData = null;
+
 function openDrugFromPrescription() {
+  // Save current prescription form state before drug DB replaces the modal
+  _pendingPrescriptionData = {
+    date: (document.getElementById('fRxDate') || {}).value || '',
+    medication: (document.getElementById('fRxMed') || {}).value || '',
+    dosage: (document.getElementById('fRxDosage') || {}).value || '',
+    instructions: (document.getElementById('fRxInst') || {}).value || '',
+    editIndex: editPrescriptionIndex
+  };
+  closeModal();
   showDrugDB();
 }
 
