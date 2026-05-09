@@ -479,6 +479,46 @@ body { background: var(--bg); color: var(--text); }
 .int-grave { background: #d32f2f; color: white; }
 .int-moderada { background: #f57c00; color: white; }
 .int-leve { background: #fdd835; color: #333; }
+
+/* ===== NUEVAS SECCIONES ===== */
+.soap-card { background: var(--card-bg); border-radius: 8px; padding: 12px; margin-bottom: 10px; border-left: 4px solid #1565c0; }
+.soap-card .soap-meta { font-size: 0.78em; color: var(--text-muted); margin-bottom: 6px; }
+.soap-card .soap-label { font-weight: 600; font-size: 0.82em; color: #1565c0; }
+.soap-card .soap-text { font-size: 0.85em; color: var(--text-secondary); margin: 2px 0 6px; }
+.discharge-card { background: var(--card-bg); border: 2px solid #2e7d32; border-radius: 10px; padding: 16px; margin-bottom: 12px; }
+.discharge-card .dc-header { color: #2e7d32; font-weight: 700; font-size: 1em; border-bottom: 2px solid #2e7d32; padding-bottom: 6px; margin-bottom: 8px; }
+.discharge-card .dc-row { font-size: 0.85em; margin: 3px 0; }
+.event-card { background: var(--card-bg); border-radius: 8px; padding: 12px; margin-bottom: 10px; border-left: 4px solid #c62828; }
+.event-card .ev-severity { display: inline-block; padding: 1px 8px; border-radius: 4px; font-size: 0.72em; font-weight: 600; }
+.ev-leve { background: #fff3e0; color: #e65100; }
+.ev-moderado { background: #fff8e1; color: #f57f17; }
+.ev-grave { background: #ffebee; color: #c62828; }
+.ev-critico { background: #fce4ec; color: #b71c1c; }
+.death-cert { background: var(--card-bg); border: 2px solid #555; border-radius: 10px; padding: 16px; margin-bottom: 12px; }
+.death-cert .dcert-header { font-weight: 700; font-size: 1em; text-align: center; border-bottom: 2px solid #555; padding-bottom: 6px; margin-bottom: 8px; }
+.death-cert .dcert-row { font-size: 0.85em; margin: 3px 0; }
+.reminder-card { background: var(--card-bg); border-radius: 8px; padding: 12px; margin-bottom: 8px; border-left: 4px solid #f57c00; display: flex; justify-content: space-between; align-items: center; }
+.reminder-card .rem-info { flex: 1; }
+.reminder-card .rem-date { font-size: 0.78em; color: var(--text-muted); }
+.reminder-card .rem-msg { font-size: 0.88em; color: var(--text); }
+.reminder-overdue { border-left-color: #c62828 !important; }
+.reminder-overdue .rem-date { color: #c62828 !important; }
+.csv-btn { background: #2e7d32; color: white; border: none; padding: 7px 14px; border-radius: 6px; cursor: pointer; font-size: 0.82em; }
+.kiosk-btn { background: #37474f; color: white; border: none; padding: 5px 12px; border-radius: 4px; cursor: pointer; font-size: 0.75em; }
+.kiosk-mode #patientListView { max-width: 100%; margin: 0; padding: 5px; }
+.kiosk-mode .dashboard { max-width: 100%; margin: 5px; padding: 0 5px; }
+.kiosk-mode header { padding: 8px 15px; }
+.kiosk-mode header h1 { font-size: 1.1em; }
+.kiosk-mode .table-container { max-height: none; }
+.adv-filter-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+.adv-filter-row select, .adv-filter-row input { padding: 6px 10px; border: 1px solid var(--input-border); border-radius: 6px; font-size: 0.82em; background: var(--input-bg); color: var(--text); }
+.adv-filter-row .adv-filter-group { display: flex; flex-direction: column; }
+.adv-filter-row .adv-filter-group label { font-size: 0.72em; color: var(--text-muted); margin-bottom: 2px; }
+.stat-table { width: 100%; border-collapse: collapse; font-size: 0.85em; margin-top: 10px; }
+.stat-table th, .stat-table td { padding: 6px 10px; border-bottom: 1px solid var(--border); text-align: left; }
+.stat-table th { font-weight: 600; color: var(--text-secondary); background: var(--hover-bg); }
+.search-count { font-size: 0.82em; color: var(--text-muted); margin-left: 8px; }
+@media print { .no-print { display: none !important; } }
 </style>
 </head>
 <body>
@@ -527,19 +567,25 @@ body { background: var(--bg); color: var(--text); }
       <button class="archive-toggle" id="archiveToggleBtn" onclick="toggleArchived()">&#x1f4c2; Archivados</button>
     </div>
     <div class="toolbar-row toolbar-buttons">
-      <button class="btn-action" style="background:#c62828;" onclick="showTriageQueue()">&#x1f6a6; Triaje</button>
-      <button class="btn-action" style="background:#e65100;" onclick="showAmbulances()">&#x1f691; Ambulancias</button>
-      <button class="btn-action" style="background:#1565c0;" onclick="showFollowUps()">&#x1f4cb; Seguimientos</button>
-      <button class="btn-action" style="background:#1a237e;" onclick="showStats()">&#x1f4ca; Stats</button>
-      <button class="btn-action" style="background:#6a1b9a;" onclick="showInternalNotes()">&#x1f4dd; Notas</button>
-      <button class="btn-action" style="background:#00695c;" onclick="showInventory()">&#x1f4e6; Insumos</button>
-      <button class="btn-action" style="background:#37474f;" onclick="showProtocols()">&#x1fa7a; Protocolos</button>
-      <button class="btn-action" style="background:#4a148c;" onclick="showCalendar()">&#x1f4c5; Guardias</button>
-      <button class="btn-action" style="background:#f57c00;" id="btnDoctorConfig" onclick="showDoctorConfig()">&#x2699; Médicos</button>
-      <button class="btn-action" style="background:#455a64;" onclick="showBackup()">&#x1f4be; Respaldo</button>
-      <button class="btn-action" style="background:#0d47a1;" onclick="showInvoices()">&#x1f4b0; Facturas</button>
-      <button class="btn-action" style="background:#00695c;" onclick="showDrugDB()">&#x1f48a; Fármacos</button>
-      <button class="btn-action" style="background:#4a148c;" onclick="showPatientPortal()">&#x1f465; Portal Paciente</button>
+      <button class="btn-action" style="background:#c62828;" onclick="showTriageQueue()" title="Gestión de triaje (Ctrl+Q)">&#x1f6a6; Triaje</button>
+      <button class="btn-action" style="background:#e65100;" onclick="showAmbulances()" title="Unidades de ambulancia">&#x1f691; Ambulancias</button>
+      <button class="btn-action" style="background:#1565c0;" onclick="showFollowUps()" title="Seguimientos de pacientes">&#x1f4cb; Seguimientos</button>
+      <button class="btn-action" style="background:#1a237e;" onclick="showStats()" title="Dashboard de KPIs (Ctrl+D)">&#x1f4ca; Stats</button>
+      <button class="btn-action" style="background:#6a1b9a;" onclick="showInternalNotes()" title="Notas internas compartidas (Ctrl+I)">&#x1f4dd; Notas</button>
+      <button class="btn-action" style="background:#00695c;" onclick="showInventory()" title="Gestión de inventario e insumos">&#x1f4e6; Insumos</button>
+      <button class="btn-action" style="background:#37474f;" onclick="showProtocols()" title="Protocolos médicos (Ctrl+P)">&#x1fa7a; Protocolos</button>
+      <button class="btn-action" style="background:#4a148c;" onclick="showCalendar()" title="Calendario de guardias">&#x1f4c5; Guardias</button>
+      <button class="btn-action" style="background:#f57c00;" id="btnDoctorConfig" onclick="showDoctorConfig()" title="Gestión de médicos y turnos (Ctrl+T)">&#x2699; Médicos</button>
+      <button class="btn-action" style="background:#455a64;" onclick="showBackup()" title="Respaldos e importación (Ctrl+B)">&#x1f4be; Respaldo</button>
+      <button class="btn-action" style="background:#0d47a1;" onclick="showInvoices()" title="Facturación">&#x1f4b0; Facturas</button>
+      <button class="btn-action" style="background:#00695c;" onclick="showDrugDB()" title="Base de datos de fármacos">&#x1f48a; Fármacos</button>
+      <button class="btn-action" style="background:#4a148c;" onclick="showPatientPortal()" title="Portal del paciente">&#x1f465; Portal Paciente</button>
+      <button class="btn-action" style="background:#2e7d32;" onclick="showDischargeSummary()" title="Informes de alta y derivación">&#x1f4c4; Altas</button>
+      <button class="btn-action" style="background:#1565c0;" onclick="showCSVExport()" title="Exportar datos a CSV">&#x1f4e5; Exportar</button>
+      <button class="btn-action" style="background:#c62828;" onclick="showAdverseEvents()" title="Registro de incidentes y eventos adversos">&#x26a0; Incidentes</button>
+      <button class="btn-action" style="background:#555;" onclick="showDeathCertificates()" title="Certificados de defunción">&#x271d; Defunciones</button>
+      <button class="btn-action" style="background:#f57c00;" onclick="showReminders()" title="Recordatorios programados">&#x23f0; Recordatorios</button>
+      <button class="kiosk-btn" onclick="toggleKioskMode()" title="Modo pantalla completa">&#x26f6; Kiosko</button>
     </div>
   </div>
 
@@ -611,6 +657,8 @@ body { background: var(--bg); color: var(--text); }
       <button class="tab" data-tab="timeline" onclick="switchTab('timeline')">&#x1f4c8; Línea de tiempo</button>
       <button class="tab" data-tab="laborders" onclick="switchTab('laborders')" style="color:#00695c;">&#x1f9ea; Laboratorio</button>
       <button class="tab" data-tab="invoices" onclick="switchTab('invoices')" style="color:#0d47a1;">&#x1f4b0; Facturas</button>
+      <button class="tab" data-tab="soap" onclick="switchTab('soap')" style="color:#1565c0;">&#x1f9d0; SOAP</button>
+      <button class="tab" data-tab="discharge" onclick="switchTab('discharge')" style="color:#2e7d32;">&#x1f4c4; Alta</button>
     </div>
 
     <div class="tab-content">
@@ -646,6 +694,8 @@ body { background: var(--bg); color: var(--text); }
           <span class="tl-filter" data-tlfilter="prescription" onclick="setTimelineFilter('prescription')">Recetas</span>
           <span class="tl-filter" data-tlfilter="appointment" onclick="setTimelineFilter('appointment')">Citas</span>
           <span class="tl-filter" data-tlfilter="emergency" onclick="setTimelineFilter('emergency')">Emergencias</span>
+          <span class="tl-filter" data-tlfilter="soap" onclick="setTimelineFilter('soap')" style="color:#1565c0;">SOAP</span>
+          <span class="tl-filter" data-tlfilter="change" onclick="setTimelineFilter('change')" style="color:#6a1b9a;">Cambios</span>
         </div>
         <div id="timelineContainer"><div class="no-data">Seleccione un paciente para ver su historial.</div></div>
       </div>
@@ -660,6 +710,18 @@ body { background: var(--bg); color: var(--text); }
           <button class="btn-small btn-small-add" onclick="openAddInvoiceForPatient()" style="background:#0d47a1;">+ Nueva factura</button>
         </h4>
         <div id="patientInvoicesList"><div class="no-data">Sin facturas registradas.</div></div>
+      </div>
+      <div class="tab-pane" id="tab-soap">
+        <h4>&#x1f9d0; Notas de evolución (SOAP)
+          <button class="btn-small btn-small-add" onclick="openAddSOAPNote()">+ Nueva nota</button>
+        </h4>
+        <div id="soapNotesList"><div class="no-data">Sin notas de evolución.</div></div>
+      </div>
+      <div class="tab-pane" id="tab-discharge">
+        <h4>&#x1f4c4; Informe de alta / Derivación
+          <button class="btn-small btn-small-add" onclick="openAddDischargeSummary()" style="background:#2e7d32;">+ Generar informe</button>
+        </h4>
+        <div id="dischargeSummaryList"><div class="no-data">Sin informes de alta.</div></div>
       </div>
     </div>
   </div>
@@ -850,11 +912,20 @@ function getData() {
   if (!dataCache.triageNextId) dataCache.triageNextId = 1;
   if (!dataCache.invoices) dataCache.invoices = [];
   if (!dataCache.invoiceNextId) dataCache.invoiceNextId = 1;
+  if (!dataCache.adverseEvents) dataCache.adverseEvents = [];
+  if (!dataCache.adverseEventNextId) dataCache.adverseEventNextId = 1;
+  if (!dataCache.deathCertificates) dataCache.deathCertificates = [];
+  if (!dataCache.deathCertNextId) dataCache.deathCertNextId = 1;
+  if (!dataCache.reminders) dataCache.reminders = [];
+  if (!dataCache.reminderNextId) dataCache.reminderNextId = 1;
+  if (!dataCache.dischargeSummaries) dataCache.dischargeSummaries = [];
+  if (!dataCache.dischargeNextId) dataCache.dischargeNextId = 1;
   dataCache.patients.forEach(function(p) {
     if (p.insuranceProvider === undefined) p.insuranceProvider = '';
     if (p.insuranceNumber === undefined) p.insuranceNumber = '';
     if (p.coverageType === undefined) p.coverageType = '';
     if (!p.labOrders) p.labOrders = [];
+    if (!p.soapNotes) p.soapNotes = [];
   });
   (dataCache.emergencyReports || []).forEach(function(r) {
     if (r.createdAt === undefined) r.createdAt = r.date ? new Date(r.date + 'T' + (r.time || '00:00')).toISOString() : new Date().toISOString();
@@ -885,14 +956,15 @@ function saveData(data) {
   }
 }
 
-function addAuditLog(action) {
+function addAuditLog(action, patientId) {
   if (!currentDoctor) return;
   const data = getData();
   if (!data.auditLog) data.auditLog = [];
   data.auditLog.push({
     date: new Date().toISOString().slice(0, 16).replace('T', ' '),
     user: currentDoctor.name + ' (@' + currentDoctor.username + ')',
-    action: action
+    action: action,
+    patientId: patientId || null
   });
   if (data.auditLog.length > 500) data.auditLog = data.auditLog.slice(-500);
 }
@@ -1048,62 +1120,11 @@ function toggleArchived() {
   searchPatients();
 }
 
-function searchPatients() {
-  const q = document.getElementById('searchInput').value.trim().toLowerCase();
-  const data = getData();
-  let results = data.patients;
-  if (!showArchived) {
-    results = results.filter(p => !p.archived);
-  }
-  if (q) {
-    results = results.filter(p =>
-      p.firstName.toLowerCase().includes(q) ||
-      p.lastName.toLowerCase().includes(q) ||
-      p.citizenNumber.toLowerCase().includes(q)
-    );
-  }
-  results = getFilteredPatients(results);
-  renderPatientList(results);
-  document.getElementById('patientCount').textContent = '(' + results.length + ' total)';
-}
-
-function renderPatientList(patients) {
-  const container = document.getElementById('patientTableBody');
-  if (patients.length === 0) {
-    container.innerHTML = '<div class="no-data">No se encontraron pacientes.</div>';
-    return;
-  }
-  var favs = getFavorites();
-  let html = '<table><thead><tr><th></th><th>DNI</th><th>Nombre</th><th>Teléfono</th><th>Acciones</th></tr></thead><tbody>';
-  patients.forEach(p => {
-    const isArchived = p.archived;
-    const isLVargas = currentDoctor && currentDoctor.username === 'LVargas';
-    var isFav = favs.indexOf(p.id) >= 0;
-    html += '<tr class="' + (isArchived ? 'archived-row' : '') + '">' +
-      '<td><button class="fav-star' + (isFav ? ' active' : '') + '" onclick="event.stopPropagation();toggleFavorite(' + p.id + ');searchPatients();" title="' + (isFav ? 'Quitar favorito' : 'Añadir favorito') + '">' + (isFav ? '\u2605' : '\u2606') + '</button></td>' +
-      '<td>' + escHtml(p.citizenNumber) + (isArchived ? ' &#x1f4c2;' : '') + '</td>' +
-      '<td><strong>' + escHtml(p.firstName + ' ' + p.lastName) + '</strong>' + (isArchived ? ' <span style="color:#999;font-size:0.8em;">(archivado)</span>' : '') + '</td>' +
-      '<td>' + escHtml(p.phone || '-') + '</td>' +
-      '<td>' +
-        '<button class="btn-view" onclick="viewPatient(' + p.id + ')">Ver</button>' +
-        '<button class="btn-edit" onclick="editPatient(' + p.id + ')">Editar</button>' +
-        (isArchived
-          ? '<button class="btn-archive" onclick="restorePatient(' + p.id + ')">Restaurar</button>' +
-            (isLVargas ? '<button class="btn-archive" style="background:#ffebee;color:#d32f2f;" onclick="deletePatient(' + p.id + ')">Eliminar</button>' : '')
-          : '<button class="btn-archive" onclick="archivePatient(' + p.id + ')">Archivar</button>') +
-      '</td>' +
-      '</tr>';
-  });
-  html += '</tbody></table>';
-  container.innerHTML = html;
-  renderRecentAndFavs();
-}
-
 function archivePatient(id) {
   if (!confirm('¿Archivar este expediente? El paciente no se borrará, quedará archivado y podrá restaurarse después.')) return;
   const data = getData();
   const p = data.patients.find(x => x.id === id);
-  if (p) { p.archived = true; addAuditLog('Paciente ' + p.firstName + ' ' + p.lastName + ' archivado'); }
+  if (p) { p.archived = true; addAuditLog('Paciente ' + p.firstName + ' ' + p.lastName + ' archivado', p.id); }
   saveData(data);
   if (currentPatientId === id) { showDashboard(); }
   searchPatients();
@@ -1112,7 +1133,7 @@ function archivePatient(id) {
 function restorePatient(id) {
   const data = getData();
   const p = data.patients.find(x => x.id === id);
-  if (p) { p.archived = false; addAuditLog('Paciente ' + p.firstName + ' ' + p.lastName + ' restaurado'); }
+  if (p) { p.archived = false; addAuditLog('Paciente ' + p.firstName + ' ' + p.lastName + ' restaurado', p.id); }
   saveData(data);
   searchPatients();
 }
@@ -1123,7 +1144,7 @@ function deletePatient(id) {
   const data = getData();
   const p = data.patients.find(x => x.id === id);
   if (!p) return;
-  addAuditLog('Paciente ELIMINADO: ' + p.firstName + ' ' + p.lastName + ' (DNI: ' + p.citizenNumber + ')');
+  addAuditLog('Paciente ELIMINADO: ' + p.firstName + ' ' + p.lastName + ' (DNI: ' + p.citizenNumber + ')', p.id);
   data.patients = data.patients.filter(x => x.id !== id);
   if (data.emergencyReports) {
     data.emergencyReports = data.emergencyReports.filter(function(r) { return r.patientId !== id; });
@@ -1197,17 +1218,6 @@ function showDashboard() {
   updateNotifBadge();
 }
 
-// ===== TABS =====
-var currentTimelineFilter = 'all';
-
-function setTimelineFilter(filter) {
-  currentTimelineFilter = filter;
-  document.querySelectorAll('.tl-filter').forEach(function(el) {
-    el.classList.toggle('active', el.dataset.tlfilter === filter);
-  });
-  renderTimeline();
-}
-
 function switchTab(tab) {
   document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
   document.querySelectorAll('.tab-pane').forEach(t => t.classList.toggle('active', t.id === 'tab-' + tab));
@@ -1233,27 +1243,6 @@ function renderDiagnoses() {
       '<button class="btn-small btn-small-delete" onclick="deleteDiagnosis(' + i + ')">Eliminar</button></div></div>' +
       '<p style="margin-top:6px;"><strong>' + escHtml(d.description) + '</strong></p>' +
       (d.notes ? '<p style="color:#666;font-size:0.85em;">' + escHtml(d.notes) + '</p>' : '') + '</div>';
-  });
-  list.innerHTML = html;
-}
-
-function renderPrescriptions() {
-  const data = getData();
-  const p = data.patients.find(x => x.id === currentPatientId);
-  if (!p) return;
-  const list = document.getElementById('prescriptionsList');
-  if (!p.prescriptions || p.prescriptions.length === 0) {
-    list.innerHTML = '<div class="no-data">Sin recetas registradas.</div>'; return;
-  }
-  let html = '';
-  p.prescriptions.forEach((r, i) => {
-    html += '<div class="item" style="background:#f8f9fa;border-radius:8px;padding:12px 15px;margin-bottom:8px;">' +
-      '<div style="display:flex;justify-content:space-between;align-items:center;">' +
-      '<span class="item-date">' + escHtml(r.date) + ' | ' + escHtml(r.doctor) + '</span>' +
-      '<div><button class="btn-small btn-small-edit" onclick="editPrescription(' + i + ')">Editar</button> ' +
-      '<button class="btn-small btn-small-delete" onclick="deletePrescription(' + i + ')">Eliminar</button></div></div>' +
-      '<p style="margin-top:6px;"><strong>' + escHtml(r.medication) + '</strong> - ' + escHtml(r.dosage) + '</p>' +
-      (r.instructions ? '<p style="color:#666;font-size:0.85em;">' + escHtml(r.instructions) + '</p>' : '') + '</div>';
   });
   list.innerHTML = html;
 }
@@ -1318,87 +1307,6 @@ function renderPatientEmergencies() {
 }
 
 // ===== TIMELINE =====
-function renderTimeline() {
-  const data = getData();
-  const p = data.patients.find(x => x.id === currentPatientId);
-  if (!p) return;
-  const container = document.getElementById('timelineContainer');
-  var events = [];
-  var filter = currentTimelineFilter || 'all';
-
-  if (p.diagnoses && (filter === 'all' || filter === 'diagnosis')) p.diagnoses.forEach(function(d) {
-    events.push({ date: d.date, time: d.time || '', type: 'diagnosis', data: d, label: 'Diagnóstico', order: 1 });
-  });
-  if (p.prescriptions && (filter === 'all' || filter === 'prescription')) p.prescriptions.forEach(function(r) {
-    events.push({ date: r.date, time: r.time || '', type: 'prescription', data: r, label: 'Receta', order: 2 });
-  });
-  if (p.appointments && (filter === 'all' || filter === 'appointment')) p.appointments.forEach(function(c) {
-    events.push({ date: c.date, time: c.time || '', type: 'appointment', data: c, label: 'Cita', order: 3 });
-  });
-  if (data.emergencyReports && (filter === 'all' || filter === 'emergency')) data.emergencyReports.filter(function(r) { return r.patientId === currentPatientId; }).forEach(function(r) {
-    events.push({ date: r.date, time: r.time || '', type: 'emergency', data: r, label: 'Emergencia', order: 4 });
-  });
-
-  events.sort(function(a, b) {
-    var dateA = a.date + ' ' + a.time;
-    var dateB = b.date + ' ' + b.time;
-    if (dateA !== dateB) return dateA < dateB ? 1 : -1;
-    return a.order - b.order;
-  });
-
-  if (events.length === 0) {
-    container.innerHTML = '<div class="no-data">No hay eventos registrados para este paciente.</div>';
-    return;
-  }
-
-  // Summary counts
-  var counts = { diagnosis: 0, prescription: 0, appointment: 0, emergency: 0 };
-  events.forEach(function(e) { counts[e.type]++; });
-  var summaryHtml = '<div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;">' +
-    '<span style="background:#e3f2fd;color:#1565c0;padding:4px 12px;border-radius:12px;font-size:0.82em;">' + counts.diagnosis + ' diagnósticos</span>' +
-    '<span style="background:#e8f5e9;color:#2e7d32;padding:4px 12px;border-radius:12px;font-size:0.82em;">' + counts.prescription + ' recetas</span>' +
-    '<span style="background:#fff3e0;color:#f57c00;padding:4px 12px;border-radius:12px;font-size:0.82em;">' + counts.appointment + ' citas</span>' +
-    '<span style="background:#ffebee;color:#c62828;padding:4px 12px;border-radius:12px;font-size:0.82em;">' + counts.emergency + ' emergencias</span>' +
-    '</div>';
-
-  var html = summaryHtml + '<div class="timeline">';
-  events.forEach(function(e) {
-    var tlClass = 'tl-' + e.type;
-    var typeClass = { diagnosis: 'tl-type-diag', prescription: 'tl-type-rx', appointment: 'tl-type-cita', emergency: 'tl-type-emerg' }[e.type];
-    var icon = { diagnosis: '\u{1f4cb}', prescription: '\u{1f48a}', appointment: '\u{1f4c5}', emergency: '\u{1f691}' }[e.type];
-    var body = '';
-
-    if (e.type === 'diagnosis') {
-      var icdTag = e.data.icd10 ? '<span style="display:inline-block;background:#e8eaf6;color:#1a237e;padding:0 8px;border-radius:4px;font-size:0.78em;font-weight:600;margin-left:6px;">' + escHtml(e.data.icd10) + '</span>' : '';
-      body = '<strong>' + escHtml(e.data.description) + '</strong>' + icdTag + (e.data.notes ? '<br><span style="color:#666;">' + escHtml(e.data.notes) + '</span>' : '');
-    } else if (e.type === 'prescription') {
-      body = '<strong>' + escHtml(e.data.medication) + '</strong> — ' + escHtml(e.data.dosage) + (e.data.instructions ? '<br><span style="color:#666;">' + escHtml(e.data.instructions) + '</span>' : '');
-    } else if (e.type === 'appointment') {
-      body = '<strong>' + escHtml(e.data.reason) + '</strong> — <span style="color:' + (e.data.status === 'Completada' ? '#2e7d32' : e.data.status === 'Cancelada' ? '#d32f2f' : '#f57c00') + ';font-weight:600;">' + escHtml(e.data.status) + '</span>';
-    } else if (e.type === 'emergency') {
-      var triageBadge = '';
-      if (e.data.triage) {
-        var tc = 'triage-' + e.data.triage;
-        var tl = { rojo: 'ROJO', amarillo: 'AMARILLO', verde: 'VERDE' }[e.data.triage];
-        triageBadge = ' <span class="' + tc + '" style="font-size:0.75em;">' + tl + '</span>';
-      }
-      var outcomeTag = '';
-      if (e.data.outcome) {
-        outcomeTag = ' <span class="outcome-tag outcome-' + e.data.outcome.toLowerCase() + '" style="font-size:0.75em;">' + escHtml(e.data.outcome.toUpperCase()) + '</span>';
-      }
-      body = '<strong>' + escHtml(e.data.type) + '</strong>' + triageBadge + outcomeTag + '<br>' + escHtml(e.data.description.substring(0, 120)) + (e.data.description.length > 120 ? '...' : '');
-    }
-
-    html += '<div class="timeline-item ' + tlClass + '">' +
-      '<div class="tl-header">' +
-      '<span class="tl-date">' + icon + ' ' + escHtml(e.date) + (e.time ? ' ' + escHtml(e.time) : '') + ' — ' + escHtml(e.data.doctor || 'Médico') + '</span>' +
-      '<span class="tl-type ' + typeClass + '">' + e.label + '</span></div>' +
-      '<div class="tl-body">' + body + '</div></div>';
-  });
-  html += '</div>';
-  container.innerHTML = html;
-}
-
 // ===== EMERGENCY REPORTS SECTION =====
 function showEmergencySection() {
   document.getElementById('patientListView').style.display = 'none';
@@ -1743,7 +1651,7 @@ function saveEmergencyModal() {
       r.observations = observations;
       r.requiresFollowUp = followUpCb ? followUpCb.checked : false;
       if (r.requiresFollowUp && followUpDate && followUpDate.value) r.followUpDate = followUpDate.value;
-      addAuditLog('Informe de emergencia #' + r.id + ' actualizado');
+      addAuditLog('Informe de emergencia #' + r.id + ' actualizado', patientId);
     }
   } else {
     if (!data.emergencyReports) data.emergencyReports = [];
@@ -1767,7 +1675,7 @@ function saveEmergencyModal() {
       requiresFollowUp: false,
       doctor: currentDoctor.name
     });
-    addAuditLog('Informe de emergencia creado para paciente #' + patientId);
+    addAuditLog('Informe de emergencia creado para paciente #' + patientId, patientId);
   }
   // Handle follow-up
   var followUpCb = document.getElementById('fEmergFollowUp');
@@ -1866,10 +1774,11 @@ function editEmergency(id) {
 function deleteEmergency(id) {
   if (!confirm('¿Eliminar este informe de emergencia?')) return;
   const data = getData();
+  var removedEmerg = data.emergencyReports ? data.emergencyReports.find(r => r.id === id) : null;
   if (data.emergencyReports) {
     data.emergencyReports = data.emergencyReports.filter(r => r.id !== id);
   }
-  addAuditLog('Informe de emergencia #' + id + ' eliminado');
+  addAuditLog('Informe de emergencia #' + id + ' eliminado', removedEmerg ? removedEmerg.patientId : null);
   saveData(data);
   searchEmergencies();
   if (currentPatientId) renderPatientEmergencies();
@@ -1985,7 +1894,7 @@ function savePatientModal() {
         p.allergies = allergies; p.chronicConditions = chronicConditions;
         p.insuranceProvider = insuranceProvider; p.insuranceNumber = insuranceNumber; p.coverageType = coverageType;
         if (avatarDataUrl) p.avatar = avatarDataUrl;
-        addAuditLog('Paciente ' + p.firstName + ' ' + p.lastName + ' actualizado');
+        addAuditLog('Paciente ' + p.firstName + ' ' + p.lastName + ' actualizado', p.id);
       }
     } else {
       const newId = data.nextPatientId++;
@@ -2000,7 +1909,7 @@ function savePatientModal() {
         avatar: avatarDataUrl || null,
         diagnoses: [], prescriptions: [], appointments: [], labOrders: []
       });
-      addAuditLog('Paciente ' + firstName + ' ' + lastName + ' creado');
+      addAuditLog('Paciente ' + firstName + ' ' + lastName + ' creado', newId);
     }
     saveData(data);
     closeModal();
@@ -2061,10 +1970,10 @@ function saveDiagnosisModal() {
     p.diagnoses[editDiagnosisIndex].icd10 = icd10;
     p.diagnoses[editDiagnosisIndex].description = description;
     p.diagnoses[editDiagnosisIndex].notes = notes;
-    addAuditLog('Diagnóstico actualizado: ' + description);
+    addAuditLog('Diagnóstico actualizado: ' + description, currentPatientId);
   } else {
     p.diagnoses.push({ date, icd10, description, notes, doctor: currentDoctor.name });
-    addAuditLog('Diagnóstico añadido: ' + description);
+    addAuditLog('Diagnóstico añadido: ' + description, currentPatientId);
   }
   saveData(data);
   closeModal();
@@ -2078,66 +1987,13 @@ function deleteDiagnosis(idx) {
   if (!p) return;
   const removed = p.diagnoses[idx];
   p.diagnoses.splice(idx, 1);
-  addAuditLog('Diagnóstico eliminado: ' + (removed ? removed.description : ''));
+  addAuditLog('Diagnóstico eliminado: ' + (removed ? removed.description : ''), currentPatientId);
   saveData(data);
   renderDiagnoses();
 }
 
 // ===== PRESCRIPTIONS =====
 let editPrescriptionIndex = -1;
-
-function openAddPrescription() {
-  editPrescriptionIndex = -1;
-  var html = '<div id="fRxAllergyInfo"></div>' +
-    '<div class="form-group"><label>Fecha</label><input type="date" id="fRxDate"></div>' +
-    '<div class="form-group"><label>Medicamento</label><div style="display:flex;gap:6px"><input type="text" id="fRxMed" placeholder="Nombre del fármaco" style="flex:1"><button type="button" onclick="openDrugFromPrescription()" style="padding:6px 12px;background:#00695c;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:0.85em">📖</button></div></div>' +
-    '<div class="form-group"><label>Dosis / Concentración</label><input type="text" id="fRxDosage" placeholder="Ej: 500mg, 1 comprimido"></div>' +
-    '<div class="form-group"><label>Instrucciones</label><textarea id="fRxInst" rows="2" placeholder="Ej: Cada 8 horas por 7 días"></textarea></div>';
-  openModal('Nueva receta', html, () => savePrescriptionModal());
-  setTimeout(showRxAllergyWarning, 100);
-  document.getElementById('fRxDate').value = new Date().toISOString().split('T')[0];
-}
-
-function editPrescription(idx) {
-  const data = getData();
-  const p = data.patients.find(x => x.id === currentPatientId);
-  if (!p || !p.prescriptions[idx]) return;
-  editPrescriptionIndex = idx;
-  const r = p.prescriptions[idx];
-  var html = '<div id="fRxAllergyInfo"></div>' +
-    '<div class="form-group"><label>Fecha</label><input type="date" id="fRxDate" value="' + escAttr(r.date) + '"></div>' +
-    '<div class="form-group"><label>Medicamento</label><div style="display:flex;gap:6px"><input type="text" id="fRxMed" value="' + escAttr(r.medication) + '" style="flex:1"><button type="button" onclick="openDrugFromPrescription()" style="padding:6px 12px;background:#00695c;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:0.85em">📖</button></div></div>' +
-    '<div class="form-group"><label>Dosis / Concentración</label><input type="text" id="fRxDosage" value="' + escAttr(r.dosage) + '"></div>' +
-    '<div class="form-group"><label>Instrucciones</label><textarea id="fRxInst" rows="2">' + escHtml(r.instructions || '') + '</textarea></div>';
-  openModal('Editar receta', html, () => savePrescriptionModal());
-  setTimeout(showRxAllergyWarning, 100);
-}
-
-function savePrescriptionModal() {
-  const date = document.getElementById('fRxDate').value;
-  const medication = document.getElementById('fRxMed').value.trim();
-  const dosage = document.getElementById('fRxDosage').value.trim();
-  const instructions = document.getElementById('fRxInst').value.trim();
-  if (!date || !medication || !dosage) { alert('Fecha, medicamento y dosis son obligatorios.'); return; }
-  if (checkAllergyConflict(medication)) return;
-  checkDrugInteractions(medication);
-  const data = getData();
-  const p = data.patients.find(x => x.id === currentPatientId);
-  if (!p) return;
-  if (editPrescriptionIndex >= 0 && p.prescriptions[editPrescriptionIndex]) {
-    p.prescriptions[editPrescriptionIndex].date = date;
-    p.prescriptions[editPrescriptionIndex].medication = medication;
-    p.prescriptions[editPrescriptionIndex].dosage = dosage;
-    p.prescriptions[editPrescriptionIndex].instructions = instructions;
-    addAuditLog('Receta actualizada: ' + medication);
-  } else {
-    p.prescriptions.push({ date, medication, dosage, instructions, doctor: currentDoctor.name });
-    addAuditLog('Receta añadida: ' + medication);
-  }
-  saveData(data);
-  closeModal();
-  renderPrescriptions();
-}
 
 function deletePrescription(idx) {
   if (!confirm('¿Eliminar esta receta?')) return;
@@ -2146,7 +2002,7 @@ function deletePrescription(idx) {
   if (!p) return;
   const removed = p.prescriptions[idx];
   p.prescriptions.splice(idx, 1);
-  addAuditLog('Receta eliminada: ' + (removed ? removed.medication : ''));
+  addAuditLog('Receta eliminada: ' + (removed ? removed.medication : ''), currentPatientId);
   saveData(data);
   renderPrescriptions();
 }
@@ -2193,10 +2049,10 @@ function saveAppointmentModal() {
     p.appointments[editAppointmentIndex].time = time;
     p.appointments[editAppointmentIndex].reason = reason;
     p.appointments[editAppointmentIndex].status = status;
-    addAuditLog('Cita actualizada: ' + reason);
+    addAuditLog('Cita actualizada: ' + reason, currentPatientId);
   } else {
     p.appointments.push({ date, time, reason, status, doctor: currentDoctor.name });
-    addAuditLog('Cita añadida: ' + reason);
+    addAuditLog('Cita añadida: ' + reason, currentPatientId);
   }
   saveData(data);
   closeModal();
@@ -2210,7 +2066,7 @@ function deleteAppointment(idx) {
   if (!p) return;
   const removed = p.appointments[idx];
   p.appointments.splice(idx, 1);
-  addAuditLog('Cita eliminada: ' + (removed ? removed.reason : ''));
+  addAuditLog('Cita eliminada: ' + (removed ? removed.reason : ''), currentPatientId);
   saveData(data);
   renderAppointments();
 }
@@ -2279,85 +2135,6 @@ function doPublicSearch() {
 }
 
 // ===== STATISTICS =====
-var statCharts = [];
-
-function showStats() {
-  const data = getData();
-  const totalPatients = data.patients.length;
-  const activePatients = data.patients.filter(function(p) { return !p.archived; }).length;
-  const totalEmergencies = (data.emergencyReports || []).length;
-  const totalDoctors = data.doctors.length;
-  const onDuty = data.doctors.filter(function(d) { return d.onDuty; }).length;
-
-  var totalRespMins = 0, respCount = 0;
-  var respByTriage = { rojo: { total: 0, count: 0 }, amarillo: { total: 0, count: 0 }, verde: { total: 0, count: 0 } };
-  (data.emergencyReports || []).forEach(function(r) {
-    var mins = getResponseTime(r);
-    if (mins !== null) { totalRespMins += mins; respCount++; var t = r.triage || 'amarillo'; if (respByTriage[t]) { respByTriage[t].total += mins; respByTriage[t].count++; } }
-  });
-  var avgResp = respCount > 0 ? Math.round(totalRespMins / respCount) : 0;
-  var avgRespRojo = respByTriage.rojo.count > 0 ? Math.round(respByTriage.rojo.total / respByTriage.rojo.count) : 0;
-  var avgRespAmarillo = respByTriage.amarillo.count > 0 ? Math.round(respByTriage.amarillo.total / respByTriage.amarillo.count) : 0;
-  var avgRespVerde = respByTriage.verde.count > 0 ? Math.round(respByTriage.verde.total / respByTriage.verde.count) : 0;
-
-  var typeCounts = {};
-  (data.emergencyReports || []).forEach(function(r) { typeCounts[r.type] = (typeCounts[r.type] || 0) + 1; });
-  var typeHtml = '';
-  Object.keys(typeCounts).sort().forEach(function(t) { typeHtml += '<div style="display:flex;justify-content:space-between;padding:3px 0;font-size:0.82em;border-bottom:1px solid var(--border);"><span>' + escHtml(t) + '</span><strong>' + typeCounts[t] + '</strong></div>'; });
-
-  var auditHtml = '';
-  var log = data.auditLog || [];
-  var recent = log.slice(-10).reverse();
-  if (recent.length > 0) { recent.forEach(function(a) { auditHtml += '<div class="audit-item"><span class="audit-date">' + escHtml(a.date) + '</span><span class="audit-user">' + escHtml(a.user) + '</span> — ' + escHtml(a.action) + '</div>'; }); }
-  else { auditHtml = '<div style="color:#999;font-size:0.85em;">Sin actividad registrada.</div>'; }
-
-  // Month-by-month emergency counts for chart
-  var monthLabels = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
-  var monthCounts = new Array(12).fill(0);
-  var triageCounts = { rojo: 0, amarillo: 0, verde: 0 };
-  (data.emergencyReports || []).forEach(function(r) {
-    if (r.date) { try { var m = new Date(r.date).getMonth(); if (m >= 0 && m < 12) monthCounts[m]++; } catch(e) {} }
-    triageCounts[r.triage || 'amarillo']++;
-  });
-
-  var chartId1 = 'chartMonthly_' + Date.now();
-  var chartId2 = 'chartTriage_' + Date.now();
-  var chartId3 = 'chartType_' + Date.now();
-
-  const html =
-    '<div class="stats-grid">' +
-    '<div class="stat-card stat-patients"><div class="stat-number">' + totalPatients + '</div><div class="stat-label">Total pacientes</div><div style="font-size:0.78em;color:var(--text-muted);">' + activePatients + ' activos</div></div>' +
-    '<div class="stat-card stat-emerg"><div class="stat-number">' + totalEmergencies + '</div><div class="stat-label">Informes de emergencia</div></div>' +
-    '<div class="stat-card stat-doctors"><div class="stat-number">' + totalDoctors + '</div><div class="stat-label">Médicos registrados</div></div>' +
-    '<div class="stat-card stat-duty"><div class="stat-number">' + onDuty + '</div><div class="stat-label">Médicos de guardia</div></div>' +
-    '<div class="stat-card" style="border-top:3px solid #1a237e;"><div class="stat-number">' + formatResponseTime(avgResp) + '</div><div class="stat-label">Tiempo resp. promedio</div><div style="font-size:0.72em;color:var(--text-muted);">Rojo: ' + formatResponseTime(avgRespRojo) + ' | Amarillo: ' + formatResponseTime(avgRespAmarillo) + ' | Verde: ' + formatResponseTime(avgRespVerde) + '</div></div>' +
-    '</div>' +
-    '<div class="chart-row">' +
-    '<div class="chart-box"><h5>Emergencias por mes</h5><canvas id="' + chartId1 + '"></canvas></div>' +
-    '<div class="chart-box"><h5>Distribución por triaje</h5><canvas id="' + chartId2 + '"></canvas></div>' +
-    '</div>' +
-    '<h5 style="margin:15px 0 8px;color:var(--text);font-size:0.9em;">Emergencias por tipo</h5>' +
-    (typeHtml || '<div style="color:#999;font-size:0.85em;">Sin emergencias registradas.</div>') +
-    '<h5 style="margin:15px 0 8px;color:var(--text);font-size:0.9em;">Actividad reciente</h5>' +
-    '<div style="max-height:200px;overflow-y:auto;">' + auditHtml + '</div>';
-
-  openModal('&#x1f4ca; Estadísticas del sistema', html, null);
-  document.getElementById('modalSaveBtn').style.display = 'none';
-
-  // Render charts after modal opens
-  setTimeout(function() {
-    statCharts.forEach(function(c) { try { c.destroy(); } catch(e) {} }); statCharts = [];
-    var ctx1 = document.getElementById(chartId1);
-    var ctx2 = document.getElementById(chartId2);
-    if (ctx1 && typeof Chart !== 'undefined') {
-      statCharts.push(new Chart(ctx1, { type: 'bar', data: { labels: monthLabels, datasets: [{ label: 'Emergencias', data: monthCounts, backgroundColor: '#1a237e', borderRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } } }));
-    }
-    if (ctx2 && typeof Chart !== 'undefined') {
-      statCharts.push(new Chart(ctx2, { type: 'doughnut', data: { labels: ['Rojo', 'Amarillo', 'Verde'], datasets: [{ data: [triageCounts.rojo, triageCounts.amarillo, triageCounts.verde], backgroundColor: ['#d32f2f', '#f57c00', '#388e3c'] }] }, options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, padding: 8 } } } } }));
-    }
-  }, 100);
-}
-
 // ===== INTERNAL NOTES =====
 function showInternalNotes() {
   if (!currentDoctor) { alert('Debe iniciar sesión.'); return; }
@@ -2479,7 +2256,7 @@ function saveQuickEmergency() {
     diagnoses: [], prescriptions: [], appointments: []
   };
   data.patients.push(p);
-  addAuditLog('Paciente ' + firstName + ' ' + lastName + ' creado vía emergencia rápida');
+  addAuditLog('Paciente ' + firstName + ' ' + lastName + ' creado vía emergencia rápida', newId);
 
   if (!data.emergencyReports) data.emergencyReports = [];
   if (!data.nextEmergencyId) data.nextEmergencyId = 1;
@@ -2498,7 +2275,7 @@ function saveQuickEmergency() {
     doctor: currentDoctor.name,
     signedConsent: (document.getElementById('fQSigned') && document.getElementById('fQSigned').checked && currentDoctor) ? { doctor: currentDoctor.name, date: new Date().toISOString() } : null
   });
-  addAuditLog('Informe de emergencia creado para ' + firstName + ' ' + lastName);
+  addAuditLog('Informe de emergencia creado para ' + firstName + ' ' + lastName, newId);
   saveData(data);
   closeModal();
   searchPatients();
@@ -3013,7 +2790,7 @@ function addToTriageQueue() {
     status: 'esperando'
   });
   var p = data.patients.find(function(x) { return x.id === patientId; });
-  addAuditLog('Paciente ' + (p ? p.firstName + ' ' + p.lastName : '') + ' agregado a triaje (' + triage + ')');
+  addAuditLog('Paciente ' + (p ? p.firstName + ' ' + p.lastName : '') + ' agregado a triaje (' + triage + ')', patientId);
   saveData(data);
   showTriageQueue();
 }
@@ -3163,7 +2940,7 @@ function addManualFollowUp() {
     createdAt: new Date().toISOString()
   });
   var p = data.patients.find(function(x) { return x.id === patientId; });
-  addAuditLog('Seguimiento creado para ' + (p ? p.firstName + ' ' + p.lastName : ''));
+  addAuditLog('Seguimiento creado para ' + (p ? p.firstName + ' ' + p.lastName : ''), patientId);
   saveData(data);
   showFollowUps();
 }
@@ -3173,7 +2950,7 @@ function completeFollowUp(id) {
   var f = data.followUps.find(function(x) { return x.id === id; });
   if (!f) return;
   f.status = 'completado';
-  addAuditLog('Seguimiento completado para paciente #' + f.patientId);
+  addAuditLog('Seguimiento completado para paciente #' + f.patientId, f.patientId);
   saveData(data);
   showFollowUps();
 }
@@ -3384,7 +3161,7 @@ function addInvoice() {
   if (!data.invoices) data.invoices = [];
   if (!data.invoiceNextId) data.invoiceNextId = 1;
   data.invoices.push({ id: data.invoiceNextId++, patientId: patientId, date: date, concept: concept, amount: amount.toFixed(2), paymentMethod: payment, status: status, doctor: currentDoctor ? currentDoctor.name : '', createdAt: new Date().toISOString() });
-  addAuditLog('Factura creada: $' + amount.toFixed(2) + ' - ' + concept);
+  addAuditLog('Factura creada: $' + amount.toFixed(2) + ' - ' + concept, patientId);
   saveData(data);
   showInvoices();
   if (currentPatientId) renderPatientInvoices();
@@ -3451,7 +3228,7 @@ function saveEditedInvoice() {
   const data = getData();
   if (window._editInvoiceIdx >= 0 && data.invoices[window._editInvoiceIdx]) {
     data.invoices[window._editInvoiceIdx] = { id: data.invoices[window._editInvoiceIdx].id, patientId: patientId, date: date, concept: concept, amount: amount.toFixed(2), paymentMethod: payment, status: status, doctor: currentDoctor ? currentDoctor.name : '', createdAt: data.invoices[window._editInvoiceIdx].createdAt || new Date().toISOString() };
-    addAuditLog('Factura editada: $' + amount.toFixed(2) + ' - ' + concept);
+    addAuditLog('Factura editada: $' + amount.toFixed(2) + ' - ' + concept, patientId);
     saveData(data);
     closeModal();
     showInvoices();
@@ -3463,7 +3240,7 @@ function deleteInvoice(idx) {
   if (!confirm('¿Eliminar esta factura?')) return;
   const data = getData();
   if (data.invoices && data.invoices[idx]) {
-    addAuditLog('Factura eliminada: $' + data.invoices[idx].amount + ' - ' + data.invoices[idx].concept);
+    addAuditLog('Factura eliminada: $' + data.invoices[idx].amount + ' - ' + data.invoices[idx].concept, data.invoices[idx].patientId);
     data.invoices.splice(idx, 1);
     saveData(data);
     showInvoices();
@@ -3495,7 +3272,7 @@ function saveLabOrder() {
   if (!p) return;
   if (!p.labOrders) p.labOrders = [];
   p.labOrders.push({ date: date, test: test, result: result, normalRange: normalRange, status: status, doctor: currentDoctor ? currentDoctor.name : '' });
-  addAuditLog('Orden laboratorio: ' + test + ' para ' + p.firstName + ' ' + p.lastName);
+  addAuditLog('Orden laboratorio: ' + test + ' para ' + p.firstName + ' ' + p.lastName, currentPatientId);
   saveData(data);
   closeModal();
   renderLabOrders();
@@ -4279,6 +4056,763 @@ function checkDrugInteractions(medication) {
   return results;
 }
 
+// ===== FIRMA DIGITAL EN RECETAS =====
+function openAddPrescription() {
+  editPrescriptionIndex = -1;
+  var html = '<div id="fRxAllergyInfo"></div>' +
+    '<div class="form-group"><label>Fecha</label><input type="date" id="fRxDate"></div>' +
+    '<div class="form-group"><label>Medicamento</label><div style="display:flex;gap:6px"><input type="text" id="fRxMed" placeholder="Nombre del fármaco" style="flex:1"><button type="button" onclick="openDrugFromPrescription()" style="padding:6px 12px;background:#00695c;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:0.85em">📖</button></div></div>' +
+    '<div class="form-group"><label>Dosis / Concentración</label><input type="text" id="fRxDosage" placeholder="Ej: 500mg, 1 comprimido"></div>' +
+    '<div class="form-group"><label>Instrucciones</label><textarea id="fRxInst" rows="2" placeholder="Ej: Cada 8 horas por 7 días"></textarea></div>' +
+    '<div class="form-group" style="margin-top:8px;"><label><input type="checkbox" id="fRxSigned"> Firma digital — <span style="font-size:0.82em;color:#666;">Certifico que la receta es válida</span></label></div>';
+  openModal('Nueva receta', html, () => savePrescriptionModal());
+  setTimeout(showRxAllergyWarning, 100);
+  document.getElementById('fRxDate').value = new Date().toISOString().split('T')[0];
+}
+function editPrescription(idx) {
+  const data = getData();
+  const p = data.patients.find(x => x.id === currentPatientId);
+  if (!p || !p.prescriptions[idx]) return;
+  editPrescriptionIndex = idx;
+  const r = p.prescriptions[idx];
+  var html = '<div id="fRxAllergyInfo"></div>' +
+    '<div class="form-group"><label>Fecha</label><input type="date" id="fRxDate" value="' + escAttr(r.date) + '"></div>' +
+    '<div class="form-group"><label>Medicamento</label><div style="display:flex;gap:6px"><input type="text" id="fRxMed" value="' + escAttr(r.medication) + '" style="flex:1"><button type="button" onclick="openDrugFromPrescription()" style="padding:6px 12px;background:#00695c;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:0.85em">📖</button></div></div>' +
+    '<div class="form-group"><label>Dosis / Concentración</label><input type="text" id="fRxDosage" value="' + escAttr(r.dosage) + '"></div>' +
+    '<div class="form-group"><label>Instrucciones</label><textarea id="fRxInst" rows="2">' + escHtml(r.instructions || '') + '</textarea></div>' +
+    '<div class="form-group" style="margin-top:8px;"><label><input type="checkbox" id="fRxSigned"' + (r.signedConsent ? ' checked' : '') + '> Firma digital — <span style="font-size:0.82em;color:#666;">Certifico que la receta es válida</span></label></div>';
+  openModal('Editar receta', html, () => savePrescriptionModal());
+  setTimeout(showRxAllergyWarning, 100);
+}
+function savePrescriptionModal() {
+  const date = document.getElementById('fRxDate').value;
+  const medication = document.getElementById('fRxMed').value.trim();
+  const dosage = document.getElementById('fRxDosage').value.trim();
+  const instructions = document.getElementById('fRxInst').value.trim();
+  if (!date || !medication || !dosage) { alert('Fecha, medicamento y dosis son obligatorios.'); return; }
+  if (checkAllergyConflict(medication)) return;
+  checkDrugInteractions(medication);
+  const data = getData();
+  const p = data.patients.find(x => x.id === currentPatientId);
+  if (!p) return;
+  var signed = document.getElementById('fRxSigned') && document.getElementById('fRxSigned').checked;
+  var consentObj = signed && currentDoctor ? { doctor: currentDoctor.name, date: new Date().toISOString() } : null;
+  if (editPrescriptionIndex >= 0 && p.prescriptions[editPrescriptionIndex]) {
+    p.prescriptions[editPrescriptionIndex].date = date;
+    p.prescriptions[editPrescriptionIndex].medication = medication;
+    p.prescriptions[editPrescriptionIndex].dosage = dosage;
+    p.prescriptions[editPrescriptionIndex].instructions = instructions;
+    p.prescriptions[editPrescriptionIndex].signedConsent = consentObj;
+    addAuditLog('Receta actualizada: ' + medication, currentPatientId);
+  } else {
+    p.prescriptions.push({ date: date, medication: medication, dosage: dosage, instructions: instructions, doctor: currentDoctor ? currentDoctor.name : '', signedConsent: consentObj });
+    addAuditLog('Receta añadida: ' + medication, currentPatientId);
+  }
+  saveData(data);
+  closeModal();
+  renderPrescriptions();
+}
+function renderPrescriptions() {
+  const data = getData();
+  const p = data.patients.find(x => x.id === currentPatientId);
+  const container = document.getElementById('prescriptionsList');
+  if (!p || !p.prescriptions || p.prescriptions.length === 0) { container.innerHTML = '<div class="no-data">Sin recetas registradas.</div>'; return; }
+  var html = '';
+  p.prescriptions.forEach(function(r, i) {
+    var sigHtml = r.signedConsent ? '<span style="display:inline-block;background:#e8f5e9;color:#2e7d32;padding:0 6px;border-radius:3px;font-size:0.72em;font-weight:600;margin-left:4px;">✓ Firmada</span>' : '';
+    html += '<div class="lab-card"><div class="lab-date">' + escHtml(r.date) + ' | ' + escHtml(r.doctor) + sigHtml + '</div>' +
+      '<div class="lab-test"><strong>' + escHtml(r.medication) + '</strong> — ' + escHtml(r.dosage) + '</div>' +
+      (r.instructions ? '<div style="font-size:0.85em;color:var(--text-secondary);margin:2px 0;">' + escHtml(r.instructions) + '</div>' : '') +
+      '<div style="margin-top:4px;"><button class="btn-small btn-small-edit" onclick="editPrescription(' + i + ')">Editar</button> <button class="btn-small btn-small-delete" onclick="deletePrescription(' + i + ')">Eliminar</button></div></div>';
+  });
+  container.innerHTML = html;
+}
+
+// ===== NOTAS DE EVOLUCIÓN SOAP =====
+function renderSOAPNotes() {
+  const data = getData();
+  const p = data.patients.find(x => x.id === currentPatientId);
+  var list = document.getElementById('soapNotesList');
+  if (!p || !p.soapNotes || p.soapNotes.length === 0) { list.innerHTML = '<div class="no-data">Sin notas de evolución.</div>'; return; }
+  var html = '';
+  p.soapNotes.slice().reverse().forEach(function(n, i) {
+    var idx = p.soapNotes.length - 1 - i;
+    html += '<div class="soap-card"><div class="soap-meta">' + escHtml(n.date) + ' | ' + escHtml(n.doctor) + '</div>' +
+      (n.subjective ? '<div class="soap-label">S (Subjetivo)</div><div class="soap-text">' + escHtml(n.subjective) + '</div>' : '') +
+      (n.objective ? '<div class="soap-label">O (Objetivo)</div><div class="soap-text">' + escHtml(n.objective) + '</div>' : '') +
+      (n.assessment ? '<div class="soap-label">A (Evaluación)</div><div class="soap-text">' + escHtml(n.assessment) + '</div>' : '') +
+      (n.plan ? '<div class="soap-label">P (Plan)</div><div class="soap-text">' + escHtml(n.plan) + '</div>' : '') +
+      '<div style="margin-top:6px;"><button class="btn-small btn-small-edit" onclick="editSOAPNote(' + idx + ')">Editar</button> <button class="btn-small btn-small-delete" onclick="deleteSOAPNote(' + idx + ')">Eliminar</button></div></div>';
+  });
+  list.innerHTML = html;
+}
+function openAddSOAPNote() {
+  if (!currentPatientId) { alert('Seleccione un paciente primero.'); return; }
+  var html =
+    '<div class="form-group"><label>Fecha</label><input type="date" id="fSOAPDate"></div>' +
+    '<div class="form-group"><label>S - Subjetivo (síntomas del paciente)</label><textarea id="fSOAPS" rows="2" placeholder="Ej: Dolor torácico opresivo desde hace 2 horas..."></textarea></div>' +
+    '<div class="form-group"><label>O - Objetivo (hallazgos del examen)</label><textarea id="fSOAPO" rows="2" placeholder="Ej: PA 150/90, FC 95, SatO2 97%..."></textarea></div>' +
+    '<div class="form-group"><label>A - Evaluación (impresión diagnóstica)</label><textarea id="fSOAPA" rows="2" placeholder="Ej: Probable IAM sin elevación ST..."></textarea></div>' +
+    '<div class="form-group"><label>P - Plan (conducta a seguir)</label><textarea id="fSOAPP" rows="2" placeholder="Ej: Monitorización, AAS 300mg, traslado a hemodinamia..."></textarea></div>';
+  openModal('Nueva nota SOAP', html, function() { saveSOAPNote(); });
+  document.getElementById('fSOAPDate').value = new Date().toISOString().split('T')[0];
+}
+function saveSOAPNote() {
+  var date = document.getElementById('fSOAPDate').value;
+  var subjective = document.getElementById('fSOAPS').value.trim();
+  var objective = document.getElementById('fSOAPO').value.trim();
+  var assessment = document.getElementById('fSOAPA').value.trim();
+  var plan = document.getElementById('fSOAPP').value.trim();
+  if (!date) { alert('La fecha es obligatoria.'); return; }
+  const data = getData();
+  var p = data.patients.find(x => x.id === currentPatientId);
+  if (!p) return;
+  if (!p.soapNotes) p.soapNotes = [];
+  p.soapNotes.push({ date: date, subjective: subjective, objective: objective, assessment: assessment, plan: plan, doctor: currentDoctor ? currentDoctor.name : '', createdAt: new Date().toISOString() });
+  addAuditLog('Nota SOAP añadida', currentPatientId);
+  saveData(data);
+  closeModal();
+  renderSOAPNotes();
+}
+
+function editSOAPNote(idx) {
+  const data = getData();
+  var p = data.patients.find(x => x.id === currentPatientId);
+  if (!p || !p.soapNotes || !p.soapNotes[idx]) return;
+  var n = p.soapNotes[idx];
+  var html =
+    '<div class="form-group"><label>Fecha</label><input type="date" id="fSOAPDate" value="' + escAttr(n.date) + '"></div>' +
+    '<div class="form-group"><label>S - Subjetivo</label><textarea id="fSOAPS" rows="2">' + escHtml(n.subjective || '') + '</textarea></div>' +
+    '<div class="form-group"><label>O - Objetivo</label><textarea id="fSOAPO" rows="2">' + escHtml(n.objective || '') + '</textarea></div>' +
+    '<div class="form-group"><label>A - Evaluación</label><textarea id="fSOAPA" rows="2">' + escHtml(n.assessment || '') + '</textarea></div>' +
+    '<div class="form-group"><label>P - Plan</label><textarea id="fSOAPP" rows="2">' + escHtml(n.plan || '') + '</textarea></div>';
+  window._editSOAPIdx = idx;
+  openModal('Editar nota SOAP', html, function() { saveEditedSOAPNote(); });
+}
+function saveEditedSOAPNote() {
+  var date = document.getElementById('fSOAPDate').value;
+  var subjective = document.getElementById('fSOAPS').value.trim();
+  var objective = document.getElementById('fSOAPO').value.trim();
+  var assessment = document.getElementById('fSOAPA').value.trim();
+  var plan = document.getElementById('fSOAPP').value.trim();
+  if (!date) return;
+  const data = getData();
+  var p = data.patients.find(x => x.id === currentPatientId);
+  if (!p || !p.soapNotes || !p.soapNotes[window._editSOAPIdx]) return;
+  p.soapNotes[window._editSOAPIdx] = { date: date, subjective: subjective, objective: objective, assessment: assessment, plan: plan, doctor: currentDoctor ? currentDoctor.name : '', createdAt: p.soapNotes[window._editSOAPIdx].createdAt || new Date().toISOString() };
+  addAuditLog('Nota SOAP editada', currentPatientId);
+  saveData(data);
+  closeModal();
+  renderSOAPNotes();
+}
+
+function deleteSOAPNote(idx) {
+  if (!confirm('¿Eliminar esta nota SOAP?')) return;
+  const data = getData();
+  const p = data.patients.find(x => x.id === currentPatientId);
+  if (!p || !p.soapNotes) return;
+  p.soapNotes.splice(idx, 1);
+  addAuditLog('Nota SOAP eliminada', currentPatientId);
+  saveData(data);
+  renderSOAPNotes();
+}
+
+// ===== INFORME DE ALTA / DERIVACIÓN =====
+function renderDischargeSummaries() {
+  const data = getData();
+  var list = document.getElementById('dischargeSummaryList');
+  var summaries = (data.dischargeSummaries || []).filter(function(s) { return s.patientId === currentPatientId; });
+  if (summaries.length === 0) { list.innerHTML = '<div class="no-data">Sin informes de alta.</div>'; return; }
+  var html = '';
+  summaries.forEach(function(s) {
+    html += '<div class="discharge-card"><div class="dc-header">INFORME DE ALTA / DERIVACIÓN</div>' +
+      '<div class="dc-row"><strong>Fecha:</strong> ' + escHtml(s.date) + ' | <strong>Médico:</strong> ' + escHtml(s.doctor) + '</div>' +
+      '<div class="dc-row"><strong>Diagnóstico principal:</strong> ' + escHtml(s.diagnosis) + '</div>' +
+      (s.secondaryDiagnoses ? '<div class="dc-row"><strong>Diagnósticos secundarios:</strong> ' + escHtml(s.secondaryDiagnoses) + '</div>' : '') +
+      '<div class="dc-row"><strong>Resumen de evolución:</strong> ' + escHtml(s.evolution) + '</div>' +
+      '<div class="dc-row"><strong>Tratamiento recibido:</strong> ' + escHtml(s.treatment) + '</div>' +
+      '<div class="dc-row"><strong>Recomendaciones:</strong> ' + escHtml(s.recommendations) + '</div>' +
+      (s.derivation ? '<div class="dc-row"><strong>Derivación a:</strong> ' + escHtml(s.derivation) + '</div>' : '') +
+      (s.medicationOnDischarge ? '<div class="dc-row"><strong>Medicación al alta:</strong> ' + escHtml(s.medicationOnDischarge) + '</div>' : '') +
+      (s.signedConsent ? '<div class="dc-row" style="margin-top:6px;"><span style="display:inline-block;background:#e8f5e9;color:#2e7d32;padding:2px 8px;border-radius:4px;font-weight:600;">✓ Firmado digitalmente</span></div>' : '') +
+      '<div style="margin-top:8px;"><button class="btn-view" onclick="printDischargeSummary(' + s.id + ')">🖨 Imprimir</button></div></div>';
+  });
+  list.innerHTML = html;
+}
+function openAddDischargeSummary() {
+  if (!currentPatientId) { alert('Seleccione un paciente primero.'); return; }
+  const data = getData();
+  var p = data.patients.find(x => x.id === currentPatientId);
+  if (!p) return;
+  var lastDx = (p.diagnoses && p.diagnoses.length > 0) ? p.diagnoses[p.diagnoses.length - 1].description : '';
+  var html =
+    '<div class="form-group"><label>Fecha de alta</label><input type="date" id="fDCDate"></div>' +
+    '<div class="form-group"><label>Diagnóstico principal</label><input type="text" id="fDCDiagnosis" value="' + escAttr(lastDx) + '"></div>' +
+    '<div class="form-group"><label>Diagnósticos secundarios</label><input type="text" id="fDCSecondary" placeholder="Separados por coma"></div>' +
+    '<div class="form-group"><label>Resumen de evolución</label><textarea id="fDCEvolution" rows="3" placeholder="Evolución del paciente durante la atención..."></textarea></div>' +
+    '<div class="form-group"><label>Tratamiento recibido</label><textarea id="fDCTreatment" rows="2" placeholder="Tratamientos, procedimientos, medicación administrada..."></textarea></div>' +
+    '<div class="form-group"><label>Recomendaciones al alta</label><textarea id="fDCRecom" rows="2" placeholder="Cuidados, seguimiento, signos de alarma..."></textarea></div>' +
+    '<div class="form-row"><div class="form-group"><label>Derivación a</label><select id="fDCDerivation"><option value="">-- No aplica --</option><option value="Hospital Central">Hospital Central</option><option value="Hospital del Este">Hospital del Este</option><option value="Hospital Universitario">Hospital Universitario</option><option value="Clínica Privada">Clínica Privada</option><option value="Centro de Salud">Centro de Salud</option><option value="Domicilio">Domicilio</option></select></div>' +
+    '<div class="form-group"><label>Medicación al alta</label><input type="text" id="fDCMed" placeholder="Ej: Amoxicilina 500mg c/8h x7d"></div></div>' +
+    '<div class="form-group"><label><input type="checkbox" id="fDCSigned"> Firma digital del médico</label></div>';
+  openModal('Generar informe de alta', html, function() { saveDischargeSummary(); });
+  document.getElementById('fDCDate').value = new Date().toISOString().split('T')[0];
+}
+function saveDischargeSummary() {
+  var date = document.getElementById('fDCDate').value;
+  var diagnosis = document.getElementById('fDCDiagnosis').value.trim();
+  var secondaryDiagnoses = document.getElementById('fDCSecondary').value.trim();
+  var evolution = document.getElementById('fDCEvolution').value.trim();
+  var treatment = document.getElementById('fDCTreatment').value.trim();
+  var recommendations = document.getElementById('fDCRecom').value.trim();
+  var derivation = document.getElementById('fDCDerivation').value;
+  var medicationOnDischarge = document.getElementById('fDCMed').value.trim();
+  if (!date || !diagnosis || !evolution) { alert('Fecha, diagnóstico y evolución son obligatorios.'); return; }
+  var signed = document.getElementById('fDCSigned') && document.getElementById('fDCSigned').checked;
+  const data = getData();
+  if (!data.dischargeSummaries) data.dischargeSummaries = [];
+  if (!data.dischargeNextId) data.dischargeNextId = 1;
+  data.dischargeSummaries.push({
+    id: data.dischargeNextId++, patientId: currentPatientId, date: date,
+    diagnosis: diagnosis, secondaryDiagnoses: secondaryDiagnoses, evolution: evolution,
+    treatment: treatment, recommendations: recommendations, derivation: derivation,
+    medicationOnDischarge: medicationOnDischarge,
+    doctor: currentDoctor ? currentDoctor.name : '',
+    signedConsent: signed && currentDoctor ? { doctor: currentDoctor.name, date: new Date().toISOString() } : null,
+    createdAt: new Date().toISOString()
+  });
+  addAuditLog('Informe de alta generado', currentPatientId);
+  saveData(data);
+  closeModal();
+  renderDischargeSummaries();
+}
+function printDischargeSummary(id) {
+  const data = getData();
+  var s = (data.dischargeSummaries || []).find(function(x) { return x.id === id; });
+  if (!s) return;
+  var p = data.patients.find(function(x) { return x.id === s.patientId; });
+  var pName = p ? escHtml(p.firstName + ' ' + p.lastName) : 'Desconocido';
+  var pDNI = p ? escHtml(p.citizenNumber) : '-';
+  var win = window.open('', '_blank');
+  win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Informe de Alta - ' + pName + '</title><style>body{font-family:Segoe UI,sans-serif;padding:40px;color:#333;}h1{color:#1a237e;border-bottom:2px solid #1a237e;padding-bottom:8px;}h2{color:#2e7d32;font-size:1.1em;margin-top:20px;}.meta{color:#666;margin:8px 0;}.section{margin:12px 0;padding:10px;background:#f8f9fa;border-radius:6px;}.signature{margin-top:30px;border-top:2px solid #333;padding-top:10px;}@media print{body{padding:20px;}}</style></head><body>');
+  win.document.write('<h1>INFORME DE ALTA / DERIVACIÓN</h1>');
+  win.document.write('<div class="meta"><strong>Paciente:</strong> ' + pName + ' | <strong>DNI:</strong> ' + pDNI + ' | <strong>Fecha de alta:</strong> ' + s.date + '</div>');
+  win.document.write('<div class="meta"><strong>Médico tratante:</strong> ' + escHtml(s.doctor) + '</div>');
+  win.document.write('<hr>');
+  win.document.write('<div class="section"><h2>Diagnóstico principal</h2><p>' + escHtml(s.diagnosis) + '</p></div>');
+  if (s.secondaryDiagnoses) win.document.write('<div class="section"><h2>Diagnósticos secundarios</h2><p>' + escHtml(s.secondaryDiagnoses) + '</p></div>');
+  win.document.write('<div class="section"><h2>Resumen de evolución</h2><p>' + escHtml(s.evolution) + '</p></div>');
+  win.document.write('<div class="section"><h2>Tratamiento recibido</h2><p>' + escHtml(s.treatment) + '</p></div>');
+  win.document.write('<div class="section"><h2>Recomendaciones</h2><p>' + escHtml(s.recommendations) + '</p></div>');
+  if (s.medicationOnDischarge) win.document.write('<div class="section"><h2>Medicación al alta</h2><p>' + escHtml(s.medicationOnDischarge) + '</p></div>');
+  if (s.derivation) win.document.write('<div class="section"><h2>Derivación</h2><p>' + escHtml(s.derivation) + '</p></div>');
+  if (s.signedConsent) win.document.write('<div class="signature"><strong>Firma digital:</strong> ' + escHtml(s.signedConsent.doctor) + ' - ' + s.signedConsent.date.split('T')[0] + '</div>');
+  win.document.write('<p style="margin-top:40px;color:#999;font-size:0.8em;border-top:1px solid #eee;padding-top:10px;">SAMU RevoRP - Sistema de Atención Médica</p>');
+  win.document.write('</body></html>');
+  win.document.close();
+  win.print();
+}
+
+// ===== EXPORTACIÓN CSV =====
+function showCSVExport() {
+  var html =
+    '<p style="color:#666;margin-bottom:15px;">Exporte datos del sistema a formato CSV para análisis externo.</p>' +
+    '<div style="display:flex;flex-direction:column;gap:10px;">' +
+    '<button class="csv-btn" onclick="exportCSV(\'patients\')">&#x1f465; Exportar pacientes</button>' +
+    '<button class="csv-btn" onclick="exportCSV(\'emergencies\')">&#x1f691; Exportar emergencias</button>' +
+    '<button class="csv-btn" onclick="exportCSV(\'invoices\')">&#x1f4b0; Exportar facturas</button>' +
+    '<button class="csv-btn" onclick="exportCSV(\'inventory\')">&#x1f4e6; Exportar inventario</button>' +
+    '<button class="csv-btn" onclick="exportCSV(\'audit\')">&#x1f4dd; Exportar auditoría</button>' +
+    '</div>';
+  openModal('&#x1f4e5; Exportar datos (CSV)', html, null);
+  document.getElementById('modalSaveBtn').style.display = 'none';
+}
+function exportCSV(type) {
+  const data = getData();
+  var csv = '';
+  var filename = '';
+  if (type === 'patients') {
+    csv = 'ID,DNI,Nombre,Apellidos,FN,Teléfono,Dirección,Alergias,Condiciones Crónicas,Obra Social,Nº Afiliado,Cobertura\n';
+    data.patients.forEach(function(p) {
+      csv += p.id + ',"' + (p.citizenNumber || '') + '","' + (p.firstName || '') + '","' + (p.lastName || '') + '","' + (p.dateOfBirth || '') + '","' + (p.phone || '') + '","' + (p.address || '').replace(/"/g, '""') + '","' + (p.allergies || []).join('; ') + '","' + (p.chronicConditions || []).join('; ') + '","' + (p.insuranceProvider || '') + '","' + (p.insuranceNumber || '') + '","' + (p.coverageType || '') + '"\n';
+    });
+    filename = 'pacientes.csv';
+  } else if (type === 'emergencies') {
+    csv = 'ID,PacienteID,Fecha,Triaje,Tipo,Descripción,Estado,Derivación,Médico\n';
+    (data.emergencyReports || []).forEach(function(r) {
+      csv += r.id + ',' + r.patientId + ',"' + (r.date || '') + '","' + (r.triage || '') + '","' + (r.type || '').replace(/"/g, '""') + '","' + (r.description || '').replace(/"/g, '""') + '","' + (r.outcome || '') + '","' + (r.derivation || '') + '","' + (r.doctor || '') + '"\n';
+    });
+    filename = 'emergencias.csv';
+  } else if (type === 'invoices') {
+    csv = 'ID,PacienteID,Fecha,Concepto,Monto,Método Pago,Estado,Médico\n';
+    (data.invoices || []).forEach(function(f) {
+      csv += f.id + ',' + f.patientId + ',"' + (f.date || '') + '","' + (f.concept || '').replace(/"/g, '""') + '",' + (f.amount || '0') + ',"' + (f.paymentMethod || '') + '","' + (f.status || '') + '","' + (f.doctor || '') + '"\n';
+    });
+    filename = 'facturas.csv';
+  } else if (type === 'inventory') {
+    csv = 'Nombre,Cantidad,Stock Mínimo,Categoría\n';
+    (data.inventory || []).forEach(function(item) {
+      csv += '"' + (item.name || '').replace(/"/g, '""') + '",' + (item.quantity || 0) + ',' + (item.minStock || 0) + ',"' + (item.category || '') + '"\n';
+    });
+    filename = 'inventario.csv';
+  } else if (type === 'audit') {
+    csv = 'Fecha,Usuario,Acción,PacienteID\n';
+    (data.auditLog || []).forEach(function(a) {
+      csv += '"' + (a.date || '') + '","' + (a.user || '') + '","' + (a.action || '').replace(/"/g, '""') + '","' + (a.patientId || '') + '"\n';
+    });
+    filename = 'auditoria.csv';
+  }
+  if (!csv) return;
+  var blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+  var link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(link.href);
+}
+
+// ===== EVENTOS ADVERSOS / INCIDENTES =====
+function showAdverseEvents() {
+  const data = getData();
+  if (!data.adverseEvents) data.adverseEvents = [];
+  var listHtml = '';
+  if (data.adverseEvents.length === 0) {
+    listHtml = '<div class="no-data" style="padding:15px;">No se han registrado incidentes.</div>';
+  } else {
+    data.adverseEvents.slice().reverse().forEach(function(e) {
+      var sevClass = 'ev-' + (e.severity || 'leve');
+      var sevLabel = { leve: 'Leve', moderado: 'Moderado', grave: 'Grave', critico: 'Crítico' }[e.severity] || 'Leve';
+      listHtml += '<div class="event-card"><div class="soap-meta">' + escHtml(e.date) + ' | ' + escHtml(e.reportedBy) + ' | <span class="ev-severity ' + sevClass + '">' + sevLabel + '</span></div>' +
+        '<div><strong>' + escHtml(e.type) + '</strong></div>' +
+        '<div style="font-size:0.85em;color:var(--text-secondary);margin:4px 0;">' + escHtml(e.description) + '</div>' +
+        (e.immediateAction ? '<div style="font-size:0.85em;color:var(--text-secondary);"><strong>Acción:</strong> ' + escHtml(e.immediateAction) + '</div>' : '') +
+        (e.preventiveMeasures ? '<div style="font-size:0.85em;color:var(--text-secondary);"><strong>Prevención:</strong> ' + escHtml(e.preventiveMeasures) + '</div>' : '') +
+        '</div>';
+    });
+  }
+  var html = '<div style="margin-bottom:12px;"><strong>Registro de incidentes y eventos adversos</strong></div>' + listHtml +
+    '<hr style="margin:15px 0;border:none;border-top:1px solid var(--border);">' +
+    '<h5 style="margin-bottom:10px;">Reportar nuevo incidente</h5>' +
+    '<div class="form-group"><label>Fecha</label><input type="date" id="fEVDate"></div>' +
+    '<div class="form-group"><label>Tipo de incidente</label><select id="fEVType"><option value="Error de medicación">Error de medicación</option><option value="Caída del paciente">Caída del paciente</option><option value="Evento adverso en procedimiento">Evento adverso en procedimiento</option><option value="Problema de equipamiento">Problema de equipamiento</option><option value="Incidente de seguridad">Incidente de seguridad</option><option value="Comunicación deficiente">Comunicación deficiente</option><option value="Otro">Otro</option></select></div>' +
+    '<div class="form-group"><label>Severidad</label><select id="fEVSeverity"><option value="leve">Leve</option><option value="moderado">Moderado</option><option value="grave">Grave</option><option value="critico">Crítico</option></select></div>' +
+    '<div class="form-group"><label>Descripción del incidente</label><textarea id="fEVDesc" rows="3" placeholder="¿Qué sucedió? ¿Cómo? ¿Cuándo?..."></textarea></div>' +
+    '<div class="form-group"><label>Acción inmediata tomada</label><textarea id="fEVAction" rows="2" placeholder="¿Qué se hizo para mitigar el daño?..."></textarea></div>' +
+    '<div class="form-group"><label>Medidas preventivas propuestas</label><textarea id="fEVPrevent" rows="2" placeholder="¿Cómo evitar que vuelva a suceder?..."></textarea></div>';
+  openModal('&#x26a0; Incidentes y eventos adversos', html, function() { addAdverseEvent(); });
+  document.getElementById('modalSaveBtn').textContent = 'Registrar incidente';
+  document.getElementById('fEVDate').value = new Date().toISOString().split('T')[0];
+}
+function addAdverseEvent() {
+  var date = document.getElementById('fEVDate').value;
+  var type = document.getElementById('fEVType').value;
+  var severity = document.getElementById('fEVSeverity').value;
+  var description = document.getElementById('fEVDesc').value.trim();
+  var immediateAction = document.getElementById('fEVAction').value.trim();
+  var preventiveMeasures = document.getElementById('fEVPrevent').value.trim();
+  if (!date || !type || !description) { alert('Fecha, tipo y descripción son obligatorios.'); return; }
+  const data = getData();
+  if (!data.adverseEvents) data.adverseEvents = [];
+  if (!data.adverseEventNextId) data.adverseEventNextId = 1;
+  data.adverseEvents.push({
+    id: data.adverseEventNextId++, date: date, type: type, severity: severity,
+    description: description, immediateAction: immediateAction, preventiveMeasures: preventiveMeasures,
+    reportedBy: currentDoctor ? currentDoctor.name : '', createdAt: new Date().toISOString()
+  });
+  addAuditLog('Incidente reportado: ' + type + ' (' + severity + ')');
+  saveData(data);
+  closeModal();
+  showAdverseEvents();
+}
+
+// ===== CERTIFICADO DE DEFUNCIÓN =====
+function showDeathCertificates() {
+  const data = getData();
+  if (!data.deathCertificates) data.deathCertificates = [];
+  var listHtml = '';
+  if (data.deathCertificates.length === 0) {
+    listHtml = '<div class="no-data" style="padding:15px;">No hay certificados de defunción registrados.</div>';
+  } else {
+    data.deathCertificates.slice().reverse().forEach(function(c) {
+      var p = data.patients.find(function(x) { return x.id === c.patientId; });
+      var pName = p ? escHtml(p.firstName + ' ' + p.lastName) : 'Desconocido';
+      listHtml += '<div class="death-cert"><div class="dcert-header">CERTIFICADO DE DEFUNCIÓN</div>' +
+        '<div class="dcert-row"><strong>Paciente:</strong> ' + pName + ' | <strong>DNI:</strong> ' + escHtml(p ? p.citizenNumber : '') + '</div>' +
+        '<div class="dcert-row"><strong>Fecha de fallecimiento:</strong> ' + escHtml(c.deathDate) + ' <strong>Hora:</strong> ' + escHtml(c.deathTime) + '</div>' +
+        '<div class="dcert-row"><strong>Causa inmediata:</strong> ' + escHtml(c.immediateCause) + '</div>' +
+        (c.underlyingCause ? '<div class="dcert-row"><strong>Causa basal:</strong> ' + escHtml(c.underlyingCause) + '</div>' : '') +
+        '<div class="dcert-row"><strong>Médico:</strong> ' + escHtml(c.doctor) + (c.medicalLicense ? ' | <strong>Matrícula:</strong> ' + escHtml(c.medicalLicense) : '') + '</div>' +
+        '<div style="margin-top:8px;"><button class="btn-view" onclick="printDeathCertificate(' + c.id + ')">🖨 Imprimir certificado</button></div></div>';
+    });
+  }
+  var patientOpts = '<option value="">Seleccionar paciente...</option>';
+  data.patients.forEach(function(p) { patientOpts += '<option value="' + p.id + '">' + escHtml(p.firstName + ' ' + p.lastName + ' (DNI: ' + p.citizenNumber + ')') + '</option>'; });
+  var html = '<div style="margin-bottom:12px;"><strong>Certificados de defunción</strong> <span style="color:#999;font-size:0.82em;">(' + data.deathCertificates.length + ')</span></div>' + listHtml +
+    '<hr style="margin:15px 0;border:none;border-top:1px solid var(--border);">' +
+    '<h5 style="margin-bottom:10px;">Nuevo certificado de defunción</h5>' +
+    '<div class="form-group"><label>Paciente</label><select id="fDCPatient">' + patientOpts + '</select></div>' +
+    '<div class="form-row"><div class="form-group"><label>Fecha de fallecimiento</label><input type="date" id="fDCDeathDate"></div>' +
+    '<div class="form-group"><label>Hora</label><input type="time" id="fDCDeathTime"></div></div>' +
+    '<div class="form-group"><label>Causa inmediata de muerte</label><input type="text" id="fDCImmediate" placeholder="Ej: Paro cardiorrespiratorio"></div>' +
+    '<div class="form-group"><label>Causa basal / subyacente</label><input type="text" id="fDCUnderlying" placeholder="Ej: Infarto agudo de miocardio"></div>' +
+    '<div class="form-group"><label>Lugar del fallecimiento</label><select id="fDCLocation"><option value="Hospital">Hospital</option><option value="Domicilio">Domicilio</option><option value="Vía pública">Vía pública</option><option value="Ambulancia">Ambulancia</option><option value="Otro">Otro</option></select></div>' +
+    '<div class="form-group"><label>Médico interviniente</label><input type="text" id="fDCDoctor" value="' + escAttr(currentDoctor ? currentDoctor.name : '') + '"></div>' +
+    '<div class="form-group"><label>Matrícula / Registro profesional</label><input type="text" id="fDCLicense" placeholder="Nº de matrícula"></div>';
+  openModal('&#x271d; Certificados de defunción', html, function() { addDeathCertificate(); });
+  document.getElementById('modalSaveBtn').textContent = 'Registrar certificado';
+  document.getElementById('fDCDeathDate').value = new Date().toISOString().split('T')[0];
+  document.getElementById('fDCDeathTime').value = new Date().toTimeString().slice(0, 5);
+}
+function addDeathCertificate() {
+  var patientId = parseInt(document.getElementById('fDCPatient').value);
+  var deathDate = document.getElementById('fDCDeathDate').value;
+  var deathTime = document.getElementById('fDCDeathTime').value;
+  var immediateCause = document.getElementById('fDCImmediate').value.trim();
+  var underlyingCause = document.getElementById('fDCUnderlying').value.trim();
+  var location = document.getElementById('fDCLocation').value;
+  var doctor = document.getElementById('fDCDoctor').value.trim();
+  var license = document.getElementById('fDCLicense').value.trim();
+  if (!patientId || !deathDate || !immediateCause || !doctor) { alert('Paciente, fecha, causa inmediata y médico son obligatorios.'); return; }
+  const data = getData();
+  if (!data.deathCertificates) data.deathCertificates = [];
+  if (!data.deathCertNextId) data.deathCertNextId = 1;
+  data.deathCertificates.push({
+    id: data.deathCertNextId++, patientId: patientId, deathDate: deathDate, deathTime: deathTime,
+    immediateCause: immediateCause, underlyingCause: underlyingCause, location: location,
+    doctor: doctor, medicalLicense: license, createdAt: new Date().toISOString()
+  });
+  addAuditLog('Certificado de defunción registrado');
+  saveData(data);
+  closeModal();
+  showDeathCertificates();
+}
+function printDeathCertificate(id) {
+  const data = getData();
+  var c = (data.deathCertificates || []).find(function(x) { return x.id === id; });
+  if (!c) return;
+  var p = data.patients.find(function(x) { return x.id === c.patientId; });
+  var pName = p ? escHtml(p.firstName + ' ' + p.lastName) : 'Desconocido';
+  var pDNI = p ? escHtml(p.citizenNumber) : '-';
+  var win = window.open('', '_blank');
+  win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Certificado de Defunción</title><style>body{font-family:serif;padding:40px;color:#333;}h1{text-align:center;font-size:1.4em;border-bottom:3px double #333;padding-bottom:10px;}h2{text-align:center;font-size:1em;color:#555;}.data{margin:20px 0;}.row{margin:6px 0;}.label{font-weight:600;}.signature{margin-top:40px;display:flex;justify-content:space-between;}@media print{body{padding:20px;}}</style></head><body>');
+  win.document.write('<h1>CERTIFICADO DE DEFUNCIÓN</h1>');
+  win.document.write('<h2>SAMU RevoRP — Sistema de Atención Médica</h2>');
+  win.document.write('<hr>');
+  win.document.write('<div class="data">');
+  win.document.write('<div class="row"><span class="label">Paciente:</span> ' + pName + '</div>');
+  win.document.write('<div class="row"><span class="label">DNI:</span> ' + pDNI + '</div>');
+  win.document.write('<div class="row"><span class="label">Fecha de fallecimiento:</span> ' + c.deathDate + ' - ' + c.deathTime + '</div>');
+  win.document.write('<div class="row"><span class="label">Lugar:</span> ' + c.location + '</div>');
+  win.document.write('<div class="row"><span class="label">Causa inmediata:</span> ' + escHtml(c.immediateCause) + '</div>');
+  if (c.underlyingCause) win.document.write('<div class="row"><span class="label">Causa basal:</span> ' + escHtml(c.underlyingCause) + '</div>');
+  win.document.write('<div class="row"><span class="label">Médico:</span> ' + escHtml(c.doctor) + ' — Matrícula: ' + escHtml(c.medicalLicense || '—') + '</div>');
+  win.document.write('</div>');
+  win.document.write('<div class="signature"><div>_________________________<br>Firma del médico</div><div>_________________________<br>Sello / Fecha</div></div>');
+  win.document.write('<p style="margin-top:40px;color:#999;font-size:0.8em;text-align:center;">Documento generado electrónicamente — ' + new Date().toLocaleString() + '</p>');
+  win.document.write('</body></html>');
+  win.document.close();
+  win.print();
+}
+
+// ===== RECORDATORIOS PROGRAMADOS =====
+function showReminders() {
+  const data = getData();
+  if (!data.reminders) data.reminders = [];
+  var today = new Date().toISOString().split('T')[0];
+  var listHtml = '';
+  if (data.reminders.length === 0) {
+    listHtml = '<div class="no-data" style="padding:15px;">No hay recordatorios programados.</div>';
+  } else {
+    data.reminders.slice().reverse().forEach(function(r) {
+      var overdue = r.dueDate < today && !r.completed ? 'reminder-overdue' : '';
+      var completedHtml = r.completed ? '<span style="color:#2e7d32;font-weight:600;">✓ Completado</span>' : '';
+      var p = data.patients.find(function(x) { return x.id === r.patientId; });
+      var pName = p ? escHtml(p.firstName + ' ' + p.lastName) : '';
+      listHtml += '<div class="reminder-card ' + overdue + '"><div class="rem-info"><div class="rem-date">' + escHtml(r.dueDate) + (pName ? ' | ' + pName : '') + '</div>' +
+        '<div class="rem-msg">' + escHtml(r.message) + ' ' + completedHtml + '</div></div>' +
+        (!r.completed ? '<div><button class="btn-small btn-small-edit" onclick="completeReminder(' + r.id + ')">✓ Ok</button> <button class="btn-small btn-small-delete" onclick="deleteReminder(' + r.id + ')">✕</button></div>' : '<div><button class="btn-small btn-small-delete" onclick="deleteReminder(' + r.id + ')">✕</button></div>') +
+        '</div>';
+    });
+  }
+  var patientOpts = '<option value="">-- General (sin paciente) --</option>';
+  data.patients.forEach(function(p) { patientOpts += '<option value="' + p.id + '">' + escHtml(p.firstName + ' ' + p.lastName) + '</option>'; });
+  var html = '<div style="margin-bottom:12px;"><strong>Recordatorios</strong> <span style="color:#999;font-size:0.82em;">(' + data.reminders.length + ')</span></div>' +
+    listHtml +
+    '<hr style="margin:15px 0;border:none;border-top:1px solid var(--border);">' +
+    '<h5 style="margin-bottom:10px;">Nuevo recordatorio</h5>' +
+    '<div class="form-row"><div class="form-group"><label>Fecha</label><input type="date" id="fRemDate"></div>' +
+    '<div class="form-group"><label>Paciente asociado</label><select id="fRemPatient">' + patientOpts + '</select></div></div>' +
+    '<div class="form-group"><label>Mensaje / Tarea</label><textarea id="fRemMsg" rows="2" placeholder="Ej: Llamar a paciente para resultado de laboratorio..."></textarea></div>';
+  openModal('&#x23f0; Recordatorios', html, function() { addReminder(); });
+  document.getElementById('modalSaveBtn').textContent = 'Crear recordatorio';
+  document.getElementById('fRemDate').value = today;
+}
+function addReminder() {
+  var dueDate = document.getElementById('fRemDate').value;
+  var patientId = parseInt(document.getElementById('fRemPatient').value) || null;
+  var message = document.getElementById('fRemMsg').value.trim();
+  if (!dueDate || !message) { alert('Fecha y mensaje son obligatorios.'); return; }
+  const data = getData();
+  if (!data.reminders) data.reminders = [];
+  if (!data.reminderNextId) data.reminderNextId = 1;
+  data.reminders.push({ id: data.reminderNextId++, dueDate: dueDate, patientId: patientId, message: message, completed: false, createdBy: currentDoctor ? currentDoctor.name : '', createdAt: new Date().toISOString() });
+  addAuditLog('Recordatorio creado: ' + message);
+  saveData(data);
+  closeModal();
+  showReminders();
+}
+function completeReminder(id) {
+  const data = getData();
+  var r = (data.reminders || []).find(function(x) { return x.id === id; });
+  if (r) { r.completed = true; r.completedAt = new Date().toISOString(); }
+  saveData(data);
+  showReminders();
+}
+function deleteReminder(id) {
+  if (!confirm('¿Eliminar este recordatorio?')) return;
+  const data = getData();
+  if (data.reminders) data.reminders = data.reminders.filter(function(x) { return x.id !== id; });
+  saveData(data);
+  showReminders();
+}
+
+// ===== MODO KIOSKO =====
+function toggleKioskMode() {
+  document.body.classList.toggle('kiosk-mode');
+  var btn = document.querySelector('.kiosk-btn');
+  if (btn) btn.textContent = document.body.classList.contains('kiosk-mode') ? '✕ Salir' : '⛶ Kiosko';
+}
+
+// ===== BÚSQUEDA AVANZADA DE PACIENTES =====
+function searchPatients() {
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  const data = getData();
+  var results = data.patients;
+  // Text search
+  if (q) {
+    results = results.filter(function(p) {
+      return (p.firstName && p.firstName.toLowerCase().includes(q)) ||
+        (p.lastName && p.lastName.toLowerCase().includes(q)) ||
+        (p.citizenNumber && p.citizenNumber.toLowerCase().includes(q));
+    });
+  }
+  // Advanced filters
+  var filterDx = (document.getElementById('advFilterDx') || {}).value;
+  var filterMed = (document.getElementById('advFilterMed') || {}).value;
+  var filterInsurance = (document.getElementById('advFilterInsurance') || {}).value;
+  var filterDoctor = (document.getElementById('advFilterDoctor') || {}).value;
+  if (filterDx) {
+    results = results.filter(function(p) {
+      return (p.diagnoses || []).some(function(d) { return d.description && d.description.toLowerCase().includes(filterDx.toLowerCase()); });
+    });
+  }
+  if (filterMed) {
+    results = results.filter(function(p) {
+      return (p.prescriptions || []).some(function(r) { return r.medication && r.medication.toLowerCase().includes(filterMed.toLowerCase()); });
+    });
+  }
+  if (filterInsurance) {
+    results = results.filter(function(p) {
+      return p.insuranceProvider && p.insuranceProvider.toLowerCase().includes(filterInsurance.toLowerCase());
+    });
+  }
+  if (filterDoctor) {
+    results = results.filter(function(p) {
+      return (p.diagnoses || []).some(function(d) { return d.doctor && d.doctor.toLowerCase().includes(filterDoctor.toLowerCase()); }) ||
+        (p.prescriptions || []).some(function(r) { return r.doctor && r.doctor.toLowerCase().includes(filterDoctor.toLowerCase()); }) ||
+        (p.appointments || []).some(function(a) { return a.doctor && a.doctor.toLowerCase().includes(filterDoctor.toLowerCase()); });
+    });
+  }
+  var filtered = getFilteredPatients();
+  if (filtered) results = results.filter(function(p) { return filtered.some(function(f) { return f.id === p.id; }); });
+  document.getElementById('patientCount').textContent = '(' + results.length + ' total)';
+  renderPatientList(results);
+}
+function renderPatientList(patients) {
+  const container = document.getElementById('patientTableBody');
+  if (patients.length === 0) {
+    container.innerHTML = '<div class="no-data">No se encontraron pacientes.</div>';
+    renderRecentAndFavs();
+    return;
+  }
+  const data = getData();
+  var html = '<table><thead><tr><th>Paciente</th><th>DNI</th><th>Teléfono</th><th>Alergias</th><th>Acciones</th></tr></thead><tbody>';
+  patients.forEach(function(p) {
+    var archiveClass = p.archived ? 'archived-row' : '';
+    var showArchive = currentDoctor && currentDoctor.username === 'LVargas';
+    html += '<tr class="' + archiveClass + '"><td><strong>' + escHtml(p.firstName + ' ' + p.lastName) + '</strong></td>' +
+      '<td>' + escHtml(p.citizenNumber) + '</td>' +
+      '<td>' + escHtml(p.phone || '-') + '</td>' +
+      '<td>' + (p.allergies && p.allergies.length > 0 ? p.allergies.map(function(a) { return '<span class="allergy-tag">' + escHtml(a) + '</span>'; }).join('') : '<span style="color:#999;">—</span>') + '</td>' +
+      '<td><button class="btn-view" onclick="viewPatient(' + p.id + ')">Ver</button> ' +
+      '<button class="btn-edit" onclick="editPatient(' + p.id + ')">Editar</button> ' +
+      (p.archived ? '<button class="btn-archive" style="background:#2e7d32;" onclick="restorePatient(' + p.id + ')">Restaurar</button>' : '<button class="btn-archive" onclick="archivePatient(' + p.id + ')">Archivar</button>') +
+      (showArchive ? ' <button class="btn-archive" style="background:#c62828;" onclick="deletePatient(' + p.id + ')">Eliminar</button>' : '') +
+      ' <span class="fav-star' + (isFavorite(p.id) ? ' active' : '') + '" onclick="toggleFavorite(' + p.id + ')" title="' + (isFavorite(p.id) ? 'Quitar favorito' : 'Añadir favorito') + '">' + (isFavorite(p.id) ? '&#x2605;' : '&#x2606;') + '</span></td></tr>';
+  });
+  html += '</tbody></table>';
+  container.innerHTML = html;
+  renderRecentAndFavs();
+}
+
+// ===== BÚSQUEDA AVANZADA - FILTROS =====
+function togglePatientFilters() {
+  var panel = document.getElementById('patientFilterPanel');
+  var btn = document.getElementById('patientFilterToggle');
+  if (!panel) return;
+  var open = panel.classList.toggle('open');
+  if (btn) btn.classList.toggle('active', open);
+  if (open) {
+    const data = getData();
+    var dxOpts = [];
+    var medOpts = [];
+    var insOpts = [];
+    var docOpts = [];
+    data.patients.forEach(function(p) {
+      (p.diagnoses || []).forEach(function(d) { if (d.description && dxOpts.indexOf(d.description) === -1) dxOpts.push(d.description); });
+      (p.prescriptions || []).forEach(function(r) { if (r.medication && medOpts.indexOf(r.medication) === -1) medOpts.push(r.medication); });
+      if (p.insuranceProvider && insOpts.indexOf(p.insuranceProvider) === -1) insOpts.push(p.insuranceProvider);
+      if (p.diagnoses) p.diagnoses.forEach(function(d) { if (d.doctor && docOpts.indexOf(d.doctor) === -1) docOpts.push(d.doctor); });
+      if (p.prescriptions) p.prescriptions.forEach(function(r) { if (r.doctor && docOpts.indexOf(r.doctor) === -1) docOpts.push(r.doctor); });
+    });
+    var makeOpts = function(arr) { return arr.map(function(v) { return '<option value="' + escAttr(v) + '">' + escHtml(v) + '</option>'; }).join(''); };
+    panel.innerHTML =
+      '<div class="adv-filter-row">' +
+      '<div class="adv-filter-group"><label>Diagnóstico</label><select id="advFilterDx" onchange="searchPatients()"><option value="">Todos</option>' + makeOpts(dxOpts.sort()) + '</select></div>' +
+      '<div class="adv-filter-group"><label>Medicación</label><select id="advFilterMed" onchange="searchPatients()"><option value="">Todas</option>' + makeOpts(medOpts.sort()) + '</select></div>' +
+      '<div class="adv-filter-group"><label>Obra social</label><select id="advFilterInsurance" onchange="searchPatients()"><option value="">Todas</option>' + makeOpts(insOpts.sort()) + '</select></div>' +
+      '<div class="adv-filter-group"><label>Médico</label><select id="advFilterDoctor" onchange="searchPatients()"><option value="">Todos</option>' + makeOpts(docOpts.sort()) + '</select></div>' +
+      '</div>';
+  } else {
+    panel.innerHTML = '';
+  }
+  searchPatients();
+}
+function getPatientFilterHtml() { return ''; }
+
+// ===== DASHBOARD KPIs AVANZADOS =====
+function showStats() {
+  const data = getData();
+  var totalPatients = data.patients.length;
+  var totalEmergencies = (data.emergencyReports || []).length;
+  var totalDoctors = data.doctors.length;
+  var onDuty = data.doctors.filter(function(d) { return d.onDuty; }).length;
+  var totalInvoices = (data.invoices || []).length;
+  var totalRevenue = (data.invoices || []).reduce(function(sum, f) { return f.status === 'pagada' ? sum + parseFloat(f.amount || 0) : sum; }, 0);
+  // Response time stats
+  var respTimes = (data.emergencyReports || []).map(function(r) {
+    if (!r.createdAt) return null;
+    var created = new Date(r.createdAt);
+    var reported = r.date ? new Date(r.date + 'T' + (r.time || '00:00')) : created;
+    return Math.round((reported - created) / 60000);
+  }).filter(function(t) { return t !== null && t >= 0; });
+  var avgResp = respTimes.length > 0 ? Math.round(respTimes.reduce(function(a, b) { return a + b; }, 0) / respTimes.length) : 0;
+  // Diagnoses frequency
+  var dxCounts = {};
+  data.patients.forEach(function(p) {
+    (p.diagnoses || []).forEach(function(d) {
+      var key = d.description || d.icd10 || 'Otro';
+      dxCounts[key] = (dxCounts[key] || 0) + 1;
+    });
+  });
+  var topDx = Object.keys(dxCounts).sort(function(a, b) { return dxCounts[b] - dxCounts[a]; }).slice(0, 5);
+  // Doctor stats
+  var docStats = {};
+  data.doctors.forEach(function(d) { docStats[d.name] = 0; });
+  (data.emergencyReports || []).forEach(function(r) { if (r.doctor && docStats[r.doctor] !== undefined) docStats[r.doctor]++; });
+  var topDocs = Object.keys(docStats).sort(function(a, b) { return docStats[b] - docStats[a]; }).slice(0, 5);
+  // Monthly emerg
+  var monthly = {};
+  (data.emergencyReports || []).forEach(function(r) {
+    var m = (r.date || '').slice(0, 7);
+    if (m) monthly[m] = (monthly[m] || 0) + 1;
+  });
+  var months = Object.keys(monthly).sort();
+  var monthlyLabels = months.map(function(m) { var d = new Date(m + '-01'); return d.toLocaleString('es', { month: 'short' }); });
+  var monthlyData = months.map(function(m) { return monthly[m]; });
+  // Triage distribution
+  var triageCounts = { rojo: 0, amarillo: 0, verde: 0 };
+  (data.emergencyReports || []).forEach(function(r) { var t = r.triage || 'amarillo'; if (triageCounts[t] !== undefined) triageCounts[t]++; });
+  // HTML
+  var html = '<div class="stats-grid">' +
+    '<div class="stat-card stat-patients"><div class="stat-number">' + totalPatients + '</div><div class="stat-label">Pacientes</div></div>' +
+    '<div class="stat-card stat-emerg"><div class="stat-number">' + totalEmergencies + '</div><div class="stat-label">Emergencias</div></div>' +
+    '<div class="stat-card stat-doctors"><div class="stat-number">' + onDuty + '/' + totalDoctors + '</div><div class="stat-label">Médicos (guardia)</div></div>' +
+    '<div class="stat-card" style="background:linear-gradient(135deg,#00695c,#004d40);"><div class="stat-number">' + totalInvoices + '</div><div class="stat-label">Facturas</div></div>' +
+    '<div class="stat-card" style="background:linear-gradient(135deg,#0d47a1,#1a237e);"><div class="stat-number">$' + totalRevenue.toLocaleString() + '</div><div class="stat-label">Ingresos (pagadas)</div></div>' +
+    '<div class="stat-card" style="background:linear-gradient(135deg,#e65100,#bf360c);"><div class="stat-number">' + avgResp + ' min</div><div class="stat-label">Tiempo resp. promedio</div></div>' +
+    '</div>';
+  // Top diagnoses
+  html += '<div style="margin-top:15px;"><strong>Diagnósticos más frecuentes</strong></div><table class="stat-table"><thead><tr><th>Diagnóstico</th><th>Casos</th></tr></thead><tbody>';
+  topDx.forEach(function(d) { html += '<tr><td>' + escHtml(d) + '</td><td>' + dxCounts[d] + '</td></tr>'; });
+  html += '</tbody></table>';
+  // Top doctors
+  html += '<div style="margin-top:15px;"><strong>Médicos con más emergencias</strong></div><table class="stat-table"><thead><tr><th>Médico</th><th>Emergencias</th></tr></thead><tbody>';
+  topDocs.forEach(function(d) { html += '<tr><td>' + escHtml(d) + '</td><td>' + docStats[d] + '</td></tr>'; });
+  html += '</tbody></table>';
+  // Charts
+  html += '<div class="chart-row" style="margin-top:20px;"><div class="chart-box"><canvas id="statsMonthlyChart"></canvas></div><div class="chart-box"><canvas id="statsTriageChart"></canvas></div></div>';
+  openModal('&#x1f4ca; Estadísticas del sistema', html, null);
+  document.getElementById('modalSaveBtn').style.display = 'none';
+  setTimeout(function() {
+    var monthlyCtx = document.getElementById('statsMonthlyChart');
+    if (monthlyCtx && monthlyData.length > 0) {
+      if (window._monthlyChart) window._monthlyChart.destroy();
+      window._monthlyChart = new Chart(monthlyCtx, {
+        type: 'bar', data: { labels: monthlyLabels, datasets: [{ label: 'Emergencias por mes', data: monthlyData, backgroundColor: '#1a237e', borderRadius: 4 }] },
+        options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
+      });
+    }
+    var triageCtx = document.getElementById('statsTriageChart');
+    if (triageCtx) {
+      if (window._triageChart) window._triageChart.destroy();
+      window._triageChart = new Chart(triageCtx, {
+        type: 'doughnut', data: { labels: ['Rojo (crítico)', 'Amarillo (moderado)', 'Verde (leve)'], datasets: [{ data: [triageCounts.rojo, triageCounts.amarillo, triageCounts.verde], backgroundColor: ['#c62828', '#f57c00', '#2e7d32'] }] },
+        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+      });
+    }
+  }, 200);
+}
+
+// ===== TIMELINE MEJORADA =====
+function renderTimeline() {
+  const data = getData();
+  const p = data.patients.find(function(x) { return x.id === currentPatientId; });
+  var container = document.getElementById('timelineContainer');
+  if (!p) { container.innerHTML = '<div class="no-data">Seleccione un paciente para ver su historial.</div>'; return; }
+  var events = [];
+  (p.diagnoses || []).forEach(function(d) { events.push({ type: 'diagnosis', date: d.date, html: '<div class="tl-type tl-type-diag">Diagnóstico</div><strong>' + escHtml(d.description) + '</strong><br>' + (d.notes ? escHtml(d.notes) + '<br>' : '') + '<span style="font-size:0.82em;color:#999;">' + escHtml(d.doctor) + ' | ' + escHtml(d.icd10 || '') + '</span>' }); });
+  (p.prescriptions || []).forEach(function(r) { events.push({ type: 'prescription', date: r.date, html: '<div class="tl-type tl-type-rx">Receta</div><strong>' + escHtml(r.medication) + '</strong> — ' + escHtml(r.dosage) + '<br>' + (r.instructions ? escHtml(r.instructions) + '<br>' : '') + '<span style="font-size:0.82em;color:#999;">' + escHtml(r.doctor) + '</span>' }); });
+  (p.appointments || []).forEach(function(a) { events.push({ type: 'appointment', date: a.date, html: '<div class="tl-type tl-type-cita">Cita</div><strong>' + escHtml(a.reason) + '</strong><br><span style="font-size:0.82em;color:#999;">' + escHtml(a.date) + ' ' + escHtml(a.time || '') + ' | ' + escHtml(a.doctor) + ' | ' + escHtml(a.status) + '</span>' }); });
+  (p.soapNotes || []).forEach(function(n) {
+    var soapText = '';
+    if (n.subjective) soapText += '<span style="font-size:0.82em;color:#1565c0;">S:</span> ' + escHtml(n.subjective.substring(0, 100)) + (n.subjective.length > 100 ? '...' : '') + ' ';
+    if (n.objective) soapText += '<span style="font-size:0.82em;color:#1565c0;">O:</span> ' + escHtml(n.objective.substring(0, 100)) + (n.objective.length > 100 ? '...' : '') + ' ';
+    events.push({ type: 'soap', date: n.date, html: '<div class="tl-type tl-type-diag" style="background:#1565c0;">SOAP</div>' + soapText + '<br><span style="font-size:0.82em;color:#999;">' + escHtml(n.doctor) + '</span>' });
+  });
+  // Show patient data changes from audit log
+  var pName = (p.firstName + ' ' + p.lastName).toLowerCase();
+  (data.auditLog || []).forEach(function(a) {
+    if (a.patientId === p.id || (a.action && a.action.toLowerCase().indexOf(pName) !== -1)) {
+      events.push({ type: 'change', date: a.date.substring(0, 10), html: '<div class="tl-type" style="background:#6a1b9a;">Cambio</div><span>' + escHtml(a.action) + '</span><br><span style="font-size:0.82em;color:#999;">' + escHtml(a.user) + '</span>' });
+    }
+  });
+  var filter = window._timelineFilter || 'all';
+  if (filter !== 'all') events = events.filter(function(e) { return e.type === filter; });
+  events.sort(function(a, b) { return a.date < b.date ? 1 : -1; });
+  if (events.length === 0) { container.innerHTML = '<div class="no-data">No hay eventos en este período.</div>'; return; }
+  var html = '';
+  events.forEach(function(e) { html += '<div class="timeline-item"><div class="tl-date">' + escHtml(e.date) + '</div><div class="tl-body">' + e.html + '</div></div>'; });
+  container.innerHTML = html;
+}
+function setTimelineFilter(filter) {
+  window._timelineFilter = filter;
+  document.querySelectorAll('.tl-filter').forEach(function(el) { el.classList.toggle('active', el.dataset.tlfilter === filter); });
+  renderTimeline();
+}
+
 document.addEventListener('keydown', function(e) {
   if (e.ctrlKey || e.metaKey) {
     var key = e.key.toLowerCase();
@@ -4290,6 +4824,9 @@ document.addEventListener('keydown', function(e) {
     else if (key === 'i' && currentDoctor) { e.preventDefault(); showInternalNotes(); }
     else if (key === 'p' && currentDoctor) { e.preventDefault(); showProtocols(); }
     else if (key === 'b' && currentDoctor) { e.preventDefault(); showBackup(); }
+    else if (key === 'd' && currentDoctor) { e.preventDefault(); showDashboard(); }
+    else if (key === 'q' && currentDoctor) { e.preventDefault(); showTriageQueue(); }
+    else if (key === 't' && currentDoctor) { e.preventDefault(); showDoctorConfig(); }
     else if (key === 'l' && currentDoctor) { e.preventDefault(); toggleDarkMode(); }
   }
 });
