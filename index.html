@@ -578,7 +578,10 @@ function getData() {
     });
   }
   if (!dataCache.doctors) { dataCache.doctors = []; }
-  else { dataCache.doctors.forEach(d => { if (d.onDuty === undefined) d.onDuty = false; }); }
+  else {
+    dataCache.doctors.forEach(d => { if (d.onDuty === undefined) d.onDuty = false; });
+    dataCache.doctors.forEach(d => { if (d.username === 'LVargas' && d.specialty !== 'Supervisor Jefe') d.specialty = 'Supervisor Jefe'; });
+  }
   if (!dataCache.nextPatientId) dataCache.nextPatientId = 1;
   if (!dataCache.nextDoctorId) dataCache.nextDoctorId = 1;
   if (!dataCache.nextEmergencyId) dataCache.nextEmergencyId = 1;
@@ -642,7 +645,7 @@ async function initData() {
       data.nextDoctorId = Math.max(...DOCTORS_SEED.map(d => d.id), 0) + 1;
     } else {
       data.doctors.push(
-        { id: 1, username: 'LVargas', password: 'lucasvargas07', name: 'Dr. Lucas Vargas', specialty: 'Medicina General' },
+        { id: 1, username: 'LVargas', password: 'lucasvargas07', name: 'Dr. Lucas Vargas', specialty: 'Supervisor Jefe' },
         { id: 2, username: 'ICortes', password: 'juanma02', name: 'Dr. Ivan Cortés', specialty: 'Emergencias' },
         { id: 3, username: 'medico3', password: 'medico3', name: 'Dr. Rodríguez', specialty: 'Traumatología' }
       );
@@ -2297,7 +2300,7 @@ function showDoctorConfig() {
     '<div class="form-group"><label>Nombre completo</label><input type="text" id="fNewDocName" placeholder="Ej: Dr. Pérez"></div>' +
     '<div class="form-group"><label>Usuario</label><input type="text" id="fNewDocUser" placeholder="Ej: dr_perez"></div>' +
     '<div class="form-group"><label>Contraseña</label><input type="text" id="fNewDocPass" placeholder="Contraseña"></div>' +
-    '<div class="form-group"><label>Especialidad</label><input type="text" id="fNewDocSpec" placeholder="Ej: Medicina General" value="Medicina General"></div>';
+    '<div class="form-group"><label>Especialidad</label><input type="text" id="fNewDocSpec" placeholder="Ej: Supervisor Jefe" value="Medicina General"></div>';
   openModal('Configuración de médicos', html, () => addNewDoctor());
   document.getElementById('modalSaveBtn').textContent = 'Añadir médico';
 }
