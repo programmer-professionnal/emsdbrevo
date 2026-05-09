@@ -316,18 +316,9 @@ tr:last-child td { border-bottom: none; }
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
 <script>
 // ===== CONFIGURACIÓN DE FIREBASE =====
-// 1. Ve a https://console.firebase.google.com y crea un proyecto
-// 2. Ve a "Realtime Database" > "Crear base de datos" > modo "prueba"
-// 3. En "Configuración del proyecto" > "Tus apps" > "Web" copia los datos aquí:
-const FIREBASE_CONFIG = {
-  apiKey: "AIzaSyAu6Bk2dTKyWVLxDwSNNK4xKqBukpWuDME",
-  authDomain: "emsdbrevo.firebaseapp.com",
-  databaseURL: "https://emsdbrevo-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "emsdbrevo",
-  storageBucket: "emsdbrevo.firebasestorage.app",
-  messagingSenderId: "553197209214",
-  appId: "1:553197209214:web:5d17e4ac48664070faba2f"
-};
+// Los valores reales se inyectan automáticamente mediante GitHub Actions.
+// Si ejecutas localmente, cambia 'null' por tu config de Firebase o se usará modo local.
+const FIREBASE_CONFIG = null;
 
 // ===== DATA LAYER =====
 const STORAGE_KEY = 'samu_ems_db';
