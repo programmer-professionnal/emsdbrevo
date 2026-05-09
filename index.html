@@ -273,6 +273,126 @@ tr:last-child td { border-bottom: none; }
 .btn-notif:hover { opacity: 0.8; }
 .notif-badge { position: absolute; top: -2px; right: 0; background: #d32f2f; color: white; font-size: 0.55em; font-weight: 700; min-width: 16px; height: 16px; border-radius: 8px; display: flex; align-items: center; justify-content: center; padding: 0 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
 
+/* ===== MODO OSCURO ===== */
+:root { --bg: #f0f2f5; --card-bg: #fff; --card-shadow: rgba(0,0,0,0.08); --text: #333; --text-secondary: #666; --text-muted: #999; --border: #eee; --input-bg: #fff; --input-border: #ddd; --header-gradient: linear-gradient(135deg, #1a237e, #0d47a1); --toolbar-bg: #f8f9fa; --hover-bg: #f5f5f5; --tab-bg: #f8f9fa; --item-bg: #f8f9fa; --modal-shadow: rgba(0,0,0,0.2); }
+body { background: var(--bg); color: var(--text); }
+.dark-mode { --bg: #0d1117; --card-bg: #161b22; --card-shadow: rgba(0,0,0,0.4); --text: #c9d1d9; --text-secondary: #8b949e; --text-muted: #484f58; --border: #30363d; --input-bg: #0d1117; --input-border: #30363d; --header-gradient: linear-gradient(135deg, #0d1117, #161b22); --toolbar-bg: #161b22; --hover-bg: #1c2128; --tab-bg: #161b22; --item-bg: #1c2128; --modal-shadow: rgba(0,0,0,0.6); }
+.dark-mode header { background: var(--header-gradient); }
+.dark-mode .table-container, .dark-mode .patient-header, .dark-mode .tab-content, .dark-mode .public-result, .dark-mode .modal { background: var(--card-bg); box-shadow: 0 2px 10px var(--card-shadow); }
+.dark-mode table th { background: var(--toolbar-bg); color: var(--text-secondary); }
+.dark-mode table td { border-bottom-color: var(--border); color: var(--text); }
+.dark-mode tr:hover { background: var(--hover-bg); }
+.dark-mode .tab { background: var(--tab-bg); color: var(--text-secondary); }
+.dark-mode .tab.active { background: var(--card-bg); color: #58a6ff; border-bottom-color: #58a6ff; }
+.dark-mode .form-group label { color: var(--text); }
+.dark-mode .form-group input, .dark-mode .form-group select, .dark-mode .form-group textarea { background: var(--input-bg); border-color: var(--input-border); color: var(--text); }
+.dark-mode .modal-header, .dark-mode .modal-footer { border-color: var(--border); }
+.dark-mode .modal-header h3 { color: var(--text); }
+.dark-mode .table-container h3 { background: var(--toolbar-bg); color: var(--text); border-bottom-color: var(--border); }
+.dark-mode .no-data, .dark-mode .stat-label, .dark-mode .em-vitals span { color: var(--text-muted); }
+.dark-mode .stat-card { background: var(--item-bg); }
+.dark-mode .stat-number { color: #58a6ff; }
+.dark-mode .item, .dark-mode .emergency-item, .dark-mode .timeline-item, .dark-mode .doctor-item { background: var(--item-bg); }
+.dark-mode .public-result .info-row { border-bottom-color: var(--border); }
+.dark-mode .public-result .info-row .value { color: var(--text); }
+.dark-mode .inv-item, .dark-mode .protocol-card, .dark-mode .audit-item { background: var(--item-bg); }
+.dark-mode .audit-item { border-bottom-color: var(--border); }
+.dark-mode .cal-day { background: var(--item-bg); }
+.dark-mode .cal-day .cal-date { color: var(--text); }
+.dark-mode .cal-day.cal-today { background: #1c2128; }
+.dark-mode .tl-filter { background: var(--card-bg); border-color: var(--border); color: var(--text-secondary); }
+.dark-mode .tl-filter.active { border-color: #58a6ff; background: #1c2128; color: #58a6ff; }
+.dark-mode .body-part { background: var(--card-bg); border-color: var(--border); color: var(--text); }
+.dark-mode .body-part.selected { border-color: #d32f2f; background: #2d1b1b; color: #ff8a8a; }
+.dark-mode .btn-cancel { background: #21262d; color: var(--text); }
+.dark-mode .btn-small-edit { background: #1c2128; color: #58a6ff; }
+.dark-mode .btn-small-delete { background: #2d1b1b; color: #ff8a8a; }
+.dark-mode .search-box input { background: var(--input-bg); border-color: var(--input-border); color: var(--text); }
+.dark-mode .public-search-box { background: var(--card-bg); }
+.dark-mode .modal-overlay { background: rgba(0,0,0,0.7); }
+.dark-mode .modal .modal-close { color: var(--text-muted); }
+.dark-mode .login-container { background: var(--card-bg); }
+.dark-mode .login-container h2, .dark-mode .login-container .subtitle { color: var(--text); }
+
+/* ===== SALA DE ESPERA / TRIAJE ===== */
+.triage-queue { width: 100%; border-collapse: collapse; }
+.triage-queue th { background: var(--toolbar-bg); color: var(--text-secondary); font-size: 0.78em; text-transform: uppercase; padding: 8px 12px; text-align: left; }
+.triage-queue td { padding: 10px 12px; border-bottom: 1px solid var(--border); font-size: 0.88em; }
+.triage-queue .q-row-rojo { border-left: 4px solid #d32f2f; background: rgba(211,47,47,0.06); }
+.triangle-queue .q-row-amarillo { border-left: 4px solid #f57c00; background: rgba(245,124,0,0.04); }
+.triage-queue .q-row-verde { border-left: 4px solid #388e3c; }
+.q-wait { font-size: 0.82em; color: var(--text-muted); }
+.q-wait.urgent { color: #d32f2f; font-weight: 600; }
+.q-complaint { color: var(--text-secondary); font-size: 0.85em; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.queue-summary { display: flex; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+.queue-summary span { padding: 4px 12px; border-radius: 12px; font-size: 0.82em; font-weight: 600; }
+.qs-rojo { background: #ffebee; color: #d32f2f; }
+.qs-amarillo { background: #fff3e0; color: #f57c00; }
+.qs-verde { background: #e8f5e9; color: #388e3c; }
+
+/* ===== AMBULANCIAS ===== */
+.amb-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; }
+.amb-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px; transition: all 0.2s; }
+.amb-card .amb-code { font-weight: 700; color: var(--text); font-size: 1em; }
+.amb-card .amb-type { font-size: 0.78em; color: var(--text-muted); }
+.amb-status { display: inline-block; padding: 2px 10px; border-radius: 10px; font-size: 0.72em; font-weight: 600; }
+.amb-disponible { background: #e8f5e9; color: #2e7d32; }
+.amb-en_ruta { background: #e3f2fd; color: #1565c0; }
+.amb-en_escena { background: #fff3e0; color: #f57c00; }
+.amb-trasladando { background: #fce4ec; color: #c62828; }
+.amb-fuera_servicio { background: #f5f5f5; color: #999; }
+.amb-actions { margin-top: 8px; display: flex; gap: 4px; flex-wrap: wrap; }
+.amb-actions button { padding: 3px 8px; border: none; border-radius: 4px; cursor: pointer; font-size: 0.72em; }
+
+/* ===== SEGUIMIENTOS ===== */
+.fup-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+.fup-card .fup-info { flex: 1; }
+.fup-card .fup-patient { font-weight: 600; font-size: 0.9em; color: var(--text); }
+.fup-card .fup-date { font-size: 0.8em; color: var(--text-muted); }
+.fup-card .fup-notes { font-size: 0.82em; color: var(--text-secondary); margin-top: 4px; }
+.fup-status { display: inline-block; padding: 2px 10px; border-radius: 10px; font-size: 0.75em; font-weight: 600; }
+.fup-pendiente { background: #fff3e0; color: #f57c00; }
+.fup-completado { background: #e8f5e9; color: #2e7d32; }
+.fup-overdue { border-left: 4px solid #d32f2f; }
+
+/* ===== FAVORITOS / RECIENTES ===== */
+.recent-section { margin-bottom: 15px; padding: 12px 16px; background: var(--card-bg); border-radius: 8px; border: 1px solid var(--border); }
+.recent-section h4 { color: var(--text); font-size: 0.85em; margin-bottom: 8px; }
+.recent-item { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 14px; font-size: 0.82em; cursor: pointer; transition: all 0.2s; margin: 2px 4px 2px 0; }
+.recent-item:hover { background: var(--hover-bg); }
+.fav-star { cursor: pointer; font-size: 1.1em; color: #f57c00; transition: transform 0.2s; border: none; background: none; padding: 0 4px; }
+.fav-star:hover { transform: scale(1.2); }
+.fav-star.active { color: #f57c00; }
+
+/* ===== FILTROS AVANZADOS ===== */
+.filter-panel { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 12px; display: none; }
+.filter-panel.open { display: block; }
+.filter-panel .filter-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: end; }
+.filter-panel .filter-group { display: flex; flex-direction: column; gap: 2px; }
+.filter-panel .filter-group label { font-size: 0.72em; color: var(--text-muted); text-transform: uppercase; }
+.filter-panel .filter-group select, .filter-panel .filter-group input { padding: 5px 8px; border: 1px solid var(--input-border); border-radius: 4px; font-size: 0.82em; background: var(--input-bg); color: var(--text); }
+.filter-toggle { background: none; border: 1px solid var(--border); border-radius: 4px; padding: 4px 10px; cursor: pointer; font-size: 0.78em; color: var(--text-secondary); transition: all 0.2s; }
+.filter-toggle:hover { border-color: #1a237e; color: #1a237e; }
+.filter-toggle.active { background: #e8eaf6; border-color: #1a237e; color: #1a237e; }
+
+/* ===== ALERTA DE ALERGIAS ===== */
+.rx-allergy-warning { background: #ffebee; border: 1px solid #d32f2f; border-radius: 6px; padding: 10px 12px; margin-bottom: 12px; font-size: 0.85em; color: #d32f2f; display: flex; align-items: center; gap: 8px; }
+.rx-allergy-warning strong { font-weight: 700; }
+
+/* ===== SEGURO ===== */
+.insurance-tag { display: inline-block; background: #e8eaf6; color: #1a237e; padding: 2px 10px; border-radius: 10px; font-size: 0.78em; margin: 2px 4px 2px 0; }
+
+/* ===== TIEMPOS DE RESPUESTA ===== */
+.response-time { font-size: 0.78em; color: var(--text-muted); white-space: nowrap; }
+.response-time.fast { color: #2e7d32; }
+.response-time.medium { color: #f57c00; }
+.response-time.slow { color: #d32f2f; }
+
+/* ===== CONFIRMACIÓN PROTOCOLOS ===== */
+.protocol-confirm-box { background: #fff3e0; border: 1px solid #f57c00; border-radius: 8px; padding: 15px; text-align: center; margin: 15px 0; }
+.protocol-confirm-box p { color: #f57c00; font-size: 0.88em; margin-bottom: 10px; }
+.protocol-confirm-box button { background: #f57c00; color: white; border: none; padding: 8px 20px; border-radius: 6px; cursor: pointer; font-size: 0.88em; }
+
 /* ===== PRINT ===== */
 @media print {
   header, .dashboard-header, .toolbar-row, .tabs, .btn-edit, .btn-view, .btn-archive, .btn-small, .btn-action, .btn-emergency, .btn-add, .archive-toggle, #btnDoctorConfig { display: none !important; }
@@ -303,6 +423,7 @@ tr:last-child td { border-bottom: none; }
   <div class="user-info" id="headerUserInfo">
     <span id="headerUserName"></span>
     <button class="btn-notif hidden" id="btnNotifications" onclick="showNotificationPanel()" title="Notificaciones">&#x1f514;<span class="notif-badge hidden" id="notifBadge">0</span></button>
+    <button class="btn-notif hidden" id="btnDarkMode" onclick="toggleDarkMode()" title="Modo oscuro">&#x1f319;</button>
     <button class="btn-back hidden" id="btnBackToDashboard" onclick="showDashboard()">Volver al panel</button>
     <button class="btn-back hidden" id="btnBackFromEmerg" onclick="showDashboard()">Volver al panel</button>
     <button class="btn-logout hidden" id="btnLogout" onclick="logout()">Cerrar sesión</button>
@@ -341,8 +462,9 @@ tr:last-child td { border-bottom: none; }
       <button class="archive-toggle" id="archiveToggleBtn" onclick="toggleArchived()">&#x1f4c2; Archivados</button>
     </div>
     <div class="toolbar-row toolbar-buttons">
-      <button class="btn-emergency" style="background:#c62828;" onclick="showEmergencySection()">&#x1f691; Emergencias</button>
-      <button class="btn-emergency" style="background:#b71c1c;" onclick="openQuickEmergency()">&#x26a1; Emergencia rápida</button>
+      <button class="btn-action" style="background:#c62828;" onclick="showTriageQueue()">&#x1f6a6; Triaje</button>
+      <button class="btn-action" style="background:#e65100;" onclick="showAmbulances()">&#x1f691; Ambulancias</button>
+      <button class="btn-action" style="background:#1565c0;" onclick="showFollowUps()">&#x1f4cb; Seguimientos</button>
       <button class="btn-action" style="background:#1a237e;" onclick="showStats()">&#x1f4ca; Stats</button>
       <button class="btn-action" style="background:#6a1b9a;" onclick="showInternalNotes()">&#x1f4dd; Notas</button>
       <button class="btn-action" style="background:#00695c;" onclick="showInventory()">&#x1f4e6; Insumos</button>
@@ -356,7 +478,11 @@ tr:last-child td { border-bottom: none; }
   <!-- Patient List View -->
   <div id="patientListView">
     <div class="table-container">
-      <h3>&#x1f465; Pacientes <span id="patientCount" style="font-size:0.8em;color:#999;font-weight:400;"></span></h3>
+      <h3>&#x1f465; Pacientes <span id="patientCount" style="font-size:0.8em;color:#999;font-weight:400;"></span>
+        <button class="filter-toggle" id="patientFilterToggle" onclick="togglePatientFilters()">&#x1f50d; Filtros</button>
+      </h3>
+      <div id="recentFavContainer"></div>
+      <div id="patientFilterPanel"></div>
       <div id="patientTableBody">
         <div class="no-data">Utilice el buscador para encontrar pacientes o cree uno nuevo.</div>
       </div>
@@ -365,14 +491,16 @@ tr:last-child td { border-bottom: none; }
 
   <!-- Emergency Reports Section -->
   <div id="emergencySectionView" style="display:none;">
-    <div class="toolbar-row" style="margin-bottom:15px;">
+    <div class="toolbar-row" style="margin-bottom:8px;">
       <div class="search-box" style="max-width:350px;">
         <input type="text" id="emergSearchInput" placeholder="Buscar por paciente o DNI..." onkeydown="if(event.key==='Enter')searchEmergencies()">
         <button class="btn-search" onclick="searchEmergencies()">Buscar</button>
       </div>
       <button class="btn-emergency" style="background:#c62828;padding:7px 14px;font-size:0.82em;" onclick="openNewEmergency()">+ Nuevo informe</button>
       <button class="btn-emergency" style="background:#b71c1c;padding:7px 14px;font-size:0.82em;" onclick="openQuickEmergency()">&#x26a1; Emergencia rápida</button>
+      <button class="filter-toggle" id="emergFilterToggle" onclick="toggleEmergFilters()">&#x1f50d; Filtros</button>
     </div>
+    <div id="emergFilterPanel"></div>
     <div class="table-container">
       <h3>&#x1f691; Informes de atención de emergencia</h3>
       <div id="emergencyListBody">
@@ -397,6 +525,7 @@ tr:last-child td { border-bottom: none; }
             </div>
             <div style="margin-top:8px;" id="detailAllergies"></div>
             <div style="margin-top:4px;" id="detailChronicConditions"></div>
+            <div style="margin-top:4px;" id="detailInsurance"></div>
           </div>
         </div>
         <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;">
@@ -596,6 +725,26 @@ function getData() {
   if (!dataCache.internalNotes) dataCache.internalNotes = '';
   if (!dataCache.auditLog) dataCache.auditLog = [];
   if (!dataCache.inventory) dataCache.inventory = [];
+  if (!dataCache.triageQueue) dataCache.triageQueue = [];
+  if (!dataCache.ambulances) dataCache.ambulances = [];
+  if (!dataCache.missions) dataCache.missions = [];
+  if (!dataCache.followUps) dataCache.followUps = [];
+  if (!dataCache.protocolConfirmations) dataCache.protocolConfirmations = [];
+  if (!dataCache.lastProtocolUpdate) dataCache.lastProtocolUpdate = new Date().toISOString();
+  if (!dataCache.insuranceNextId) dataCache.insuranceNextId = 1;
+  if (!dataCache.ambulanceNextId) dataCache.ambulanceNextId = 1;
+  if (!dataCache.missionNextId) dataCache.missionNextId = 1;
+  if (!dataCache.followUpNextId) dataCache.followUpNextId = 1;
+  if (!dataCache.triageNextId) dataCache.triageNextId = 1;
+  dataCache.patients.forEach(function(p) {
+    if (p.insuranceProvider === undefined) p.insuranceProvider = '';
+    if (p.insuranceNumber === undefined) p.insuranceNumber = '';
+    if (p.coverageType === undefined) p.coverageType = '';
+  });
+  (dataCache.emergencyReports || []).forEach(function(r) {
+    if (r.createdAt === undefined) r.createdAt = r.date ? new Date(r.date + 'T' + (r.time || '00:00')).toISOString() : new Date().toISOString();
+    if (r.requiresFollowUp === undefined) r.requiresFollowUp = false;
+  });
   if (!dataCache.protocols) {
     dataCache.protocols = {
       rojo: 'Paciente crítico con amenaza vital. Priorizar vía aérea, respiración y circulación (ABC). Solicitar apoyo avanzado. Preparar traslado inmediato.',
@@ -676,6 +825,8 @@ function setLoggedInUI(doc) {
   document.getElementById('headerUserName').textContent = doc.name + ' (' + doc.specialty + ')';
   document.getElementById('btnLogout').classList.remove('hidden');
   document.getElementById('btnNotifications').classList.remove('hidden');
+  document.getElementById('btnDarkMode').classList.remove('hidden');
+  initDarkMode();
   requestNotifPermission();
   document.getElementById('btnDoctorConfig').style.display = doc.username === 'LVargas' ? 'inline-block' : 'none';
   document.getElementById('btnBackToDashboard').classList.add('hidden');
@@ -686,6 +837,9 @@ function setLoggedInUI(doc) {
   document.getElementById('loginUser').value = '';
   document.getElementById('loginPass').value = '';
   document.getElementById('loginError').textContent = '';
+  if (!document.getElementById('patientFilterPanel').innerHTML) {
+    document.getElementById('patientFilterPanel').innerHTML = getPatientFilterHtml();
+  }
   searchPatients();
   setTimeout(function() {
     updateNotifBadge();
@@ -735,6 +889,19 @@ function logout() {
   document.getElementById('headerUserName').textContent = '';
   document.getElementById('btnLogout').classList.add('hidden');
   document.getElementById('btnNotifications').classList.add('hidden');
+  document.getElementById('btnDarkMode').classList.add('hidden');
+  document.getElementById('notifBadge').classList.add('hidden');
+}
+}
+
+function showPublicSearch() {
+  document.getElementById('publicContainer').classList.remove('hidden');
+  document.getElementById('loginContainer').classList.add('hidden');
+  document.getElementById('dashboardContainer').classList.add('hidden');
+  document.getElementById('headerUserName').textContent = '';
+  document.getElementById('btnLogout').classList.add('hidden');
+  document.getElementById('btnNotifications').classList.add('hidden');
+  document.getElementById('btnDarkMode').classList.add('hidden');
   document.getElementById('notifBadge').classList.add('hidden');
   document.getElementById('btnBackToDashboard').classList.add('hidden');
   document.getElementById('btnBackFromEmerg').classList.add('hidden');
@@ -750,6 +917,7 @@ function showLogin() {
   document.getElementById('headerUserName').textContent = '';
   document.getElementById('btnLogout').classList.add('hidden');
   document.getElementById('btnNotifications').classList.add('hidden');
+  document.getElementById('btnDarkMode').classList.add('hidden');
   document.getElementById('notifBadge').classList.add('hidden');
 }
 
@@ -790,6 +958,7 @@ function searchPatients() {
       p.citizenNumber.toLowerCase().includes(q)
     );
   }
+  results = getFilteredPatients(results);
   renderPatientList(results);
   document.getElementById('patientCount').textContent = '(' + results.length + ' total)';
 }
@@ -800,11 +969,14 @@ function renderPatientList(patients) {
     container.innerHTML = '<div class="no-data">No se encontraron pacientes.</div>';
     return;
   }
-  let html = '<table><thead><tr><th>DNI</th><th>Nombre</th><th>Teléfono</th><th>Acciones</th></tr></thead><tbody>';
+  var favs = getFavorites();
+  let html = '<table><thead><tr><th></th><th>DNI</th><th>Nombre</th><th>Teléfono</th><th>Acciones</th></tr></thead><tbody>';
   patients.forEach(p => {
     const isArchived = p.archived;
     const isLVargas = currentDoctor && currentDoctor.username === 'LVargas';
+    var isFav = favs.indexOf(p.id) >= 0;
     html += '<tr class="' + (isArchived ? 'archived-row' : '') + '">' +
+      '<td><button class="fav-star' + (isFav ? ' active' : '') + '" onclick="event.stopPropagation();toggleFavorite(' + p.id + ');searchPatients();" title="' + (isFav ? 'Quitar favorito' : 'Añadir favorito') + '">' + (isFav ? '\u2605' : '\u2606') + '</button></td>' +
       '<td>' + escHtml(p.citizenNumber) + (isArchived ? ' &#x1f4c2;' : '') + '</td>' +
       '<td><strong>' + escHtml(p.firstName + ' ' + p.lastName) + '</strong>' + (isArchived ? ' <span style="color:#999;font-size:0.8em;">(archivado)</span>' : '') + '</td>' +
       '<td>' + escHtml(p.phone || '-') + '</td>' +
@@ -820,6 +992,7 @@ function renderPatientList(patients) {
   });
   html += '</tbody></table>';
   container.innerHTML = html;
+  renderRecentAndFavs();
 }
 
 function archivePatient(id) {
@@ -870,11 +1043,19 @@ function viewPatient(id) {
   document.getElementById('btnBackToDashboard').classList.remove('hidden');
   document.getElementById('btnBackFromEmerg').classList.add('hidden');
 
+  addRecentPatient(id);
+
   document.getElementById('detailName').textContent = p.firstName + ' ' + p.lastName;
   document.getElementById('detailCitizen').textContent = 'DNI: ' + p.citizenNumber;
   document.getElementById('detailBirth').textContent = 'FN: ' + (p.dateOfBirth || '-');
   document.getElementById('detailPhone').textContent = 'Tel: ' + (p.phone || '-');
   document.getElementById('detailAddress').textContent = 'Dir: ' + (p.address || '-');
+
+  // Insurance
+  var insEl = document.getElementById('detailInsurance');
+  if (p.insuranceProvider || p.insuranceNumber) {
+    insEl.innerHTML = '<span class="insurance-tag">' + escHtml(p.insuranceProvider || 'Sin obra social') + (p.insuranceNumber ? ' N\u00ba: ' + escHtml(p.insuranceNumber) : '') + (p.coverageType ? ' (' + escHtml(p.coverageType) + ')' : '') + '</span>';
+  } else { insEl.innerHTML = ''; }
 
   // Avatar
   const avatarEl = document.getElementById('detailAvatar');
@@ -1121,6 +1302,10 @@ function showEmergencySection() {
   document.getElementById('btnBackToDashboard').classList.add('hidden');
   document.getElementById('btnBackFromEmerg').classList.remove('hidden');
   document.getElementById('emergSearchInput').value = '';
+  if (!emergFilterInited) {
+    document.getElementById('emergFilterPanel').innerHTML = getEmergFilterHtml();
+    emergFilterInited = true;
+  }
   searchEmergencies();
 }
 
@@ -1138,8 +1323,22 @@ function searchEmergencies() {
       );
     });
   }
+  reports = getFilteredEmergencies();
+  if (q) {
+    reports = reports.filter(r => {
+      const p = data.patients.find(x => x.id === r.patientId);
+      return p && (
+        p.firstName.toLowerCase().includes(q) ||
+        p.lastName.toLowerCase().includes(q) ||
+        p.citizenNumber.toLowerCase().includes(q)
+      );
+    });
+  }
   renderEmergencyList(reports);
 }
+
+// Initialize emerg filter panel on first show
+var emergFilterInited = false;
 
 function renderEmergencyList(reports) {
   const container = document.getElementById('emergencyListBody');
@@ -1147,7 +1346,7 @@ function renderEmergencyList(reports) {
   if (!reports || reports.length === 0) {
     container.innerHTML = '<div class="no-data">No hay informes de emergencia.</div>'; return;
   }
-  let html = '<table><thead><tr><th>Triaje</th><th>Fecha</th><th>Paciente</th><th>DNI</th><th>Tipo</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>';
+  let html = '<table><thead><tr><th>Triaje</th><th>Fecha</th><th>Paciente</th><th>DNI</th><th>Tipo</th><th>Estado</th><th>Tiempo</th><th>Acciones</th></tr></thead><tbody>';
   reports.sort((a, b) => (b.date + ' ' + (b.time || '')) < (a.date + ' ' + (a.time || '')) ? -1 : 1);
   reports.forEach(r => {
     const p = data.patients.find(x => x.id === r.patientId);
@@ -1163,6 +1362,8 @@ function renderEmergencyList(reports) {
     } else {
       outcomeHtml = '<span style="color:#999;">—</span>';
     }
+    var respMins = getResponseTime(r);
+    var respHtml = '<span class="response-time' + (respMins !== null ? (respMins < 30 ? ' fast' : respMins < 120 ? ' medium' : ' slow') : '') + '">' + formatResponseTime(respMins) + '</span>';
     html += '<tr class="' + triageClass + '-bg" style="border-left:4px solid transparent;">' +
       '<td><span class="' + triageClass + '">' + triageLabel + '</span></td>' +
       '<td>' + escHtml(dateStr) + '</td>' +
@@ -1170,6 +1371,7 @@ function renderEmergencyList(reports) {
       '<td>' + escHtml(pDNI) + '</td>' +
       '<td><span class="em-type">' + escHtml(r.type) + '</span></td>' +
       '<td>' + outcomeHtml + '</td>' +
+      '<td>' + respHtml + '</td>' +
       '<td>' +
         '<button class="btn-view" onclick="viewEmergency(' + r.id + ')">Ver</button> ' +
         '<button class="btn-edit" onclick="editEmergency(' + r.id + ')">Editar</button> ' +
@@ -1352,11 +1554,22 @@ function openNewEmergency() {
     '<select id="fEmergOutcome"><option value="">-- Seleccionar --</option><option value="Atendido">Atendido</option><option value="Estabilizado">Estabilizado</option><option value="Trasladado">Trasladado a hospital</option><option value="Fallecido">Fallecido</option></select></div>' +
     '<div class="form-group"><label>Derivación hospitalaria</label>' +
     '<select id="fEmergDerivation"><option value="">-- No aplica --</option><option value="Hospital Central">Hospital Central</option><option value="Hospital del Este">Hospital del Este</option><option value="Hospital Universitario">Hospital Universitario</option><option value="Clínica Privada">Clínica Privada</option><option value="Centro de Salud">Centro de Salud</option></select></div>' +
+    '<div class="form-group"><label><input type="checkbox" id="fEmergFollowUp"> Requiere seguimiento</label></div>' +
+    '<div class="form-group" id="fEmergFollowUpDateGroup" style="display:none;"><label>Fecha de seguimiento</label><input type="date" id="fEmergFollowUpDate"></div>' +
     '<div class="form-group"><label>Observaciones</label><textarea id="fEmergObs" rows="2" placeholder="Observaciones adicionales..."></textarea></div>';
   openModal('Nuevo informe de emergencia', html, () => saveEmergencyModal());
-  document.getElementById('modalSaveBtn').textContent = 'Guardar informe';
   document.getElementById('fEmergDate').value = new Date().toISOString().split('T')[0];
   document.getElementById('fEmergTime').value = new Date().toTimeString().slice(0,5);
+  setTimeout(function() {
+    var cb = document.getElementById('fEmergFollowUp');
+    if (cb) {
+      cb.addEventListener('change', function() {
+        var g = document.getElementById('fEmergFollowUpDateGroup');
+        if (g) g.style.display = this.checked ? 'block' : 'none';
+      });
+    }
+  }, 100);
+  document.getElementById('modalSaveBtn').textContent = 'Guardar informe';
 }
 
 function openNewEmergencyFromPatient() {
@@ -1422,6 +1635,8 @@ function saveEmergencyModal() {
       r.derivation = derivation;
       r.bodyParts = bodyParts;
       r.observations = observations;
+      r.requiresFollowUp = followUpCb ? followUpCb.checked : false;
+      if (r.requiresFollowUp && followUpDate && followUpDate.value) r.followUpDate = followUpDate.value;
       addAuditLog('Informe de emergencia #' + r.id + ' actualizado');
     }
   } else {
@@ -1442,9 +1657,18 @@ function saveEmergencyModal() {
       derivation: derivation,
       bodyParts: bodyParts,
       observations: observations,
+      createdAt: new Date().toISOString(),
+      requiresFollowUp: false,
       doctor: currentDoctor.name
     });
     addAuditLog('Informe de emergencia creado para paciente #' + patientId);
+  }
+  // Handle follow-up
+  var followUpCb = document.getElementById('fEmergFollowUp');
+  var followUpDate = document.getElementById('fEmergFollowUpDate');
+  if (followUpCb && followUpCb.checked && followUpDate && followUpDate.value) {
+    var savedId = editingEmergencyId || (data.emergencyReports[data.emergencyReports.length - 1].id);
+    processEmergencyFollowUp(savedId, patientId, followUpDate.value);
   }
   saveData(data);
   closeModal();
@@ -1500,10 +1724,21 @@ function editEmergency(id) {
     '<div class="form-group"><label>Derivación</label><select id="fEmergDerivation">' +
     derivationOpts.map(function(d) { return '<option value="' + d + '"' + (r.derivation === d ? ' selected' : '') + '>' + d + '</option>'; }).join('') +
     '</select></div>' +
+    '<div class="form-group"><label><input type="checkbox" id="fEmergFollowUp"' + (r.requiresFollowUp ? ' checked' : '') + '> Requiere seguimiento</label></div>' +
+    '<div class="form-group" id="fEmergFollowUpDateGroup" style="display:' + (r.requiresFollowUp ? 'block' : 'none') + ';"><label>Fecha de seguimiento</label><input type="date" id="fEmergFollowUpDate" value="' + escAttr(r.followUpDate || '') + '"></div>' +
     '<div class="form-group"><label>Observaciones</label><textarea id="fEmergObs" rows="2">' + escHtml(r.observations || '') + '</textarea></div>';
   openModal('Editar informe de emergencia', html, function() { saveEmergencyModal(); });
   document.getElementById('modalSaveBtn').textContent = 'Guardar cambios';
-  setTimeout(showPatientAllergiesInEmerg, 100);
+  setTimeout(function() {
+    showPatientAllergiesInEmerg();
+    var cb = document.getElementById('fEmergFollowUp');
+    if (cb) {
+      cb.addEventListener('change', function() {
+        var g = document.getElementById('fEmergFollowUpDateGroup');
+        if (g) g.style.display = this.checked ? 'block' : 'none';
+      });
+    }
+  }, 100);
 }
 
 function deleteEmergency(id) {
@@ -1552,6 +1787,10 @@ function openNewPatient() {
     '<div class="form-group"><label>Dirección</label><input type="text" id="fAddress" placeholder="Dirección"></div>' +
     '<div class="form-group"><label>Alergias (separadas por coma)</label><input type="text" id="fAllergies" placeholder="Ej: Penicilina, Aspirina, Frutos secos"></div>' +
     '<div class="form-group"><label>Condiciones crónicas (separadas por coma)</label><input type="text" id="fChronic" placeholder="Ej: Diabetes tipo 2, Hipertensión, Asma"></div>' +
+    '<hr style="margin:15px 0;border:none;border-top:1px solid var(--border);"><h5 style="margin-bottom:10px;color:var(--text);">Obra social / Seguro</h5>' +
+    '<div class="form-row"><div class="form-group"><label>Obra social</label><input type="text" id="fInsuranceProvider" placeholder="Ej: OSECAC, PAMI"></div>' +
+    '<div class="form-group"><label>Nº de afiliado</label><input type="text" id="fInsuranceNumber" placeholder="Número de afiliado"></div></div>' +
+    '<div class="form-group"><label>Tipo de cobertura</label><select id="fCoverageType"><option value="">-- Seleccionar --</option><option value="Completa">Completa</option><option value="Parcial">Parcial</option><option value="Básica">Básica</option><option value="Sin cobertura">Sin cobertura</option></select></div>' +
     '<div class="form-group"><label>Foto / Avatar</label><div class="avatar-upload"><input type="file" id="fAvatar" accept="image/*" onchange="previewAvatar()"><img id="fAvatarPreview" src="" style="display:none;"></div></div>';
   openModal('Nuevo paciente', html, () => savePatientModal());
 }
@@ -1573,6 +1812,10 @@ function editPatient(id) {
     '<div class="form-group"><label>Dirección</label><input type="text" id="fAddress" value="' + escAttr(p.address || '') + '"></div>' +
     '<div class="form-group"><label>Alergias (separadas por coma)</label><input type="text" id="fAllergies" value="' + escAttr(allergies) + '" placeholder="Ej: Penicilina, Aspirina"></div>' +
     '<div class="form-group"><label>Condiciones crónicas (separadas por coma)</label><input type="text" id="fChronic" value="' + escAttr(chronic) + '" placeholder="Ej: Diabetes, Hipertensión"></div>' +
+    '<hr style="margin:15px 0;border:none;border-top:1px solid var(--border);"><h5 style="margin-bottom:10px;color:var(--text);">Obra social / Seguro</h5>' +
+    '<div class="form-row"><div class="form-group"><label>Obra social</label><input type="text" id="fInsuranceProvider" value="' + escAttr(p.insuranceProvider || '') + '"></div>' +
+    '<div class="form-group"><label>Nº de afiliado</label><input type="text" id="fInsuranceNumber" value="' + escAttr(p.insuranceNumber || '') + '"></div></div>' +
+    '<div class="form-group"><label>Tipo de cobertura</label><select id="fCoverageType"><option value="">-- Seleccionar --</option><option value="Completa"' + ((p.coverageType || '') === 'Completa' ? ' selected' : '') + '>Completa</option><option value="Parcial"' + ((p.coverageType || '') === 'Parcial' ? ' selected' : '') + '>Parcial</option><option value="Básica"' + ((p.coverageType || '') === 'Básica' ? ' selected' : '') + '>Básica</option><option value="Sin cobertura"' + ((p.coverageType || '') === 'Sin cobertura' ? ' selected' : '') + '>Sin cobertura</option></select></div>' +
     '<div class="form-group"><label>Foto / Avatar</label><div class="avatar-upload"><input type="file" id="fAvatar" accept="image/*" onchange="previewAvatar()">' + avatarHtml + '</div></div>';
   openModal('Editar paciente', html, () => savePatientModal());
 }
@@ -1605,6 +1848,9 @@ function savePatientModal() {
   const allergies = document.getElementById('fAllergies').value.split(',').map(function(s) { return s.trim(); }).filter(function(s) { return s; });
   const chronicConditions = document.getElementById('fChronic').value.split(',').map(function(s) { return s.trim(); }).filter(function(s) { return s; });
   const avatarFile = document.getElementById('fAvatar').files[0];
+  const insuranceProvider = document.getElementById('fInsuranceProvider') ? document.getElementById('fInsuranceProvider').value.trim() : '';
+  const insuranceNumber = document.getElementById('fInsuranceNumber') ? document.getElementById('fInsuranceNumber').value.trim() : '';
+  const coverageType = document.getElementById('fCoverageType') ? document.getElementById('fCoverageType').value : '';
   if (!citizen || !firstName || !lastName) { alert('DNI, nombre y apellidos son obligatorios.'); return; }
 
   function doSave(avatarDataUrl) {
@@ -1615,6 +1861,7 @@ function savePatientModal() {
         p.citizenNumber = citizen; p.firstName = firstName; p.lastName = lastName;
         p.dateOfBirth = dateOfBirth; p.phone = phone; p.address = address;
         p.allergies = allergies; p.chronicConditions = chronicConditions;
+        p.insuranceProvider = insuranceProvider; p.insuranceNumber = insuranceNumber; p.coverageType = coverageType;
         if (avatarDataUrl) p.avatar = avatarDataUrl;
         addAuditLog('Paciente ' + p.firstName + ' ' + p.lastName + ' actualizado');
       }
@@ -1625,6 +1872,9 @@ function savePatientModal() {
         dateOfBirth, phone, address, archived: false,
         allergies: allergies || [],
         chronicConditions: chronicConditions || [],
+        insuranceProvider: insuranceProvider || '',
+        insuranceNumber: insuranceNumber || '',
+        coverageType: coverageType || '',
         avatar: avatarDataUrl || null,
         diagnoses: [], prescriptions: [], appointments: []
       });
@@ -1716,12 +1966,13 @@ let editPrescriptionIndex = -1;
 
 function openAddPrescription() {
   editPrescriptionIndex = -1;
-  const html =
+  var html = '<div id="fRxAllergyInfo"></div>' +
     '<div class="form-group"><label>Fecha</label><input type="date" id="fRxDate"></div>' +
     '<div class="form-group"><label>Medicamento</label><input type="text" id="fRxMed" placeholder="Nombre del fármaco"></div>' +
     '<div class="form-group"><label>Dosis / Concentración</label><input type="text" id="fRxDosage" placeholder="Ej: 500mg, 1 comprimido"></div>' +
     '<div class="form-group"><label>Instrucciones</label><textarea id="fRxInst" rows="2" placeholder="Ej: Cada 8 horas por 7 días"></textarea></div>';
   openModal('Nueva receta', html, () => savePrescriptionModal());
+  setTimeout(showRxAllergyWarning, 100);
   document.getElementById('fRxDate').value = new Date().toISOString().split('T')[0];
 }
 
@@ -1731,12 +1982,13 @@ function editPrescription(idx) {
   if (!p || !p.prescriptions[idx]) return;
   editPrescriptionIndex = idx;
   const r = p.prescriptions[idx];
-  const html =
+  var html = '<div id="fRxAllergyInfo"></div>' +
     '<div class="form-group"><label>Fecha</label><input type="date" id="fRxDate" value="' + escAttr(r.date) + '"></div>' +
     '<div class="form-group"><label>Medicamento</label><input type="text" id="fRxMed" value="' + escAttr(r.medication) + '"></div>' +
     '<div class="form-group"><label>Dosis / Concentración</label><input type="text" id="fRxDosage" value="' + escAttr(r.dosage) + '"></div>' +
     '<div class="form-group"><label>Instrucciones</label><textarea id="fRxInst" rows="2">' + escHtml(r.instructions || '') + '</textarea></div>';
   openModal('Editar receta', html, () => savePrescriptionModal());
+  setTimeout(showRxAllergyWarning, 100);
 }
 
 function savePrescriptionModal() {
@@ -1745,6 +1997,7 @@ function savePrescriptionModal() {
   const dosage = document.getElementById('fRxDosage').value.trim();
   const instructions = document.getElementById('fRxInst').value.trim();
   if (!date || !medication || !dosage) { alert('Fecha, medicamento y dosis son obligatorios.'); return; }
+  if (checkAllergyConflict(medication)) return;
   const data = getData();
   const p = data.patients.find(x => x.id === currentPatientId);
   if (!p) return;
@@ -1911,6 +2164,24 @@ function showStats() {
   const totalDoctors = data.doctors.length;
   const onDuty = data.doctors.filter(function(d) { return d.onDuty; }).length;
 
+  // Response time stats
+  var totalRespMins = 0;
+  var respCount = 0;
+  var respByTriage = { rojo: { total: 0, count: 0 }, amarillo: { total: 0, count: 0 }, verde: { total: 0, count: 0 } };
+  (data.emergencyReports || []).forEach(function(r) {
+    var mins = getResponseTime(r);
+    if (mins !== null) {
+      totalRespMins += mins;
+      respCount++;
+      var t = r.triage || 'amarillo';
+      if (respByTriage[t]) { respByTriage[t].total += mins; respByTriage[t].count++; }
+    }
+  });
+  var avgResp = respCount > 0 ? Math.round(totalRespMins / respCount) : 0;
+  var avgRespRojo = respByTriage.rojo.count > 0 ? Math.round(respByTriage.rojo.total / respByTriage.rojo.count) : 0;
+  var avgRespAmarillo = respByTriage.amarillo.count > 0 ? Math.round(respByTriage.amarillo.total / respByTriage.amarillo.count) : 0;
+  var avgRespVerde = respByTriage.verde.count > 0 ? Math.round(respByTriage.verde.total / respByTriage.verde.count) : 0;
+
   var typeCounts = {};
   (data.emergencyReports || []).forEach(function(r) { typeCounts[r.type] = (typeCounts[r.type] || 0) + 1; });
   var typeHtml = '';
@@ -1936,6 +2207,7 @@ function showStats() {
     '<div class="stat-card stat-emerg"><div class="stat-number">' + totalEmergencies + '</div><div class="stat-label">Informes de emergencia</div></div>' +
     '<div class="stat-card stat-doctors"><div class="stat-number">' + totalDoctors + '</div><div class="stat-label">Médicos registrados</div></div>' +
     '<div class="stat-card stat-duty"><div class="stat-number">' + onDuty + '</div><div class="stat-label">Médicos de guardia</div></div>' +
+    '<div class="stat-card" style="border-top:3px solid #1a237e;"><div class="stat-number">' + formatResponseTime(avgResp) + '</div><div class="stat-label">Tiempo resp. promedio</div><div style="font-size:0.72em;color:#999;">Rojo: ' + formatResponseTime(avgRespRojo) + ' | Amarillo: ' + formatResponseTime(avgRespAmarillo) + ' | Verde: ' + formatResponseTime(avgRespVerde) + '</div></div>' +
     '</div>' +
     '<h5 style="margin:20px 0 10px;color:#333;">Emergencias por tipo</h5>' +
     (typeHtml || '<div style="color:#999;font-size:0.85em;">Sin emergencias registradas.</div>') +
@@ -2148,6 +2420,9 @@ function showProtocols() {
   var html = '<div class="protocol-card prot-rojo"><h4>🔴 Rojo — Crítico</h4><p>' + escHtml(data.protocols.rojo) + '</p></div>' +
     '<div class="protocol-card prot-amarillo"><h4>🟡 Amarillo — Moderado</h4><p>' + escHtml(data.protocols.amarillo) + '</p></div>' +
     '<div class="protocol-card prot-verde"><h4>🟢 Verde — Leve</h4><p>' + escHtml(data.protocols.verde) + '</p></div>';
+  if (!editable && currentDoctor) {
+    if (!ensureProtocolConfirmed()) { return; }
+  }
   if (editable) {
     html += '<hr style="margin:15px 0;border:none;border-top:1px solid #eee;"><p style="color:#666;font-size:0.85em;margin-bottom:10px;">Solo LVargas puede editar los protocolos:</p>' +
       '<div class="form-group"><label>Protocolo Rojo</label><textarea id="fProtR" rows="3">' + escHtml(data.protocols.rojo) + '</textarea></div>' +
@@ -2166,6 +2441,14 @@ function saveProtocols() {
     amarillo: document.getElementById('fProtA').value.trim(),
     verde: document.getElementById('fProtV').value.trim()
   };
+  data.lastProtocolUpdate = new Date().toISOString();
+  data.protocolConfirmations = data.protocolConfirmations || [];
+  data.protocolConfirmations.push({
+    doctorId: currentDoctor.id,
+    doctorName: currentDoctor.name,
+    lastUpdate: data.lastProtocolUpdate,
+    timestamp: new Date().toISOString()
+  });
   addAuditLog('Protocolos actualizados');
   saveData(data);
   closeModal();
@@ -2341,6 +2624,31 @@ function checkNotifications() {
     }
   });
 
+  // Follow-ups due
+  (data.followUps || []).forEach(function(f) {
+    if (f.status !== 'pendiente') return;
+    var p = data.patients.find(function(x) { return x.id === f.patientId; });
+    var pName = p ? escHtml(p.firstName + ' ' + p.lastName) : '#' + f.patientId;
+    var dueDate = new Date(f.dueDate);
+    var now = new Date();
+    var diffDays = Math.floor((dueDate - now) / 86400000);
+    if (diffDays < 0) {
+      notifs.push({ icon: '\u{1f4cb}', msg: 'Seguimiento VENCIDO: ' + pName + ' (' + escHtml(f.dueDate) + ')', urgent: true });
+    } else if (diffDays <= 2) {
+      notifs.push({ icon: '\u{1f4cb}', msg: 'Seguimiento pr\u00f3ximo: ' + pName + ' (' + escHtml(f.dueDate) + ')', urgent: false });
+    }
+  });
+
+  // Protocol confirmation needed
+  if (currentDoctor && data.lastProtocolUpdate) {
+    var confirmed = (data.protocolConfirmations || []).some(function(c) {
+      return c.doctorId === currentDoctor.id && c.lastUpdate === data.lastProtocolUpdate;
+    });
+    if (!confirmed) {
+      notifs.push({ icon: '\u{1fa7a}', msg: 'Protocolos sin confirmar — ingrese a Protocolos para leer y confirmar', urgent: false });
+    }
+  }
+
   var onDuty = data.doctors.filter(function(d) { return d.onDuty; });
   if (onDuty.length > 0) {
     notifs.push({ icon: '\u{1f4c5}', msg: 'M\u00e9dicos de guardia: ' + onDuty.map(function(d) { return d.name.split(' ')[0]; }).join(', '), urgent: false });
@@ -2366,6 +2674,530 @@ function showNotificationPanel() {
   document.getElementById('modalSaveBtn').style.display = 'none';
 }
 
+// ===== DARK MODE =====
+function toggleDarkMode() {
+  document.body.classList.toggle('dark-mode');
+  var enabled = document.body.classList.contains('dark-mode');
+  localStorage.setItem('samu_dark_mode', enabled ? '1' : '0');
+  document.getElementById('btnDarkMode').textContent = enabled ? '\u{2600}\u{fe0f}' : '\u{1f319}';
+}
+
+function initDarkMode() {
+  if (localStorage.getItem('samu_dark_mode') === '1') {
+    document.body.classList.add('dark-mode');
+    var btn = document.getElementById('btnDarkMode');
+    if (btn) btn.textContent = '\u{2600}\u{fe0f}';
+  }
+}
+
+// ===== RECENTLY VIEWED & FAVORITES =====
+var RECENT_KEY = 'samu_recent';
+var FAV_KEY = 'samu_favs';
+
+function getRecentPatients() {
+  try { return JSON.parse(localStorage.getItem(RECENT_KEY)) || []; } catch(e) { return []; }
+}
+
+function addRecentPatient(id) {
+  var recents = getRecentPatients();
+  recents = recents.filter(function(x) { return x !== id; });
+  recents.unshift(id);
+  if (recents.length > 10) recents = recents.slice(0, 10);
+  localStorage.setItem(RECENT_KEY, JSON.stringify(recents));
+}
+
+function getFavorites() {
+  if (!currentDoctor) return [];
+  try {
+    var all = JSON.parse(localStorage.getItem(FAV_KEY)) || {};
+    return all[currentDoctor.username] || [];
+  } catch(e) { return []; }
+}
+
+function toggleFavorite(patientId) {
+  if (!currentDoctor) return;
+  var all = {};
+  try { all = JSON.parse(localStorage.getItem(FAV_KEY)) || {}; } catch(e) {}
+  if (!all[currentDoctor.username]) all[currentDoctor.username] = [];
+  var favs = all[currentDoctor.username];
+  var idx = favs.indexOf(patientId);
+  if (idx >= 0) { favs.splice(idx, 1); } else { favs.push(patientId); }
+  all[currentDoctor.username] = favs;
+  localStorage.setItem(FAV_KEY, JSON.stringify(all));
+  searchPatients();
+}
+
+function renderRecentAndFavs() {
+  var container = document.getElementById('recentFavContainer');
+  if (!container) return;
+  var html = '';
+  var recents = getRecentPatients();
+  var favs = getFavorites();
+  if (recents.length > 0) {
+    var data = getData();
+    html += '<div class="recent-section"><h4>\u{1f550} \u00daltimos vistos</h4>';
+    recents.forEach(function(id) {
+      var p = data.patients.find(function(x) { return x.id === id; });
+      if (p) {
+        var isFav = favs.indexOf(id) >= 0;
+        html += '<span class="recent-item" onclick="viewPatient(' + id + ')"><button class="fav-star' + (isFav ? ' active' : '') + '" onclick="event.stopPropagation();toggleFavorite(' + id + ');return false;">' + (isFav ? '\u2605' : '\u2606') + '</button> ' + escHtml(p.firstName + ' ' + p.lastName) + '</span>';
+      }
+    });
+    html += '</div>';
+  }
+  container.innerHTML = html;
+}
+
+// ===== INSURANCE FIELDS IN PATIENT =====
+function renderInsuranceInfo(p) {
+  if (!p.insuranceProvider && !p.insuranceNumber) return '';
+  return '<span class="insurance-tag">' + escHtml(p.insuranceProvider || 'Sin obra social') + (p.insuranceNumber ? ' N\u00ba: ' + escHtml(p.insuranceNumber) : '') + '</span>';
+}
+
+// ===== ALLERGY WARNING IN PRESCRIPTIONS =====
+function showRxAllergyWarning() {
+  if (!currentPatientId) return;
+  var data = getData();
+  var p = data.patients.find(function(x) { return x.id === currentPatientId; });
+  if (!p || !p.allergies || p.allergies.length === 0) return;
+  var infoEl = document.getElementById('fRxAllergyInfo');
+  if (infoEl) {
+    infoEl.innerHTML = '<div class="rx-allergy-warning">\u26a0\ufe0f <strong>Alergias del paciente:</strong> ' + p.allergies.map(function(a) { return '<span class="allergy-tag">' + escHtml(a) + '</span>'; }).join('') + '</div>';
+  }
+}
+
+function checkAllergyConflict(medication) {
+  if (!currentPatientId || !medication) return false;
+  var data = getData();
+  var p = data.patients.find(function(x) { return x.id === currentPatientId; });
+  if (!p || !p.allergies || p.allergies.length === 0) return false;
+  var medLower = medication.toLowerCase();
+  var conflict = p.allergies.some(function(a) { return medLower.indexOf(a.toLowerCase()) >= 0; });
+  if (conflict && !confirm('\u26a0\ufe0f El medicamento "' + medication + '" coincide con una alergia registrada del paciente.\n\n\u00bfContinuar de todas formas?')) {
+    return true; // blocked
+  }
+  return false;
+}
+
+// ===== RESPONSE TIME =====
+function getResponseTime(emergency) {
+  if (!emergency.createdAt) return null;
+  try {
+    var created = new Date(emergency.createdAt);
+    var resolved = emergency.outcomeDate ? new Date(emergency.outcomeDate) : new Date();
+    var diffMs = resolved - created;
+    var mins = Math.floor(diffMs / 60000);
+    if (mins < 0) mins = 0;
+    return mins;
+  } catch(e) { return null; }
+}
+
+function formatResponseTime(mins) {
+  if (mins === null || mins === undefined) return '-';
+  if (mins < 60) return mins + ' min';
+  var h = Math.floor(mins / 60);
+  var m = mins % 60;
+  return h + 'h ' + m + 'm';
+}
+
+// ===== TRIAGE QUEUE =====
+function showTriageQueue() {
+  const data = getData();
+  if (!data.triageQueue) data.triageQueue = [];
+  var now = new Date();
+  var queue = data.triageQueue.filter(function(t) { return t.status !== 'atendido'; });
+  var order = { 'rojo': 0, 'amarillo': 1, 'verde': 2 };
+  queue.sort(function(a, b) { return (order[a.triage] || 9) - (order[b.triage] || 9) || (a.arrivalTime < b.arrivalTime ? -1 : 1); });
+
+  var rojo = queue.filter(function(t) { return t.triage === 'rojo'; }).length;
+  var amarillo = queue.filter(function(t) { return t.triage === 'amarillo'; }).length;
+  var verde = queue.filter(function(t) { return t.triage === 'verde'; }).length;
+
+  var html = '<div class="queue-summary"><span class="qs-rojo">\u{1f534} Rojo: ' + rojo + '</span><span class="qs-amarillo">\u{1f7e1} Amarillo: ' + amarillo + '</span><span class="qs-verde">\u{1f7e2} Verde: ' + verde + '</span></div>';
+
+  if (queue.length === 0) {
+    html += '<div class="no-data">\u2705 No hay pacientes en espera</div>';
+  } else {
+    html += '<table class="triage-queue"><thead><tr><th>Triaje</th><th>Paciente</th><th>Motivo</th><th>Espera</th><th>Acci\u00f3n</th></tr></thead><tbody>';
+    queue.forEach(function(t) {
+      var p = data.patients.find(function(x) { return x.id === t.patientId; });
+      var pName = p ? escHtml(p.firstName + ' ' + p.lastName) : 'Desconocido';
+      var triageLabel = { rojo: 'ROJO', amarillo: 'AMARILLO', verde: 'VERDE' }[t.triage] || 'AMARILLO';
+      var triageClass = 'triage-' + (t.triage || 'amarillo');
+      var qClass = 'q-row-' + (t.triage || 'amarillo');
+      var waitMins = Math.floor((now - new Date(t.arrivalTime)) / 60000);
+      var waitText = waitMins < 1 ? '< 1 min' : waitMins < 60 ? waitMins + ' min' : Math.floor(waitMins / 60) + 'h ' + (waitMins % 60) + 'm';
+      var urgent = waitMins > 30 ? ' urgent' : '';
+      html += '<tr class="' + qClass + '"><td><span class="' + triageClass + '">' + triageLabel + '</span></td>' +
+        '<td><strong>' + pName + '</strong></td>' +
+        '<td class="q-complaint">' + escHtml(t.chiefComplaint || '-') + '</td>' +
+        '<td><span class="q-wait' + urgent + '">' + waitText + '</span></td>' +
+        '<td><button class="btn-view" onclick="passToConsultation(' + t.id + ')">Pasar a consulta</button> ' +
+        '<button class="btn-archive" onclick="removeFromQueue(' + t.id + ')">Atendido</button></td></tr>';
+    });
+    html += '</tbody></table>';
+  }
+
+  html += '<hr style="margin:15px 0;border:none;border-top:1px solid var(--border);">' +
+    '<div style="display:flex;gap:8px;">' +
+    '<select id="fTriagePatient" style="flex:1;padding:8px;border:1px solid var(--input-border);border-radius:6px;">' +
+    '<option value="">Seleccionar paciente...</option>';
+  data.patients.filter(function(p) { return !p.archived; }).forEach(function(p) {
+    html += '<option value="' + p.id + '">' + escHtml(p.firstName + ' ' + p.lastName + ' (DNI: ' + p.citizenNumber + ')') + '</option>';
+  });
+  html += '</select>' +
+    '<select id="fTriageLevel" style="padding:8px;border:1px solid var(--input-border);border-radius:6px;"><option value="rojo">Rojo</option><option value="amarillo" selected>Amarillo</option><option value="verde">Verde</option></select>' +
+    '<input type="text" id="fTriageComplaint" placeholder="Motivo..." style="flex:1;padding:8px;border:1px solid var(--input-border);border-radius:6px;">' +
+    '<button class="btn-add" onclick="addToTriageQueue()" style="white-space:nowrap;">+ Agregar</button></div>';
+
+  openModal('\u{1f6a6} Sala de espera - Triaje', html, null);
+  document.getElementById('modalSaveBtn').style.display = 'none';
+}
+
+function addToTriageQueue() {
+  var patientId = parseInt(document.getElementById('fTriagePatient').value);
+  var triage = document.getElementById('fTriageLevel').value;
+  var complaint = document.getElementById('fTriageComplaint').value.trim();
+  if (!patientId) { alert('Seleccione un paciente.'); return; }
+  const data = getData();
+  if (!data.triageQueue) data.triageQueue = [];
+  if (!data.triageNextId) data.triageNextId = 1;
+  data.triageQueue.push({
+    id: data.triageNextId++,
+    patientId: patientId,
+    triage: triage,
+    chiefComplaint: complaint || 'Sin especificar',
+    arrivalTime: new Date().toISOString(),
+    status: 'esperando'
+  });
+  var p = data.patients.find(function(x) { return x.id === patientId; });
+  addAuditLog('Paciente ' + (p ? p.firstName + ' ' + p.lastName : '') + ' agregado a triaje (' + triage + ')');
+  saveData(data);
+  showTriageQueue();
+}
+
+function passToConsultation(triageId) {
+  const data = getData();
+  var t = data.triageQueue.find(function(x) { return x.id === triageId; });
+  if (!t) return;
+  t.status = 'en_consulta';
+  saveData(data);
+  viewPatient(t.patientId);
+}
+
+function removeFromQueue(triageId) {
+  const data = getData();
+  var t = data.triageQueue.find(function(x) { return x.id === triageId; });
+  if (!t) return;
+  t.status = 'atendido';
+  saveData(data);
+  showTriageQueue();
+}
+
+// ===== AMBULANCES =====
+function showAmbulances() {
+  const data = getData();
+  if (!data.ambulances) data.ambulances = [];
+  var html = '<div style="margin-bottom:12px;"><strong>Unidades disponibles</strong></div>';
+  if (data.ambulances.length === 0) {
+    html += '<div class="no-data" style="padding:15px;">No hay unidades registradas. Agregue la primera unidad.</div>';
+  } else {
+    html += '<div class="amb-grid">';
+    data.ambulances.forEach(function(a, i) {
+      var statusLabel = { disponible: 'Disponible', en_ruta: 'En ruta', en_escena: 'En escena', trasladando: 'Trasladando', fuera_servicio: 'Fuera de servicio' }[a.status] || a.status;
+      var statusClass = 'amb-' + (a.status || 'disponible');
+      var missionInfo = '';
+      if (a.status !== 'disponible' && a.status !== 'fuera_servicio' && a.activeMissionId) {
+        var m = data.missions.find(function(x) { return x.id === a.activeMissionId; });
+        if (m) {
+          var emerg = (data.emergencyReports || []).find(function(x) { return x.id === m.emergencyId; });
+          if (emerg) {
+            var p = data.patients.find(function(x) { return x.id === emerg.patientId; });
+            missionInfo = '<div style="font-size:0.75em;color:var(--text-muted);margin-top:4px;">Misi\u00f3n: ' + escHtml(p ? p.firstName + ' ' + p.lastName : '#' + emerg.id) + '</div>';
+          }
+        }
+      }
+      html += '<div class="amb-card"><div style="display:flex;justify-content:space-between;align-items:center;">' +
+        '<div><span class="amb-code">' + escHtml(a.code) + '</span><br><span class="amb-type">' + escHtml(a.type || 'No especificado') + '</span></div>' +
+        '<div><span class="amb-status ' + statusClass + '">' + statusLabel + '</span></div></div>' +
+        missionInfo +
+        '<div class="amb-actions">' +
+        '<button class="btn-small btn-small-edit" onclick="setAmbulanceStatus(' + i + ',\'disponible\')">Libre</button>' +
+        '<button class="btn-small btn-small-edit" onclick="setAmbulanceStatus(' + i + ',\'en_ruta\')">En ruta</button>' +
+        '<button class="btn-small btn-small-edit" onclick="setAmbulanceStatus(' + i + ',\'en_escena\')">Escena</button>' +
+        '<button class="btn-small btn-small-delete" onclick="setAmbulanceStatus(' + i + ',\'trasladando\')">Traslado</button>' +
+        '<button class="btn-small" style="background:#f5f5f5;color:#999;" onclick="setAmbulanceStatus(' + i + ',\'fuera_servicio\')">Fuera</button>' +
+        '</div></div>';
+    });
+    html += '</div>';
+  }
+  html += '<hr style="margin:15px 0;border:none;border-top:1px solid var(--border);">' +
+    '<div class="form-row"><div class="form-group"><label>C\u00f3digo unidad</label><input type="text" id="fAmbCode" placeholder="Ej: U-01"></div>' +
+    '<div class="form-group"><label>Tipo</label><select id="fAmbType"><option value="Medicalizada">Medicalizada</option><option value="Transporte">Transporte</option><option value="UCI M\u00f3vil">UCI M\u00f3vil</option></select></div></div>';
+  openModal('\u{1f691} Ambulancias', html, function() { addAmbulance(); });
+  document.getElementById('modalSaveBtn').textContent = 'Agregar unidad';
+}
+
+function addAmbulance() {
+  var code = document.getElementById('fAmbCode').value.trim();
+  var type = document.getElementById('fAmbType').value;
+  if (!code) { alert('C\u00f3digo de unidad obligatorio.'); return; }
+  const data = getData();
+  if (!data.ambulances) data.ambulances = [];
+  if (!data.ambulanceNextId) data.ambulanceNextId = 1;
+  data.ambulances.push({ id: data.ambulanceNextId++, code: code, type: type, status: 'disponible', activeMissionId: null });
+  addAuditLog('Unidad agregada: ' + code);
+  saveData(data);
+  showAmbulances();
+}
+
+function setAmbulanceStatus(idx, status) {
+  const data = getData();
+  if (!data.ambulances[idx]) return;
+  data.ambulances[idx].status = status;
+  if (status === 'disponible') data.ambulances[idx].activeMissionId = null;
+  addAuditLog('Unidad ' + data.ambulances[idx].code + ': ' + status);
+  saveData(data);
+  showAmbulances();
+}
+
+// ===== FOLLOW-UPS =====
+function showFollowUps() {
+  const data = getData();
+  if (!data.followUps) data.followUps = [];
+  var now = new Date();
+  var pending = data.followUps.filter(function(f) { return f.status === 'pendiente'; });
+  pending.sort(function(a, b) { return a.dueDate < b.dueDate ? -1 : 1; });
+
+  var html = '<div style="margin-bottom:12px;"><strong>Seguimientos pendientes</strong> <span style="color:var(--text-muted);font-size:0.82em;">(' + pending.length + ')</span></div>';
+  if (pending.length === 0) {
+    html += '<div class="no-data">\u2705 No hay seguimientos pendientes</div>';
+  } else {
+    pending.forEach(function(f) {
+      var p = data.patients.find(function(x) { return x.id === f.patientId; });
+      var pName = p ? escHtml(p.firstName + ' ' + p.lastName) : 'Desconocido';
+      var due = new Date(f.dueDate);
+      var overdue = due < now;
+      html += '<div class="fup-card' + (overdue ? ' fup-overdue' : '') + '">' +
+        '<div class="fup-info"><div class="fup-patient">' + pName + '</div>' +
+        '<div class="fup-date">\u{1f4c5} ' + escHtml(f.dueDate) + (overdue ? ' <strong style="color:#d32f2f;">(VENCIDO)</strong>' : '') + '</div>' +
+        (f.notes ? '<div class="fup-notes">' + escHtml(f.notes) + '</div>' : '') + '</div>' +
+        '<button class="btn-view" onclick="completeFollowUp(' + f.id + ')">Completar</button></div>';
+    });
+  }
+
+  html += '<hr style="margin:15px 0;border:none;border-top:1px solid var(--border);">' +
+    '<h5 style="margin-bottom:10px;">Agregar seguimiento manual</h5>' +
+    '<div style="display:flex;gap:8px;flex-wrap:wrap;">' +
+    '<select id="fFupPatient" style="padding:8px;border:1px solid var(--input-border);border-radius:6px;flex:1;">' +
+    '<option value="">Seleccionar paciente...</option>';
+  data.patients.filter(function(p) { return !p.archived; }).forEach(function(p) {
+    html += '<option value="' + p.id + '">' + escHtml(p.firstName + ' ' + p.lastName) + '</option>';
+  });
+  html += '</select>' +
+    '<input type="date" id="fFupDate" style="padding:8px;border:1px solid var(--input-border);border-radius:6px;">' +
+    '<input type="text" id="fFupNotes" placeholder="Notas..." style="padding:8px;border:1px solid var(--input-border);border-radius:6px;flex:1;">' +
+    '<button class="btn-add" onclick="addManualFollowUp()">+ Agregar</button></div>';
+
+  openModal('\u{1f4cb} Seguimientos', html, null);
+  document.getElementById('modalSaveBtn').style.display = 'none';
+}
+
+function addManualFollowUp() {
+  var patientId = parseInt(document.getElementById('fFupPatient').value);
+  var dueDate = document.getElementById('fFupDate').value;
+  var notes = document.getElementById('fFupNotes').value.trim();
+  if (!patientId || !dueDate) { alert('Seleccione paciente y fecha.'); return; }
+  const data = getData();
+  if (!data.followUps) data.followUps = [];
+  if (!data.followUpNextId) data.followUpNextId = 1;
+  data.followUps.push({
+    id: data.followUpNextId++,
+    emergencyId: null,
+    patientId: patientId,
+    dueDate: dueDate,
+    notes: notes,
+    status: 'pendiente',
+    createdAt: new Date().toISOString()
+  });
+  var p = data.patients.find(function(x) { return x.id === patientId; });
+  addAuditLog('Seguimiento creado para ' + (p ? p.firstName + ' ' + p.lastName : ''));
+  saveData(data);
+  showFollowUps();
+}
+
+function completeFollowUp(id) {
+  const data = getData();
+  var f = data.followUps.find(function(x) { return x.id === id; });
+  if (!f) return;
+  f.status = 'completado';
+  addAuditLog('Seguimiento completado para paciente #' + f.patientId);
+  saveData(data);
+  showFollowUps();
+}
+
+// Add follow-up when saving emergency with requiresFollowUp
+function processEmergencyFollowUp(emergencyId, patientId, followUpDate) {
+  if (!followUpDate) return;
+  const data = getData();
+  if (!data.followUps) data.followUps = [];
+  if (!data.followUpNextId) data.followUpNextId = 1;
+  data.followUps.push({
+    id: data.followUpNextId++,
+    emergencyId: emergencyId,
+    patientId: patientId,
+    dueDate: followUpDate,
+    notes: 'Seguimiento post-emergencia',
+    status: 'pendiente',
+    createdAt: new Date().toISOString()
+  });
+}
+
+// ===== FILTERS =====
+var emergFiltersOpen = false;
+var patientFiltersOpen = false;
+
+function toggleEmergFilters() {
+  emergFiltersOpen = !emergFiltersOpen;
+  var panel = document.getElementById('emergFilterPanel');
+  var btn = document.getElementById('emergFilterToggle');
+  if (panel) panel.classList.toggle('open', emergFiltersOpen);
+  if (btn) btn.classList.toggle('active', emergFiltersOpen);
+}
+
+function togglePatientFilters() {
+  patientFiltersOpen = !patientFiltersOpen;
+  var panel = document.getElementById('patientFilterPanel');
+  var btn = document.getElementById('patientFilterToggle');
+  if (panel) panel.classList.toggle('open', patientFiltersOpen);
+  if (btn) btn.classList.toggle('active', patientFiltersOpen);
+}
+
+function getFilteredEmergencies() {
+  const data = getData();
+  var reports = data.emergencyReports || [];
+  if (!emergFiltersOpen) return reports;
+  var triage = document.getElementById('filtEmergTriage');
+  var outcome = document.getElementById('filtEmergOutcome');
+  var type = document.getElementById('filtEmergType');
+  var dateFrom = document.getElementById('filtEmergDateFrom');
+  var dateTo = document.getElementById('filtEmergDateTo');
+  if (triage && triage.value) reports = reports.filter(function(r) { return r.triage === triage.value; });
+  if (outcome && outcome.value) reports = reports.filter(function(r) { return r.outcome === outcome.value; });
+  if (type && type.value) reports = reports.filter(function(r) { return r.type === type.value; });
+  if (dateFrom && dateFrom.value) reports = reports.filter(function(r) { return r.date >= dateFrom.value; });
+  if (dateTo && dateTo.value) reports = reports.filter(function(r) { return r.date <= dateTo.value; });
+  return reports;
+}
+
+function getFilteredPatients(baseResults) {
+  if (!patientFiltersOpen) return baseResults;
+  var hasAllergies = document.getElementById('filtPatAllergies');
+  var hasChronic = document.getElementById('filtPatChronic');
+  var insProvider = document.getElementById('filtPatInsurance');
+  if (hasAllergies && hasAllergies.checked) baseResults = baseResults.filter(function(p) { return p.allergies && p.allergies.length > 0; });
+  if (hasChronic && hasChronic.checked) baseResults = baseResults.filter(function(p) { return p.chronicConditions && p.chronicConditions.length > 0; });
+  if (insProvider && insProvider.value) baseResults = baseResults.filter(function(p) { return (p.insuranceProvider || '').toLowerCase().indexOf(insProvider.value.toLowerCase()) >= 0; });
+  return baseResults;
+}
+
+// ===== ADVANCED FILTERS HTML =====
+function getEmergFilterHtml() {
+  return '<div class="filter-panel" id="emergFilterPanel"><div class="filter-row">' +
+    '<div class="filter-group"><label>Triaje</label><select id="filtEmergTriage"><option value="">Todos</option><option value="rojo">Rojo</option><option value="amarillo">Amarillo</option><option value="verde">Verde</option></select></div>' +
+    '<div class="filter-group"><label>Estado</label><select id="filtEmergOutcome"><option value="">Todos</option><option value="Atendido">Atendido</option><option value="Estabilizado">Estabilizado</option><option value="Trasladado">Trasladado</option><option value="Fallecido">Fallecido</option></select></div>' +
+    '<div class="filter-group"><label>Tipo</label><select id="filtEmergType"><option value="">Todos</option><option value="Accidente">Accidente</option><option value="Paro card\u00edaco">Paro card\u00edaco</option><option value="Traumatismo">Traumatismo</option><option value="Quemadura">Quemadura</option><option value="Intoxicaci\u00f3n">Intoxicaci\u00f3n</option><option value="Agresi\u00f3n">Agresi\u00f3n</option><option value="Otro">Otro</option></select></div>' +
+    '<div class="filter-group"><label>Desde</label><input type="date" id="filtEmergDateFrom"></div>' +
+    '<div class="filter-group"><label>Hasta</label><input type="date" id="filtEmergDateTo"></div>' +
+    '<button class="btn-search" style="padding:5px 12px;font-size:0.78em;" onclick="searchEmergencies()">Filtrar</button></div></div>';
+}
+
+function getPatientFilterHtml() {
+  return '<div class="filter-panel" id="patientFilterPanel"><div class="filter-row">' +
+    '<div class="filter-group"><label><input type="checkbox" id="filtPatAllergies"> Solo con alergias</label></div>' +
+    '<div class="filter-group"><label><input type="checkbox" id="filtPatChronic"> Solo cond. cr\u00f3nicas</label></div>' +
+    '<div class="filter-group"><label>Obra social</label><input type="text" id="filtPatInsurance" placeholder="Buscar..." style="width:140px;"></div>' +
+    '<button class="btn-search" style="padding:5px 12px;font-size:0.78em;" onclick="searchPatients()">Filtrar</button></div></div>';
+}
+
+// ===== PROTOCOL CONFIRMATION =====
+function ensureProtocolConfirmed() {
+  if (!currentDoctor) return;
+  const data = getData();
+  if (!data.protocolConfirmations) data.protocolConfirmations = [];
+  if (!data.lastProtocolUpdate) data.lastProtocolUpdate = new Date().toISOString();
+  var confirmed = data.protocolConfirmations.some(function(c) {
+    return c.doctorId === currentDoctor.id && c.lastUpdate === data.lastProtocolUpdate;
+  });
+  if (confirmed) return true;
+  if (confirm('\u00bfHa le\u00eddo y comprendido los protocolos de tratamiento SAMU?\n\nDebe confirmar para continuar.')) {
+    data.protocolConfirmations.push({
+      doctorId: currentDoctor.id,
+      doctorName: currentDoctor.name,
+      lastUpdate: data.lastProtocolUpdate,
+      timestamp: new Date().toISOString()
+    });
+    addAuditLog(currentDoctor.name + ' confirm\u00f3 lectura de protocolos');
+    saveData(data);
+    return true;
+  }
+  return false;
+}
+
+// ===== EXPORT PDF (improved) =====
+function exportPatientPDF(id) {
+  const data = getData();
+  var p = data.patients.find(function(x) { return x.id === (id || currentPatientId); });
+  if (!p) return;
+  var win = window.open('', '_blank');
+  var content = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Expediente - ' + escHtml(p.firstName + ' ' + p.lastName) + '</title>' +
+    '<style>' +
+    'body{font-family:Segoe UI,sans-serif;padding:40px;color:#333;max-width:800px;margin:0 auto;}' +
+    'h1{color:#1a237e;border-bottom:2px solid #e8eaf6;padding-bottom:10px;}' +
+    'h2{color:#1a237e;margin-top:25px;font-size:1.1em;border-bottom:1px solid #eee;padding-bottom:6px;}' +
+    '.meta{color:#666;margin:10px 0;font-size:0.9em;}' +
+    '.section{margin-bottom:12px;padding:8px 12px;border-left:3px solid #1a237e;background:#f8f9fa;border-radius:4px;}' +
+    '.section .date{color:#1a237e;font-weight:600;font-size:0.85em;}' +
+    '.tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:0.8em;margin:2px;}' +
+    '.tag-allergy{background:#fff3e0;color:#e65100;}' +
+    '.tag-chronic{background:#fce4ec;color:#c62828;}' +
+    '.footer{margin-top:40px;color:#999;font-size:0.8em;border-top:1px solid #eee;padding-top:10px;}' +
+    '@media print{body{padding:20px;}}' +
+    '</style></head><body>';
+  content += '<h1>' + escHtml(p.firstName + ' ' + p.lastName) + '</h1>';
+  content += '<div class="meta"><strong>DNI:</strong> ' + escHtml(p.citizenNumber) + ' | <strong>FN:</strong> ' + escHtml(p.dateOfBirth || '-') +
+    ' | <strong>Tel:</strong> ' + escHtml(p.phone || '-') + ' | <strong>Dir:</strong> ' + escHtml(p.address || '-') + '</div>';
+  if (p.insuranceProvider) content += '<div class="meta"><strong>Obra social:</strong> ' + escHtml(p.insuranceProvider) + (p.insuranceNumber ? ' (N\u00ba: ' + escHtml(p.insuranceNumber) + ')' : '') + '</div>';
+  if (p.allergies && p.allergies.length > 0) content += '<div><strong>Alergias:</strong> ' + p.allergies.map(function(a) { return '<span class="tag tag-allergy">' + escHtml(a) + '</span>'; }).join('') + '</div>';
+  if (p.chronicConditions && p.chronicConditions.length > 0) content += '<div><strong>Condiciones cr\u00f3nicas:</strong> ' + p.chronicConditions.map(function(c) { return '<span class="tag tag-chronic">' + escHtml(c) + '</span>'; }).join('') + '</div>';
+
+  if (p.diagnoses && p.diagnoses.length > 0) {
+    content += '<h2>Diagn\u00f3sticos</h2>';
+    p.diagnoses.forEach(function(d) { content += '<div class="section"><span class="date">' + escHtml(d.date) + '</span> — <strong>' + escHtml(d.description) + '</strong>' + (d.notes ? '<br>' + escHtml(d.notes) : '') + '<br><span style="color:#888;font-size:0.85em;">Dr. ' + escHtml(d.doctor) + '</span></div>'; });
+  }
+  if (p.prescriptions && p.prescriptions.length > 0) {
+    content += '<h2>Recetas</h2>';
+    p.prescriptions.forEach(function(r) { content += '<div class="section"><span class="date">' + escHtml(r.date) + '</span> — <strong>' + escHtml(r.medication) + '</strong> (' + escHtml(r.dosage) + ')' + (r.instructions ? '<br>' + escHtml(r.instructions) : '') + '<br><span style="color:#888;font-size:0.85em;">Dr. ' + escHtml(r.doctor) + '</span></div>'; });
+  }
+  if (p.appointments && p.appointments.length > 0) {
+    content += '<h2>Citas</h2>';
+    p.appointments.forEach(function(c) { content += '<div class="section"><span class="date">' + escHtml(c.date) + ' ' + escHtml(c.time || '') + '</span> — ' + escHtml(c.reason) + ' (' + escHtml(c.status) + ')<br><span style="color:#888;font-size:0.85em;">Dr. ' + escHtml(c.doctor) + '</span></div>'; });
+  }
+  var emergReports = (data.emergencyReports || []).filter(function(r) { return r.patientId === p.id; });
+  if (emergReports.length > 0) {
+    content += '<h2>Emergencias</h2>';
+    emergReports.forEach(function(r) {
+      content += '<div class="section" style="border-left-color:#c62828;"><span class="date">' + escHtml(r.date) + ' ' + escHtml(r.time || '') + '</span> — <strong>' + escHtml(r.type) + '</strong> (' + (r.triage || 'N/A').toUpperCase() + ')<br>' + escHtml(r.description.substring(0, 150)) + (r.outcome ? '<br><strong>Estado final:</strong> ' + escHtml(r.outcome) : '') + '</div>';
+    });
+  }
+  content += '<div class="footer">Generado desde SAMU RevoRP — ' + new Date().toLocaleString() + '</div>';
+  content += '</body></html>';
+  win.document.write(content);
+  win.document.close();
+  win.focus();
+  setTimeout(function() { win.print(); }, 300);
+}
+
 // ===== KEYBOARD SHORTCUTS =====
 document.addEventListener('keydown', function(e) {
   if (e.ctrlKey || e.metaKey) {
@@ -2378,6 +3210,7 @@ document.addEventListener('keydown', function(e) {
     else if (key === 'i' && currentDoctor) { e.preventDefault(); showInternalNotes(); }
     else if (key === 'p' && currentDoctor) { e.preventDefault(); showProtocols(); }
     else if (key === 'b' && currentDoctor) { e.preventDefault(); showBackup(); }
+    else if (key === 'l' && currentDoctor) { e.preventDefault(); toggleDarkMode(); }
   }
 });
 
