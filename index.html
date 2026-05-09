@@ -210,6 +210,62 @@ tr:last-child td { border-bottom: none; }
 .audit-item .audit-date { color: #999; margin-right: 10px; }
 .audit-item .audit-user { color: #1a237e; font-weight: 600; }
 
+/* ===== MAPA CORPORAL ===== */
+.body-map { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; }
+.body-part { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 20px; border: 2px solid #ddd; background: white; cursor: pointer; font-size: 0.82em; transition: all 0.2s; user-select: none; }
+.body-part:hover { border-color: #999; }
+.body-part.selected { border-color: #c62828; background: #ffebee; color: #c62828; font-weight: 600; }
+.body-part .bp-icon { font-size: 1.2em; }
+.body-map-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 6px; margin: 8px 0; }
+
+/* ===== DERIVACIÓN / CIERRE DE CASO ===== */
+.outcome-tag { display: inline-block; padding: 2px 10px; border-radius: 4px; font-size: 0.78em; font-weight: 600; }
+.outcome-atendido { background: #e8f5e9; color: #2e7d32; }
+.outcome-estabilizado { background: #fff3e0; color: #f57c00; }
+.outcome-trasladado { background: #e3f2fd; color: #1565c0; }
+.outcome-fallecido { background: #ffebee; color: #d32f2f; }
+
+/* ===== INVENTARIO ===== */
+.inv-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; background: #f8f9fa; border-radius: 8px; margin-bottom: 6px; }
+.inv-item .inv-name { font-weight: 600; color: #333; font-size: 0.9em; }
+.inv-item .inv-qty { font-size: 0.85em; color: #666; }
+.inv-item .inv-qty.low { color: #d32f2f; font-weight: 600; }
+.inv-header { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+.inv-header input, .inv-header select { padding: 8px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9em; }
+
+/* ===== CALENDARIO DE GUARDIAS ===== */
+.cal-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.cal-nav h3 { color: #333; font-size: 1.1em; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.cal-day-header { text-align: center; font-size: 0.75em; color: #888; font-weight: 600; padding: 4px; text-transform: uppercase; }
+.cal-day { min-height: 60px; background: #f8f9fa; border-radius: 6px; padding: 4px; font-size: 0.75em; }
+.cal-day .cal-date { font-weight: 600; color: #333; margin-bottom: 2px; }
+.cal-day.cal-today { background: #e3f2fd; }
+.cal-day.cal-other { opacity: 0.4; }
+.cal-duty { display: block; padding: 1px 4px; border-radius: 3px; font-size: 0.7em; margin: 1px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; background: #e8f5e9; color: #2e7d32; }
+
+/* ===== PROTOCOLOS ===== */
+.protocol-card { background: #f8f9fa; border-radius: 8px; padding: 15px; margin-bottom: 10px; border-left: 4px solid #1a237e; }
+.protocol-card h4 { color: #1a237e; margin-bottom: 6px; }
+.protocol-card p { color: #555; font-size: 0.88em; line-height: 1.5; }
+.protocol-card.prot-rojo { border-left-color: #d32f2f; }
+.protocol-card.prot-amarillo { border-left-color: #f57c00; }
+.protocol-card.prot-verde { border-left-color: #388e3c; }
+
+/* ===== FILTROS TIMELINE ===== */
+.tl-filters { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
+.tl-filter { padding: 4px 12px; border-radius: 14px; border: 1px solid #ddd; background: white; cursor: pointer; font-size: 0.78em; transition: all 0.2s; }
+.tl-filter:hover { border-color: #999; }
+.tl-filter.active { border-color: #1a237e; background: #e8eaf6; color: #1a237e; font-weight: 600; }
+
+/* ===== EXPORT/IMPORT ===== */
+.backup-actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin: 20px 0; }
+.backup-actions button { padding: 14px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 0.95em; font-weight: 600; transition: all 0.2s; }
+.backup-actions .btn-export { background: #e8f5e9; color: #2e7d32; }
+.backup-actions .btn-export:hover { background: #c8e6c9; }
+.backup-actions .btn-import { background: #e3f2fd; color: #1565c0; }
+.backup-actions .btn-import:hover { background: #bbdefb; }
+
 /* ===== PRINT ===== */
 @media print {
   header, .dashboard-header, .tabs, .btn-edit, .btn-view, .btn-archive, .btn-small, .btn-action, .btn-emergency, .btn-add, .archive-toggle, #btnDoctorConfig { display: none !important; }
@@ -274,9 +330,14 @@ tr:last-child td { border-bottom: none; }
     <button class="btn-add" onclick="openNewPatient()">+ Nuevo paciente</button>
     <button class="btn-action" onclick="showPublicSearch()">&#x1f50d; Búsqueda pública</button>
     <button class="btn-emergency" onclick="showEmergencySection()">&#x1f691; Informes de emergencia</button>
+    <button class="btn-emergency" style="background:#b71c1c;" onclick="openQuickEmergency()">&#x26a1; Emergencia rápida</button>
     <button class="btn-action" style="background:#1565c0;" onclick="showStats()">&#x1f4ca; Estadísticas</button>
     <button class="btn-action" style="background:#6a1b9a;" onclick="showInternalNotes()">&#x1f4dd; Notas internas</button>
+    <button class="btn-action" style="background:#00695c;" onclick="showInventory()">&#x1f4e6; Insumos</button>
+    <button class="btn-action" style="background:#37474f;" onclick="showProtocols()">&#x1fa7a; Protocolos</button>
+    <button class="btn-action" style="background:#4a148c;" onclick="showCalendar()">&#x1f4c5; Guardias</button>
     <button class="btn-action" style="background:#f57c00;" id="btnDoctorConfig" onclick="showDoctorConfig()">&#x2699; Médicos</button>
+    <button class="btn-action" style="background:#455a64;" onclick="showBackup()">&#x1f4be; Respaldo</button>
     <button class="archive-toggle" id="archiveToggleBtn" onclick="toggleArchived()">&#x1f4c2; Ver archivados</button>
   </div>
 
@@ -298,6 +359,7 @@ tr:last-child td { border-bottom: none; }
         <button class="btn-search" onclick="searchEmergencies()">Buscar</button>
       </div>
       <button class="btn-emergency" onclick="openNewEmergency()">+ Nuevo informe</button>
+      <button class="btn-emergency" style="background:#b71c1c;" onclick="openQuickEmergency()">&#x26a1; Emergencia rápida</button>
     </div>
     <div class="table-container">
       <h3>&#x1f691; Informes de atención de emergencia</h3>
@@ -367,6 +429,13 @@ tr:last-child td { border-bottom: none; }
       </div>
       <div class="tab-pane" id="tab-timeline">
         <h4>&#x1f4c8; Línea de tiempo del paciente</h4>
+        <div class="tl-filters" id="tlFilters">
+          <span class="tl-filter active" data-tlfilter="all" onclick="setTimelineFilter('all')">Todos</span>
+          <span class="tl-filter" data-tlfilter="diagnosis" onclick="setTimelineFilter('diagnosis')">Diagnósticos</span>
+          <span class="tl-filter" data-tlfilter="prescription" onclick="setTimelineFilter('prescription')">Recetas</span>
+          <span class="tl-filter" data-tlfilter="appointment" onclick="setTimelineFilter('appointment')">Citas</span>
+          <span class="tl-filter" data-tlfilter="emergency" onclick="setTimelineFilter('emergency')">Emergencias</span>
+        </div>
         <div id="timelineContainer"><div class="no-data">Seleccione un paciente para ver su historial.</div></div>
       </div>
     </div>
@@ -416,6 +485,34 @@ const FIREBASE_CONFIG = null;
 // ===== CREDENCIALES DE MÉDICOS (inyectadas por GitHub Actions) =====
 // En el repo solo aparece 'null'; los valores reales se inyectan via secrets.
 const DOCTORS_SEED = null;
+
+// ===== ICD-10 CODES =====
+var ICD10_CODES = [
+  { code: 'A09', name: 'Diarrea y gastroenteritis' },
+  { code: 'E11', name: 'Diabetes mellitus tipo 2' },
+  { code: 'I10', name: 'Hipertensión esencial' },
+  { code: 'I21', name: 'Infarto agudo de miocardio' },
+  { code: 'I48', name: 'Fibrilación auricular' },
+  { code: 'I64', name: 'Accidente vascular encefálico' },
+  { code: 'J06', name: 'Infección respiratoria aguda' },
+  { code: 'J15', name: 'Neumonía bacteriana' },
+  { code: 'J45', name: 'Asma' },
+  { code: 'K29', name: 'Gastritis' },
+  { code: 'M54', name: 'Lumbago' },
+  { code: 'N39', name: 'Infección urinaria' },
+  { code: 'R10', name: 'Dolor abdominal' },
+  { code: 'R51', name: 'Cefalea' },
+  { code: 'R55', name: 'Síncope' },
+  { code: 'S06', name: 'Traumatismo craneoencefálico' },
+  { code: 'S22', name: 'Fractura de costilla' },
+  { code: 'S42', name: 'Fractura de húmero' },
+  { code: 'S52', name: 'Fractura de antebrazo' },
+  { code: 'S82', name: 'Fractura de pierna' },
+  { code: 'T14', name: 'Traumatismo múltiple' },
+  { code: 'T30', name: 'Quemaduras sin especificar' },
+  { code: 'T63', name: 'Efecto tóxico de veneno animal' },
+  { code: 'Z03', name: 'Observación por sospecha de enfermedad' }
+];
 
 // ===== DATA LAYER =====
 const STORAGE_KEY = 'samu_ems_db';
@@ -483,6 +580,14 @@ function getData() {
   else { dataCache.emergencyReports.forEach(function(r) { if (!r.triage) r.triage = 'amarillo'; }); }
   if (!dataCache.internalNotes) dataCache.internalNotes = '';
   if (!dataCache.auditLog) dataCache.auditLog = [];
+  if (!dataCache.inventory) dataCache.inventory = [];
+  if (!dataCache.protocols) {
+    dataCache.protocols = {
+      rojo: 'Paciente crítico con amenaza vital. Priorizar vía aérea, respiración y circulación (ABC). Solicitar apoyo avanzado. Preparar traslado inmediato.',
+      amarillo: 'Paciente grave sin amenaza vital inmediata. Evaluación secundaria completa. Monitorización continua. Preparar para traslado.',
+      verde: 'Paciente leve. Atención no urgente. Evaluación básica. Alta con indicaciones o derivación ambulatoria.'
+    };
+  }
   return dataCache;
 }
 
@@ -776,6 +881,16 @@ function showDashboard() {
 }
 
 // ===== TABS =====
+var currentTimelineFilter = 'all';
+
+function setTimelineFilter(filter) {
+  currentTimelineFilter = filter;
+  document.querySelectorAll('.tl-filter').forEach(function(el) {
+    el.classList.toggle('active', el.dataset.tlfilter === filter);
+  });
+  renderTimeline();
+}
+
 function switchTab(tab) {
   document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
   document.querySelectorAll('.tab-pane').forEach(t => t.classList.toggle('active', t.id === 'tab-' + tab));
@@ -793,9 +908,10 @@ function renderDiagnoses() {
   }
   let html = '';
   p.diagnoses.forEach((d, i) => {
+    var icdBadge = d.icd10 ? '<span style="display:inline-block;background:#e8eaf6;color:#1a237e;padding:0 8px;border-radius:4px;font-size:0.78em;font-weight:600;margin-left:6px;">' + escHtml(d.icd10) + '</span>' : '';
     html += '<div class="item" style="background:#f8f9fa;border-radius:8px;padding:12px 15px;margin-bottom:8px;">' +
       '<div style="display:flex;justify-content:space-between;align-items:center;">' +
-      '<span class="item-date">' + escHtml(d.date) + ' | ' + escHtml(d.doctor) + '</span>' +
+      '<span class="item-date">' + escHtml(d.date) + ' | ' + escHtml(d.doctor) + icdBadge + '</span>' +
       '<div><button class="btn-small btn-small-edit" onclick="editDiagnosis(' + i + ')">Editar</button> ' +
       '<button class="btn-small btn-small-delete" onclick="deleteDiagnosis(' + i + ')">Eliminar</button></div></div>' +
       '<p style="margin-top:6px;"><strong>' + escHtml(d.description) + '</strong></p>' +
@@ -876,6 +992,8 @@ function renderPatientEmergencies() {
         (r.vitalSigns.rr ? '<span>FR: <strong>' + escHtml(r.vitalSigns.rr) + '</strong></span>' : '') +
         '</div>' : '') +
       (r.treatment ? '<p><strong>Tratamiento:</strong> ' + escHtml(r.treatment) + '</p>' : '') +
+      (r.outcome ? '<p><strong>Estado final:</strong> <span class="outcome-tag outcome-' + r.outcome.toLowerCase() + '">' + escHtml(r.outcome.toUpperCase()) + '</span></p>' : '') +
+      (r.derivation ? '<p><strong>Derivación:</strong> ' + escHtml(r.derivation) + '</p>' : '') +
       (r.observations ? '<p style="color:#666;font-size:0.85em;"><strong>Observaciones:</strong> ' + escHtml(r.observations) + '</p>' : '') +
       '<p style="font-size:0.8em;color:#999;margin-top:4px;">Atendido por: ' + escHtml(r.doctor) + '</p></div>';
   });
@@ -889,17 +1007,18 @@ function renderTimeline() {
   if (!p) return;
   const container = document.getElementById('timelineContainer');
   var events = [];
+  var filter = currentTimelineFilter || 'all';
 
-  if (p.diagnoses) p.diagnoses.forEach(function(d) {
+  if (p.diagnoses && (filter === 'all' || filter === 'diagnosis')) p.diagnoses.forEach(function(d) {
     events.push({ date: d.date, time: d.time || '', type: 'diagnosis', data: d, label: 'Diagnóstico', order: 1 });
   });
-  if (p.prescriptions) p.prescriptions.forEach(function(r) {
+  if (p.prescriptions && (filter === 'all' || filter === 'prescription')) p.prescriptions.forEach(function(r) {
     events.push({ date: r.date, time: r.time || '', type: 'prescription', data: r, label: 'Receta', order: 2 });
   });
-  if (p.appointments) p.appointments.forEach(function(c) {
+  if (p.appointments && (filter === 'all' || filter === 'appointment')) p.appointments.forEach(function(c) {
     events.push({ date: c.date, time: c.time || '', type: 'appointment', data: c, label: 'Cita', order: 3 });
   });
-  if (data.emergencyReports) data.emergencyReports.filter(function(r) { return r.patientId === currentPatientId; }).forEach(function(r) {
+  if (data.emergencyReports && (filter === 'all' || filter === 'emergency')) data.emergencyReports.filter(function(r) { return r.patientId === currentPatientId; }).forEach(function(r) {
     events.push({ date: r.date, time: r.time || '', type: 'emergency', data: r, label: 'Emergencia', order: 4 });
   });
 
@@ -933,7 +1052,8 @@ function renderTimeline() {
     var body = '';
 
     if (e.type === 'diagnosis') {
-      body = '<strong>' + escHtml(e.data.description) + '</strong>' + (e.data.notes ? '<br><span style="color:#666;">' + escHtml(e.data.notes) + '</span>' : '');
+      var icdTag = e.data.icd10 ? '<span style="display:inline-block;background:#e8eaf6;color:#1a237e;padding:0 8px;border-radius:4px;font-size:0.78em;font-weight:600;margin-left:6px;">' + escHtml(e.data.icd10) + '</span>' : '';
+      body = '<strong>' + escHtml(e.data.description) + '</strong>' + icdTag + (e.data.notes ? '<br><span style="color:#666;">' + escHtml(e.data.notes) + '</span>' : '');
     } else if (e.type === 'prescription') {
       body = '<strong>' + escHtml(e.data.medication) + '</strong> — ' + escHtml(e.data.dosage) + (e.data.instructions ? '<br><span style="color:#666;">' + escHtml(e.data.instructions) + '</span>' : '');
     } else if (e.type === 'appointment') {
@@ -945,7 +1065,11 @@ function renderTimeline() {
         var tl = { rojo: 'ROJO', amarillo: 'AMARILLO', verde: 'VERDE' }[e.data.triage];
         triageBadge = ' <span class="' + tc + '" style="font-size:0.75em;">' + tl + '</span>';
       }
-      body = '<strong>' + escHtml(e.data.type) + '</strong>' + triageBadge + '<br>' + escHtml(e.data.description.substring(0, 120)) + (e.data.description.length > 120 ? '...' : '');
+      var outcomeTag = '';
+      if (e.data.outcome) {
+        outcomeTag = ' <span class="outcome-tag outcome-' + e.data.outcome.toLowerCase() + '" style="font-size:0.75em;">' + escHtml(e.data.outcome.toUpperCase()) + '</span>';
+      }
+      body = '<strong>' + escHtml(e.data.type) + '</strong>' + triageBadge + outcomeTag + '<br>' + escHtml(e.data.description.substring(0, 120)) + (e.data.description.length > 120 ? '...' : '');
     }
 
     html += '<div class="timeline-item ' + tlClass + '">' +
@@ -992,7 +1116,7 @@ function renderEmergencyList(reports) {
   if (!reports || reports.length === 0) {
     container.innerHTML = '<div class="no-data">No hay informes de emergencia.</div>'; return;
   }
-  let html = '<table><thead><tr><th>Triaje</th><th>Fecha</th><th>Paciente</th><th>DNI</th><th>Tipo</th><th>Acciones</th></tr></thead><tbody>';
+  let html = '<table><thead><tr><th>Triaje</th><th>Fecha</th><th>Paciente</th><th>DNI</th><th>Tipo</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>';
   reports.sort((a, b) => (b.date + ' ' + (b.time || '')) < (a.date + ' ' + (a.time || '')) ? -1 : 1);
   reports.forEach(r => {
     const p = data.patients.find(x => x.id === r.patientId);
@@ -1001,12 +1125,20 @@ function renderEmergencyList(reports) {
     const dateStr = r.date + (r.time ? ' ' + r.time : '');
     const triageClass = 'triage-' + (r.triage || 'amarillo');
     const triageLabel = { rojo: 'ROJO', amarillo: 'AMARILLO', verde: 'VERDE' }[r.triage || 'amarillo'];
+    var outcomeHtml = '';
+    if (r.outcome) {
+      var oc = 'outcome-tag outcome-' + r.outcome.toLowerCase();
+      outcomeHtml = '<span class="' + oc + '">' + escHtml(r.outcome.toUpperCase()) + '</span>';
+    } else {
+      outcomeHtml = '<span style="color:#999;">—</span>';
+    }
     html += '<tr class="' + triageClass + '-bg" style="border-left:4px solid transparent;">' +
       '<td><span class="' + triageClass + '">' + triageLabel + '</span></td>' +
       '<td>' + escHtml(dateStr) + '</td>' +
       '<td><strong>' + escHtml(pName) + '</strong></td>' +
       '<td>' + escHtml(pDNI) + '</td>' +
       '<td><span class="em-type">' + escHtml(r.type) + '</span></td>' +
+      '<td>' + outcomeHtml + '</td>' +
       '<td>' +
         '<button class="btn-view" onclick="viewEmergency(' + r.id + ')">Ver</button> ' +
         '<button class="btn-edit" onclick="editEmergency(' + r.id + ')">Editar</button> ' +
@@ -1026,6 +1158,18 @@ function viewEmergency(id) {
   const vs = r.vitalSigns || {};
   const triageClass = 'triage-' + (r.triage || 'amarillo');
   const triageLabel = { rojo: 'ROJO', amarillo: 'AMARILLO', verde: 'VERDE' }[r.triage || 'amarillo'];
+
+  var bodyPartsHtml = '';
+  if (r.bodyParts && r.bodyParts.length > 0) {
+    var bpLabels = {};
+    BODY_PARTS.forEach(function(bp) { bpLabels[bp.id] = bp.icon + ' ' + bp.label; });
+    bodyPartsHtml = '<p><strong>Zonas afectadas:</strong> ' + r.bodyParts.map(function(b) { return bpLabels[b] || b; }).join(', ') + '</p>';
+  }
+
+  var outcomeClass = r.outcome ? 'outcome-tag outcome-' + r.outcome.toLowerCase() : '';
+  var outcomeHtml = r.outcome ? '<p><strong>Estado final:</strong> <span class="' + outcomeClass + '">' + escHtml(r.outcome.toUpperCase()) + '</span></p>' : '';
+  var derivationHtml = r.derivation ? '<p><strong>Derivación:</strong> ' + escHtml(r.derivation) + '</p>' : '';
+
   const html =
     '<div class="emergency-item" style="margin:0;">' +
     '<p><strong>Paciente:</strong> ' + escHtml(pName) + '</p>' +
@@ -1034,6 +1178,7 @@ function viewEmergency(id) {
     '<p><strong>Tipo de emergencia:</strong> ' + escHtml(r.type) + '</p>' +
     '<p><strong>Ubicación:</strong> ' + escHtml(r.location || '-') + '</p>' +
     '<p><strong>Descripción:</strong> ' + escHtml(r.description) + '</p>' +
+    bodyPartsHtml +
     (vs.bp || vs.hr || vs.temp || vs.sat || vs.rr ? '<p><strong>Signos vitales:</strong></p>' +
     '<div class="em-vitals">' +
       (vs.bp ? '<span>PA: <strong>' + escHtml(vs.bp) + '</strong></span>' : '') +
@@ -1043,6 +1188,7 @@ function viewEmergency(id) {
       (vs.rr ? '<span>FR: <strong>' + escHtml(vs.rr) + '</strong></span>' : '') +
     '</div>' : '') +
     (r.treatment ? '<p><strong>Tratamiento aplicado:</strong> ' + escHtml(r.treatment) + '</p>' : '') +
+    outcomeHtml + derivationHtml +
     (r.observations ? '<p><strong>Observaciones:</strong> ' + escHtml(r.observations) + '</p>' : '') +
     '<p style="font-size:0.85em;color:#999;margin-top:8px;">Atendido por: ' + escHtml(r.doctor) + '</p></div>';
   openModal('Informe de emergencia', html, null);
@@ -1067,6 +1213,72 @@ function showPatientAllergiesInEmerg() {
   }
 }
 
+var BODY_PARTS = [
+  { id: 'cabeza', icon: '\u{1f9e0}', label: 'Cabeza' },
+  { id: 'cara', icon: '\u{1f9b6}', label: 'Cara' },
+  { id: 'cuello', icon: '\u{1f9b0}', label: 'Cuello' },
+  { id: 'hombro_izq', icon: '\u{1f9be}', label: 'Hombro izq.' },
+  { id: 'hombro_der', icon: '\u{1f9bf}', label: 'Hombro der.' },
+  { id: 'brazo_izq', icon: '\u{1f9be}', label: 'Brazo izq.' },
+  { id: 'brazo_der', icon: '\u{1f9bf}', label: 'Brazo der.' },
+  { id: 'mano_izq', icon: '\u{270b}', label: 'Mano izq.' },
+  { id: 'mano_der', icon: '\u{270c}', label: 'Mano der.' },
+  { id: 'torax', icon: '\u{1f9d1}', label: 'Tórax' },
+  { id: 'abdomen', icon: '\u{1fac4}', label: 'Abdomen' },
+  { id: 'espalda', icon: '\u{1f9d1}', label: 'Espalda' },
+  { id: 'cadera', icon: '\u{1f9b5}', label: 'Cadera' },
+  { id: 'pierna_izq', icon: '\u{1f9b5}', label: 'Pierna izq.' },
+  { id: 'pierna_der', icon: '\u{1f9b6}', label: 'Pierna der.' },
+  { id: 'pie_izq', icon: '\u{1f9b5}', label: 'Pie izq.' },
+  { id: 'pie_der', icon: '\u{1f9b6}', label: 'Pie der.' }
+];
+
+var INCIDENT_TEMPLATES = {
+  'herida-bala': { type: 'Agresión', desc: 'Herida por arma de fuego. Se observa orificio de entrada y posible salida. Hemorragia activa.', treatment: 'Control de hemorragia con compresión directa. Vendaje oclusivo. Evaluar ABC. Preparar traslado urgente.' },
+  'apuñalamiento': { type: 'Agresión', desc: 'Herida por arma blanca. Herida penetrante con posible daño interno.', treatment: 'Control de hemorragia. NO retirar objeto incrustado. Vendaje alrededor. Evaluar ABC.' },
+  'accidente-transito': { type: 'Accidente', desc: 'Accidente de tránsito. Paciente impactado con posible TEC y traumatismo múltiple.', treatment: 'Inmovilización cervical y espinal completa. Evaluar ABC. Exploración secundaria. Preparar traslado.' },
+  'quemadura': { type: 'Quemadura', desc: 'Quemadura térmica con afectación dérmica.', treatment: 'Enfriar zona con agua 10-15 min. Cubrir con apósito estéril. Hidratación EV. Evaluar superficie quemada.' },
+  'paro': { type: 'Paro cardíaco', desc: 'Paciente inconsciente, sin pulso ni respiración.', treatment: 'Iniciar RCP inmediatamente. DEA si disponible. Adrenalina 1mg EV cada 3-5 min. Intubación orotraqueal.' },
+  'fractura': { type: 'Traumatismo', desc: 'Fractura cerrada con deformidad, dolor e impotencia funcional.', treatment: 'Inmovilización con férula. Hielo local. Analgesia. Evaluar pulsos distales.' },
+  'intoxicacion': { type: 'Intoxicación', desc: 'Paciente con sospecha de intoxicación por sustancia desconocida.', treatment: 'Evaluar nivel de conciencia. Monitorización. Carbón activado si procede. Traslado para descontaminación.' }
+};
+
+function applyIncidentTemplate(templateId) {
+  var tpl = INCIDENT_TEMPLATES[templateId];
+  if (!tpl) return;
+  document.getElementById('fEmergType').value = tpl.type;
+  document.getElementById('fEmergDesc').value = tpl.desc;
+  document.getElementById('fEmergTreatment').value = tpl.treatment;
+  // Auto-set triage based on template
+  var triageMap = { 'paro': 'rojo', 'herida-bala': 'rojo', 'apuñalamiento': 'rojo', 'accidente-transito': 'amarillo', 'quemadura': 'amarillo', 'fractura': 'verde', 'intoxicacion': 'amarillo' };
+  if (triageMap[templateId] && document.getElementById('fEmergTriage')) {
+    document.getElementById('fEmergTriage').value = triageMap[templateId];
+  }
+}
+
+function renderBodyMap(selected) {
+  if (!selected) selected = [];
+  var html = '<div class="body-map-grid">';
+  BODY_PARTS.forEach(function(bp) {
+    var sel = selected.indexOf(bp.id) >= 0 ? ' selected' : '';
+    html += '<div class="body-part' + sel + '" data-bpid="' + bp.id + '" onclick="toggleBodyPart(this)"><span class="bp-icon">' + bp.icon + '</span>' + bp.label + '</div>';
+  });
+  html += '</div>';
+  return html;
+}
+
+function toggleBodyPart(el) {
+  el.classList.toggle('selected');
+}
+
+function getSelectedBodyParts() {
+  var parts = [];
+  document.querySelectorAll('.body-part.selected').forEach(function(el) {
+    parts.push(el.dataset.bpid);
+  });
+  return parts;
+}
+
 function openNewEmergency() {
   editingEmergencyId = null;
   const data = getData();
@@ -1074,6 +1286,13 @@ function openNewEmergency() {
   data.patients.forEach(p => {
     patientOpts += '<option value="' + p.id + '">' + escHtml(p.firstName + ' ' + p.lastName + ' (DNI: ' + p.citizenNumber + ')') + '</option>';
   });
+  var bodyMapHtml = renderBodyMap([]);
+  var templateHtml = '<div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px;">';
+  Object.keys(INCIDENT_TEMPLATES).forEach(function(k) {
+    var labelMap = { 'herida-bala': 'Herida de bala', 'apuñalamiento': 'Apuñalamiento', 'accidente-transito': 'Accidente tráfico', 'quemadura': 'Quemadura', 'paro': 'Paro cardíaco', 'fractura': 'Fractura', 'intoxicacion': 'Intoxicación' };
+    templateHtml += '<span style="padding:3px 10px;border-radius:12px;border:1px solid #c62828;color:#c62828;font-size:0.75em;cursor:pointer;background:white;" onclick="applyIncidentTemplate(\'' + k + '\')">' + labelMap[k] + '</span>';
+  });
+  templateHtml += '</div>';
   const html =
     '<div class="form-group"><label>Paciente</label>' +
     '<select id="fEmergPatient" onchange="showPatientAllergiesInEmerg()">' +
@@ -1084,10 +1303,12 @@ function openNewEmergency() {
     '<div class="form-group"><label>Hora</label><input type="time" id="fEmergTime"></div>' +
     '<div class="form-group"><label>Triaje</label>' +
     '<select id="fEmergTriage"><option value="verde">Verde (leve)</option><option value="amarillo" selected>Amarillo (moderado)</option><option value="rojo">Rojo (crítico)</option></select></div>' +
+    '<div class="form-group"><label>Plantillas de incidente (click para autocompletar)</label>' + templateHtml +
     '<div class="form-group"><label>Tipo de emergencia</label>' +
     '<select id="fEmergType"><option value="Accidente">Accidente</option><option value="Paro cardíaco">Paro cardíaco</option><option value="Traumatismo">Traumatismo</option><option value="Quemadura">Quemadura</option><option value="Intoxicación">Intoxicación</option><option value="Problema respiratorio">Problema respiratorio</option><option value="Problema neurológico">Problema neurológico</option><option value="Parto">Parto</option><option value="Agresión">Agresión</option><option value="Otro">Otro</option></select></div>' +
     '<div class="form-group"><label>Ubicación del incidente</label><input type="text" id="fEmergLocation" placeholder="Calle, zona, etc."></div>' +
     '<div class="form-group"><label>Descripción de la emergencia</label><textarea id="fEmergDesc" rows="3" placeholder="Describa lo ocurrido..."></textarea></div>' +
+    '<h5 style="color:#333;margin:15px 0 10px;">Mapa corporal — Zonas afectadas</h5>' + bodyMapHtml +
     '<h5 style="color:#333;margin:15px 0 10px;">Signos vitales</h5>' +
     '<div class="form-row"><div class="form-group"><label>Presión arterial</label><input type="text" id="fEmergBP" placeholder="Ej: 120/80"></div>' +
     '<div class="form-group"><label>Frec. cardíaca</label><input type="text" id="fEmergHR" placeholder="Ej: 80 lpm"></div></div>' +
@@ -1095,6 +1316,11 @@ function openNewEmergency() {
     '<div class="form-group"><label>Sat O2</label><input type="text" id="fEmergSat" placeholder="Ej: 98%"></div></div>' +
     '<div class="form-group"><label>Frec. respiratoria</label><input type="text" id="fEmergRR" placeholder="Ej: 16 rpm"></div>' +
     '<div class="form-group"><label>Tratamiento aplicado</label><textarea id="fEmergTreatment" rows="2" placeholder="Tratamiento pre-hospitalario..."></textarea></div>' +
+    '<h5 style="color:#333;margin:15px 0 10px;">Cierre del caso</h5>' +
+    '<div class="form-group"><label>Estado final</label>' +
+    '<select id="fEmergOutcome"><option value="">-- Seleccionar --</option><option value="Atendido">Atendido</option><option value="Estabilizado">Estabilizado</option><option value="Trasladado">Trasladado a hospital</option><option value="Fallecido">Fallecido</option></select></div>' +
+    '<div class="form-group"><label>Derivación hospitalaria</label>' +
+    '<select id="fEmergDerivation"><option value="">-- No aplica --</option><option value="Hospital Central">Hospital Central</option><option value="Hospital del Este">Hospital del Este</option><option value="Hospital Universitario">Hospital Universitario</option><option value="Clínica Privada">Clínica Privada</option><option value="Centro de Salud">Centro de Salud</option></select></div>' +
     '<div class="form-group"><label>Observaciones</label><textarea id="fEmergObs" rows="2" placeholder="Observaciones adicionales..."></textarea></div>';
   openModal('Nuevo informe de emergencia', html, () => saveEmergencyModal());
   document.getElementById('modalSaveBtn').textContent = 'Guardar informe';
@@ -1140,7 +1366,10 @@ function saveEmergencyModal() {
   const sat = document.getElementById('fEmergSat').value.trim();
   const rr = document.getElementById('fEmergRR').value.trim();
   const treatment = document.getElementById('fEmergTreatment').value.trim();
+  const outcome = document.getElementById('fEmergOutcome') ? document.getElementById('fEmergOutcome').value : '';
+  const derivation = document.getElementById('fEmergDerivation') ? document.getElementById('fEmergDerivation').value : '';
   const observations = document.getElementById('fEmergObs').value.trim();
+  var bodyParts = getSelectedBodyParts();
 
   if (!date || !description || !type) { alert('Fecha, tipo y descripción son obligatorios.'); return; }
 
@@ -1158,6 +1387,9 @@ function saveEmergencyModal() {
       r.description = description;
       r.vitalSigns = { bp, hr, temp, sat, rr };
       r.treatment = treatment;
+      r.outcome = outcome;
+      r.derivation = derivation;
+      r.bodyParts = bodyParts;
       r.observations = observations;
       addAuditLog('Informe de emergencia #' + r.id + ' actualizado');
     }
@@ -1175,6 +1407,9 @@ function saveEmergencyModal() {
       description: description,
       vitalSigns: { bp, hr, temp, sat, rr },
       treatment: treatment,
+      outcome: outcome,
+      derivation: derivation,
+      bodyParts: bodyParts,
       observations: observations,
       doctor: currentDoctor.name
     });
@@ -1199,6 +1434,9 @@ function editEmergency(id) {
   const vs = r.vitalSigns || {};
   const triageOpts = ['rojo','amarillo','verde'];
   const triageLabels = { rojo: 'Rojo (crítico)', amarillo: 'Amarillo (moderado)', verde: 'Verde (leve)' };
+  var bodyMapHtml = renderBodyMap(r.bodyParts || []);
+  const outcomeOpts = ['','Atendido','Estabilizado','Trasladado','Fallecido'];
+  const derivationOpts = ['','Hospital Central','Hospital del Este','Hospital Universitario','Clínica Privada','Centro de Salud'];
   const html =
     '<div class="form-group"><label>Paciente</label>' +
     '<select id="fEmergPatient" onchange="showPatientAllergiesInEmerg()">' + patientOpts + '</select></div>' +
@@ -1216,6 +1454,7 @@ function editEmergency(id) {
     '</select></div>' +
     '<div class="form-group"><label>Ubicación</label><input type="text" id="fEmergLocation" value="' + escAttr(r.location || '') + '"></div>' +
     '<div class="form-group"><label>Descripción</label><textarea id="fEmergDesc" rows="3">' + escHtml(r.description) + '</textarea></div>' +
+    '<h5 style="color:#333;margin:15px 0 10px;">Mapa corporal — Zonas afectadas</h5>' + bodyMapHtml +
     '<h5 style="color:#333;margin:15px 0 10px;">Signos vitales</h5>' +
     '<div class="form-row"><div class="form-group"><label>PA</label><input type="text" id="fEmergBP" value="' + escAttr(vs.bp || '') + '"></div>' +
     '<div class="form-group"><label>FC</label><input type="text" id="fEmergHR" value="' + escAttr(vs.hr || '') + '"></div></div>' +
@@ -1223,6 +1462,13 @@ function editEmergency(id) {
     '<div class="form-group"><label>Sat O2</label><input type="text" id="fEmergSat" value="' + escAttr(vs.sat || '') + '"></div></div>' +
     '<div class="form-group"><label>FR</label><input type="text" id="fEmergRR" value="' + escAttr(vs.rr || '') + '"></div>' +
     '<div class="form-group"><label>Tratamiento</label><textarea id="fEmergTreatment" rows="2">' + escHtml(r.treatment || '') + '</textarea></div>' +
+    '<h5 style="color:#333;margin:15px 0 10px;">Cierre del caso</h5>' +
+    '<div class="form-group"><label>Estado final</label><select id="fEmergOutcome">' +
+    outcomeOpts.map(function(o) { return '<option value="' + o + '"' + (r.outcome === o ? ' selected' : '') + '>' + (o || '-- No seleccionar --') + '</option>'; }).join('') +
+    '</select></div>' +
+    '<div class="form-group"><label>Derivación</label><select id="fEmergDerivation">' +
+    derivationOpts.map(function(d) { return '<option value="' + d + '"' + (r.derivation === d ? ' selected' : '') + '>' + d + '</option>'; }).join('') +
+    '</select></div>' +
     '<div class="form-group"><label>Observaciones</label><textarea id="fEmergObs" rows="2">' + escHtml(r.observations || '') + '</textarea></div>';
   openModal('Editar informe de emergencia', html, function() { saveEmergencyModal(); });
   document.getElementById('modalSaveBtn').textContent = 'Guardar cambios';
@@ -1373,8 +1619,10 @@ let editDiagnosisIndex = -1;
 
 function openAddDiagnosis() {
   editDiagnosisIndex = -1;
+  var icdOpts = ICD10_CODES.map(function(c) { return '<option value="' + c.code + '">' + c.code + ' — ' + c.name + '</option>'; }).join('');
   const html =
     '<div class="form-group"><label>Fecha</label><input type="date" id="fDiagDate"></div>' +
+    '<div class="form-group"><label>Código ICD-10</label><select id="fDiagICD" onchange="document.getElementById(\'fDiagDesc\').value=this.options[this.selectedIndex].text.split(\' — \')[1]||\'\'"><option value="">-- Sin código --</option>' + icdOpts + '</select></div>' +
     '<div class="form-group"><label>Diagnóstico</label><textarea id="fDiagDesc" rows="3" placeholder="Descripción del diagnóstico"></textarea></div>' +
     '<div class="form-group"><label>Notas adicionales</label><textarea id="fDiagNotes" rows="2" placeholder="Notas..."></textarea></div>';
   openModal('Nuevo diagnóstico', html, () => saveDiagnosisModal());
@@ -1387,8 +1635,10 @@ function editDiagnosis(idx) {
   if (!p || !p.diagnoses[idx]) return;
   editDiagnosisIndex = idx;
   const d = p.diagnoses[idx];
+  var icdOpts = ICD10_CODES.map(function(c) { return '<option value="' + c.code + '"' + (d.icd10 === c.code ? ' selected' : '') + '>' + c.code + ' — ' + c.name + '</option>'; }).join('');
   const html =
     '<div class="form-group"><label>Fecha</label><input type="date" id="fDiagDate" value="' + escAttr(d.date) + '"></div>' +
+    '<div class="form-group"><label>Código ICD-10</label><select id="fDiagICD"><option value="">-- Sin código --</option>' + icdOpts + '</select></div>' +
     '<div class="form-group"><label>Diagnóstico</label><textarea id="fDiagDesc" rows="3">' + escHtml(d.description) + '</textarea></div>' +
     '<div class="form-group"><label>Notas adicionales</label><textarea id="fDiagNotes" rows="2">' + escHtml(d.notes || '') + '</textarea></div>';
   openModal('Editar diagnóstico', html, () => saveDiagnosisModal());
@@ -1396,6 +1646,7 @@ function editDiagnosis(idx) {
 
 function saveDiagnosisModal() {
   const date = document.getElementById('fDiagDate').value;
+  const icd10 = document.getElementById('fDiagICD') ? document.getElementById('fDiagICD').value : '';
   const description = document.getElementById('fDiagDesc').value.trim();
   const notes = document.getElementById('fDiagNotes').value.trim();
   if (!date || !description) { alert('Fecha y diagnóstico son obligatorios.'); return; }
@@ -1404,11 +1655,12 @@ function saveDiagnosisModal() {
   if (!p) return;
   if (editDiagnosisIndex >= 0 && p.diagnoses[editDiagnosisIndex]) {
     p.diagnoses[editDiagnosisIndex].date = date;
+    p.diagnoses[editDiagnosisIndex].icd10 = icd10;
     p.diagnoses[editDiagnosisIndex].description = description;
     p.diagnoses[editDiagnosisIndex].notes = notes;
     addAuditLog('Diagnóstico actualizado: ' + description);
   } else {
-    p.diagnoses.push({ date, description, notes, doctor: currentDoctor.name });
+    p.diagnoses.push({ date, icd10, description, notes, doctor: currentDoctor.name });
     addAuditLog('Diagnóstico añadido: ' + description);
   }
   saveData(data);
@@ -1735,6 +1987,279 @@ function printPatientRecord() {
   win.document.close();
   win.print();
 }
+
+// ===== QUICK EMERGENCY =====
+function openQuickEmergency() {
+  editingEmergencyId = null;
+  const data = getData();
+  var html =
+    '<div class="form-group"><label>Nombre del paciente</label><input type="text" id="fQName" placeholder="Nombre y apellidos"></div>' +
+    '<div class="form-group"><label>DNI / Nº Ciudadano</label><input type="text" id="fQDNI" placeholder="DNI"></div>' +
+    '<div class="form-group"><label>Triaje</label>' +
+    '<select id="fQEmergTriage"><option value="verde">Verde (leve)</option><option value="amarillo" selected>Amarillo (moderado)</option><option value="rojo">Rojo (crítico)</option></select></div>' +
+    '<div class="form-group"><label>Plantillas de incidente</label><div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px;">' +
+    Object.keys(INCIDENT_TEMPLATES).map(function(k) {
+      var labelMap = { 'herida-bala': 'Herida de bala', 'apuñalamiento': 'Apuñalamiento', 'accidente-transito': 'Accidente tráfico', 'quemadura': 'Quemadura', 'paro': 'Paro cardíaco', 'fractura': 'Fractura', 'intoxicacion': 'Intoxicación' };
+      return '<span style="padding:3px 10px;border-radius:12px;border:1px solid #b71c1c;color:#b71c1c;font-size:0.75em;cursor:pointer;background:white;" onclick="document.getElementById(\'fQType\').value=\'' + INCIDENT_TEMPLATES[k].type + '\';document.getElementById(\'fQDesc\').value=\'' + escAttr(INCIDENT_TEMPLATES[k].desc) + '\';document.getElementById(\'fQTreatment\').value=\'' + escAttr(INCIDENT_TEMPLATES[k].treatment) + '\'">' + labelMap[k] + '</span>';
+    }).join('') + '</div></div>' +
+    '<div class="form-group"><label>Tipo</label><select id="fQType"><option value="Accidente">Accidente</option><option value="Paro cardíaco">Paro cardíaco</option><option value="Traumatismo">Traumatismo</option><option value="Quemadura">Quemadura</option><option value="Intoxicación">Intoxicación</option><option value="Agresión">Agresión</option><option value="Otro">Otro</option></select></div>' +
+    '<div class="form-group"><label>Descripción</label><textarea id="fQDesc" rows="2" placeholder="Breve descripción..."></textarea></div>' +
+    '<div class="form-group"><label>Tratamiento</label><textarea id="fQTreatment" rows="2" placeholder="Tratamiento aplicado..."></textarea></div>' +
+    '<h5 style="color:#333;margin:12px 0 8px;">Signos vitales (opcional)</h5>' +
+    '<div class="form-row"><div class="form-group"><label>PA</label><input type="text" id="fQBP" placeholder="120/80"></div>' +
+    '<div class="form-group"><label>FC</label><input type="text" id="fQHR" placeholder="80 lpm"></div></div>';
+  openModal('&#x26a1; Emergencia rápida — crear paciente + informe en 1 paso', html, function() { saveQuickEmergency(); });
+  document.getElementById('modalSaveBtn').textContent = 'Guardar y crear';
+}
+
+function saveQuickEmergency() {
+  var name = document.getElementById('fQName').value.trim();
+  var dni = document.getElementById('fQDNI').value.trim();
+  var triage = document.getElementById('fQEmergTriage').value;
+  var type = document.getElementById('fQType').value;
+  var desc = document.getElementById('fQDesc').value.trim();
+  var treatment = document.getElementById('fQTreatment').value.trim();
+  var bp = document.getElementById('fQBP').value.trim();
+  var hr = document.getElementById('fQHR').value.trim();
+  if (!name || !dni || !desc) { alert('Nombre, DNI y descripción son obligatorios.'); return; }
+  var nameParts = name.split(' ');
+  var firstName = nameParts[0];
+  var lastName = nameParts.slice(1).join(' ') || nameParts[0];
+
+  const data = getData();
+  var newId = data.nextPatientId++;
+  var p = {
+    id: newId, citizenNumber: dni, firstName: firstName, lastName: lastName,
+    dateOfBirth: '', phone: '', address: '', archived: false,
+    allergies: [], chronicConditions: [], avatar: null,
+    diagnoses: [], prescriptions: [], appointments: []
+  };
+  data.patients.push(p);
+  addAuditLog('Paciente ' + firstName + ' ' + lastName + ' creado vía emergencia rápida');
+
+  if (!data.emergencyReports) data.emergencyReports = [];
+  if (!data.nextEmergencyId) data.nextEmergencyId = 1;
+  var now = new Date();
+  var dateStr = now.toISOString().split('T')[0];
+  var timeStr = now.toTimeString().slice(0, 5);
+  data.emergencyReports.push({
+    id: data.nextEmergencyId++,
+    patientId: newId,
+    date: dateStr, time: timeStr,
+    triage: triage, type: type,
+    location: '', description: desc,
+    vitalSigns: { bp: bp, hr: hr, temp: '', sat: '', rr: '' },
+    treatment: treatment, outcome: '', derivation: '', bodyParts: [],
+    observations: '',
+    doctor: currentDoctor.name
+  });
+  addAuditLog('Informe de emergencia creado para ' + firstName + ' ' + lastName);
+  saveData(data);
+  closeModal();
+  searchPatients();
+}
+
+// ===== INVENTORY =====
+function showInventory() {
+  const data = getData();
+  if (!data.inventory) data.inventory = [];
+  var listHtml = '';
+  if (data.inventory.length === 0) {
+    listHtml = '<div class="no-data" style="padding:20px;">Sin insumos registrados. Agregue el primer insumo.</div>';
+  } else {
+    listHtml = '<div style="max-height:300px;overflow-y:auto;">';
+    data.inventory.forEach(function(item, i) {
+      var qtyClass = item.quantity <= (item.minStock || 0) ? 'inv-qty low' : 'inv-qty';
+      listHtml += '<div class="inv-item"><div><div class="inv-name">' + escHtml(item.name) + '</div><div style="font-size:0.78em;color:#999;">' + escHtml(item.category || 'General') + '</div></div>' +
+        '<div style="text-align:right;"><span class="' + qtyClass + '">' + item.quantity + ' uds.</span><br><span style="font-size:0.72em;color:#999;">mín: ' + (item.minStock || 0) + '</span></div>' +
+        '</div>';
+    });
+    listHtml += '</div>';
+  }
+
+  var html = '<div style="margin-bottom:15px;"><strong>Insumos y medicamentos</strong></div>' + listHtml +
+    '<hr style="margin:15px 0;border:none;border-top:1px solid #eee;">' +
+    '<div class="form-row"><div class="form-group"><label>Nombre</label><input type="text" id="fInvName" placeholder="Ej: Suero fisiológico"></div></div>' +
+    '<div class="form-row"><div class="form-group"><label>Cantidad</label><input type="number" id="fInvQty" placeholder="0" min="0"></div>' +
+    '<div class="form-group"><label>Stock mínimo</label><input type="number" id="fInvMin" placeholder="0" min="0" value="5"></div></div>' +
+    '<div class="form-group"><label>Categoría</label><select id="fInvCat"><option value="Medicamento">Medicamento</option><option value="Insumo">Insumo</option><option value="Equipo">Equipo</option><option value="Vendaje">Vendaje</option><option value="Otro">Otro</option></select></div>';
+  openModal('&#x1f4e6; Inventario de insumos', html, function() { addInventoryItem(); });
+  document.getElementById('modalSaveBtn').textContent = 'Agregar insumo';
+}
+
+function addInventoryItem() {
+  var name = document.getElementById('fInvName').value.trim();
+  var qty = parseInt(document.getElementById('fInvQty').value) || 0;
+  var minStock = parseInt(document.getElementById('fInvMin').value) || 0;
+  var cat = document.getElementById('fInvCat').value;
+  if (!name) { alert('Nombre del insumo es obligatorio.'); return; }
+  const data = getData();
+  if (!data.inventory) data.inventory = [];
+  data.inventory.push({ name: name, quantity: qty, minStock: minStock, category: cat });
+  addAuditLog('Insumo añadido: ' + name + ' (' + qty + ' uds)');
+  saveData(data);
+  document.getElementById('fInvName').value = '';
+  document.getElementById('fInvQty').value = '';
+  showInventory();
+}
+
+// ===== PROTOCOLS =====
+function showProtocols() {
+  const data = getData();
+  if (!data.protocols) {
+    data.protocols = {
+      rojo: 'Paciente crítico con amenaza vital. Priorizar vía aérea, respiración y circulación (ABC). Solicitar apoyo avanzado. Preparar traslado inmediato.',
+      amarillo: 'Paciente grave sin amenaza vital inmediata. Evaluación secundaria completa. Monitorización continua. Preparar para traslado.',
+      verde: 'Paciente leve. Atención no urgente. Evaluación básica. Alta con indicaciones o derivación ambulatoria.'
+    };
+  }
+  var editable = currentDoctor && currentDoctor.username === 'LVargas';
+  var html = '<div class="protocol-card prot-rojo"><h4>🔴 Rojo — Crítico</h4><p>' + escHtml(data.protocols.rojo) + '</p></div>' +
+    '<div class="protocol-card prot-amarillo"><h4>🟡 Amarillo — Moderado</h4><p>' + escHtml(data.protocols.amarillo) + '</p></div>' +
+    '<div class="protocol-card prot-verde"><h4>🟢 Verde — Leve</h4><p>' + escHtml(data.protocols.verde) + '</p></div>';
+  if (editable) {
+    html += '<hr style="margin:15px 0;border:none;border-top:1px solid #eee;"><p style="color:#666;font-size:0.85em;margin-bottom:10px;">Solo LVargas puede editar los protocolos:</p>' +
+      '<div class="form-group"><label>Protocolo Rojo</label><textarea id="fProtR" rows="3">' + escHtml(data.protocols.rojo) + '</textarea></div>' +
+      '<div class="form-group"><label>Protocolo Amarillo</label><textarea id="fProtA" rows="3">' + escHtml(data.protocols.amarillo) + '</textarea></div>' +
+      '<div class="form-group"><label>Protocolo Verde</label><textarea id="fProtV" rows="3">' + escHtml(data.protocols.verde) + '</textarea></div>';
+  }
+  openModal('&#x1fa7a; Protocolos de tratamiento SAMU', html, editable ? function() { saveProtocols(); } : null);
+  if (editable) document.getElementById('modalSaveBtn').textContent = 'Guardar protocolos';
+  else document.getElementById('modalSaveBtn').style.display = 'none';
+}
+
+function saveProtocols() {
+  const data = getData();
+  data.protocols = {
+    rojo: document.getElementById('fProtR').value.trim(),
+    amarillo: document.getElementById('fProtA').value.trim(),
+    verde: document.getElementById('fProtV').value.trim()
+  };
+  addAuditLog('Protocolos actualizados');
+  saveData(data);
+  closeModal();
+}
+
+// ===== CALENDAR =====
+var calendarMonth = new Date().getMonth();
+var calendarYear = new Date().getFullYear();
+
+function showCalendar() {
+  calendarMonth = new Date().getMonth();
+  calendarYear = new Date().getFullYear();
+  renderCalendar();
+}
+
+function renderCalendar() {
+  const data = getData();
+  var monthNames = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  var dayNames = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+  var firstDay = new Date(calendarYear, calendarMonth, 1).getDay();
+  var daysInMonth = new Date(calendarYear, calendarMonth + 1, 0).getDate();
+  var today = new Date();
+  var todayStr = today.getFullYear() + '-' + (today.getMonth()+1) + '-' + today.getDate();
+
+  var html = '<div class="cal-nav"><button class="btn-small btn-small-edit" onclick="calendarMonth--;if(calendarMonth<0){calendarMonth=11;calendarYear--;}renderCalendar();">◀</button>' +
+    '<h3>' + monthNames[calendarMonth] + ' ' + calendarYear + '</h3>' +
+    '<button class="btn-small btn-small-edit" onclick="calendarMonth++;if(calendarMonth>11){calendarMonth=0;calendarYear++;}renderCalendar();">▶</button></div>';
+
+  html += '<div class="cal-grid">';
+  dayNames.forEach(function(d) { html += '<div class="cal-day-header">' + d + '</div>'; });
+
+  var onDutyDocs = data.doctors.filter(function(d) { return d.onDuty; });
+  var dutyNames = onDutyDocs.map(function(d) { return d.name.split(' ')[0]; }).join(', ') || 'Sin guardia';
+
+  // Previous month days
+  var prevMonthDays = new Date(calendarYear, calendarMonth, 0).getDate();
+  for (var i = firstDay - 1; i >= 0; i--) {
+    html += '<div class="cal-day cal-other"><div class="cal-date">' + (prevMonthDays - i) + '</div></div>';
+  }
+
+  for (var day = 1; day <= daysInMonth; day++) {
+    var dateStr = calendarYear + '-' + (calendarMonth+1) + '-' + day;
+    var isToday = dateStr === todayStr ? ' cal-today' : '';
+    html += '<div class="cal-day' + isToday + '"><div class="cal-date">' + day + '</div>';
+    if (onDutyDocs.length > 0) {
+      html += '<span class="cal-duty" title="' + escAttr(dutyNames) + '">' + escHtml(dutyNames) + '</span>';
+    }
+    html += '</div>';
+  }
+  html += '</div>';
+  html += '<div style="margin-top:12px;font-size:0.82em;color:#666;">Médicos de guardia: <strong>' + escHtml(dutyNames) + '</strong></div>';
+
+  openModal('&#x1f4c5; Calendario de guardias', html, null);
+  document.getElementById('modalSaveBtn').style.display = 'none';
+}
+
+// ===== BACKUP =====
+function showBackup() {
+  var html =
+    '<p style="color:#666;margin-bottom:15px;">Exporte todos los datos del sistema o importe un respaldo previo.</p>' +
+    '<div class="backup-actions">' +
+    '<button class="btn-export" onclick="exportData()">&#x1f4e5; Exportar datos (JSON)</button>' +
+    '<button class="btn-import" onclick="document.getElementById(\'importFileInput\').click()">&#x1f4e4; Importar respaldo</button>' +
+    '</div>' +
+    '<input type="file" id="importFileInput" accept=".json" style="display:none;" onchange="importData(event)">' +
+    '<div id="backupResult" style="margin-top:12px;text-align:center;font-size:0.85em;"></div>';
+  openModal('&#x1f4be; Respaldo de datos', html, null);
+  document.getElementById('modalSaveBtn').style.display = 'none';
+}
+
+function exportData() {
+  const data = getData();
+  var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'samu_backup_' + new Date().toISOString().slice(0, 10) + '.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  document.getElementById('backupResult').innerHTML = '<span style="color:#2e7d32;">&#x2705; Respaldo exportado correctamente.</span>';
+}
+
+function importData(event) {
+  var file = event.target.files[0];
+  if (!file) return;
+  if (!confirm('¿Importar respaldo? Esto SOBRESCRIBIRÁ todos los datos actuales.')) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      var imported = JSON.parse(e.target.result);
+      if (!imported.patients || !imported.doctors) {
+        document.getElementById('backupResult').innerHTML = '<span style="color:#d32f2f;">&#x274c; El archivo no tiene el formato correcto.</span>';
+        return;
+      }
+      const data = getData();
+      Object.keys(imported).forEach(function(k) { data[k] = imported[k]; });
+      dataCache = data;
+      addAuditLog('Datos importados desde respaldo');
+      saveData(data);
+      document.getElementById('backupResult').innerHTML = '<span style="color:#2e7d32;">&#x2705; Datos importados correctamente. Recargando...</span>';
+      setTimeout(function() { location.reload(); }, 1500);
+    } catch (err) {
+      document.getElementById('backupResult').innerHTML = '<span style="color:#d32f2f;">&#x274c; Error al leer el archivo: ' + escHtml(err.message) + '</span>';
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+// ===== KEYBOARD SHORTCUTS =====
+document.addEventListener('keydown', function(e) {
+  if (e.ctrlKey || e.metaKey) {
+    var key = e.key.toLowerCase();
+    if (key === 'n' && currentDoctor) { e.preventDefault(); openNewPatient(); }
+    else if (key === 'e' && currentDoctor) { e.preventDefault(); showEmergencySection(); }
+    else if (key === 'f' && currentDoctor) { e.preventDefault(); document.getElementById('searchInput').focus(); }
+    else if (key === 'r' && currentDoctor) { e.preventDefault(); openQuickEmergency(); }
+    else if (key === 's' && currentDoctor) { e.preventDefault(); showStats(); }
+    else if (key === 'i' && currentDoctor) { e.preventDefault(); showInternalNotes(); }
+    else if (key === 'p' && currentDoctor) { e.preventDefault(); showProtocols(); }
+    else if (key === 'b' && currentDoctor) { e.preventDefault(); showBackup(); }
+  }
+});
 
 // ===== DOCTOR CONFIG =====
 function toggleDuty(docId) {
