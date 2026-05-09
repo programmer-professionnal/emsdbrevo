@@ -3390,8 +3390,11 @@ function addInvoice() {
 
 function openAddInvoiceForPatient() {
   if (!currentPatientId) return;
-  document.getElementById('fInvPatient').value = currentPatientId;
   showInvoices();
+  setTimeout(function() {
+    var sel = document.getElementById('fInvPatient');
+    if (sel) sel.value = currentPatientId;
+  }, 100);
 }
 
 function renderPatientInvoices() {
