@@ -1,0 +1,8 @@
+{
+  "rules": {
+    "samuData": {
+      ".read": true,
+      ".write": true
+    }
+  }
+}

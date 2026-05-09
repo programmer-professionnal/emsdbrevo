@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAMU - Sistema de Atención Médica de Urgencia</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+body { background: #f0f2f5; min-height: 100vh; }
+.hidden { display: none !important; }
+
+header { background: linear-gradient(135deg, #1a237e, #0d47a1); color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+header h1 { font-size: 1.5em; }
+header h1 span { color: #42a5f5; }
+header .user-info { display: flex; align-items: center; gap: 15px; }
+header .user-info span { font-size: 0.9em; opacity: 0.9; }
+.btn-logout, .btn-back { background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 8px 18px; border-radius: 6px; cursor: pointer; font-size: 0.85em; transition: all 0.3s; }
+.btn-logout:hover, .btn-back:hover { background: rgba(255,255,255,0.25); }
+
+.login-container { max-width: 400px; margin: 80px auto; background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); padding: 40px; }
+.login-container h2 { text-align: center; color: #1a237e; margin-bottom: 25px; font-size: 1.5em; }
+.login-container .subtitle { text-align: center; color: #666; margin-bottom: 25px; font-size: 0.9em; }
+.form-group { margin-bottom: 18px; }
+.form-group label { display: block; margin-bottom: 5px; color: #333; font-size: 0.9em; font-weight: 500; }
+.form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.95em; transition: border 0.3s; }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #1a237e; }
+.form-row { display: flex; gap: 12px; }
+.form-row .form-group { flex: 1; }
+.btn-primary { width: 100%; padding: 12px; background: linear-gradient(135deg, #1a237e, #0d47a1); color: white; border: none; border-radius: 6px; font-size: 1em; cursor: pointer; transition: opacity 0.3s; }
+.btn-primary:hover { opacity: 0.9; }
+.login-error { color: #d32f2f; text-align: center; margin-top: 12px; font-size: 0.85em; }
+.login-footer { text-align: center; margin-top: 20px; font-size: 0.85em; color: #666; }
+.login-footer a { color: #1a237e; cursor: pointer; text-decoration: underline; }
+
+.dashboard { max-width: 1400px; margin: 20px auto; padding: 0 20px; }
+.dashboard-header { display: flex; gap: 12px; margin-bottom: 25px; flex-wrap: wrap; align-items: center; }
+.search-box { flex: 1; min-width: 250px; display: flex; gap: 10px; }
+.search-box input { flex: 1; padding: 10px 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.95em; }
+.search-box input:focus { outline: none; border-color: #1a237e; }
+.btn-search, .btn-add { padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-size: 0.9em; transition: all 0.3s; }
+.btn-search { background: #1a237e; color: white; }
+.btn-add { background: #2e7d32; color: white; white-space: nowrap; }
+.btn-search:hover { opacity: 0.9; }
+.btn-add:hover { opacity: 0.9; }
+.btn-action { background: #1565c0; color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-size: 0.9em; white-space: nowrap; transition: all 0.3s; }
+.btn-action:hover { opacity: 0.9; }
+.btn-emergency { background: #c62828; color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-size: 0.9em; white-space: nowrap; transition: all 0.3s; }
+.btn-emergency:hover { opacity: 0.9; }
+.archive-toggle { background: #6a1b9a; color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-size: 0.9em; white-space: nowrap; transition: all 0.3s; }
+.archive-toggle:hover { opacity: 0.9; }
+.archive-toggle.active { background: #e65100; }
+
+.table-container { background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); overflow: hidden; margin-bottom: 25px; }
+.table-container h3 { padding: 18px 20px; background: #f8f9fa; border-bottom: 1px solid #eee; color: #333; font-size: 1.05em; display: flex; justify-content: space-between; align-items: center; }
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid #f0f0f0; font-size: 0.9em; }
+th { background: #f8f9fa; color: #555; font-weight: 600; font-size: 0.82em; text-transform: uppercase; letter-spacing: 0.5px; }
+tr:hover { background: #f5f5f5; }
+tr.archived-row td { color: #999; font-style: italic; }
+tr:last-child td { border-bottom: none; }
+.btn-edit, .btn-view, .btn-archive { padding: 5px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 0.8em; margin: 0 3px; transition: all 0.3s; }
+.btn-edit { background: #e3f2fd; color: #1565c0; }
+.btn-view { background: #e8f5e9; color: #2e7d32; }
+.btn-archive { background: #f3e5f5; color: #6a1b9a; }
+.btn-edit:hover { background: #bbdefb; }
+.btn-view:hover { background: #c8e6c9; }
+.btn-archive:hover { background: #e1bee7; }
+.no-data { text-align: center; padding: 40px; color: #999; font-size: 0.95em; }
+
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 1000; }
+.modal { background: white; border-radius: 12px; width: 90%; max-width: 700px; max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+.modal-header { padding: 18px 24px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+.modal-header h3 { font-size: 1.1em; color: #333; }
+.modal-close { background: none; border: none; font-size: 1.5em; cursor: pointer; color: #999; transition: color 0.3s; }
+.modal-close:hover { color: #333; }
+.modal-body { padding: 24px; }
+.modal-footer { padding: 15px 24px; border-top: 1px solid #eee; display: flex; gap: 10px; justify-content: flex-end; }
+.btn-save { background: #1a237e; color: white; padding: 10px 24px; border: none; border-radius: 6px; cursor: pointer; font-size: 0.9em; transition: opacity 0.3s; }
+.btn-cancel { background: #e0e0e0; color: #333; padding: 10px 24px; border: none; border-radius: 6px; cursor: pointer; font-size: 0.9em; transition: opacity 0.3s; }
+.btn-save:hover { opacity: 0.9; }
+.btn-cancel:hover { opacity: 0.9; }
+
+.patient-detail { display: none; }
+.patient-detail.active { display: block; }
+.patient-header { background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); padding: 24px; margin-bottom: 20px; }
+.patient-header h2 { color: #1a237e; margin-bottom: 5px; }
+.patient-header .patient-meta { color: #666; font-size: 0.9em; }
+.patient-header .patient-meta span { margin-right: 20px; }
+.tabs { display: flex; gap: 0; margin-bottom: 20px; background: white; border-radius: 12px 12px 0 0; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+.tab { flex: 1; padding: 12px; text-align: center; cursor: pointer; background: #f8f9fa; border: none; font-size: 0.9em; color: #666; transition: all 0.3s; border-bottom: 3px solid transparent; }
+.tab.active { background: white; color: #1a237e; border-bottom-color: #1a237e; font-weight: 600; }
+.tab:hover:not(.active) { background: #eee; }
+.tab-content { background: white; border-radius: 0 0 12px 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); padding: 20px; margin-bottom: 20px; }
+.tab-pane { display: none; }
+.tab-pane.active { display: block; }
+.tab-pane h4 { color: #333; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+.btn-small { padding: 6px 14px; border: none; border-radius: 4px; cursor: pointer; font-size: 0.8em; transition: all 0.3s; }
+.btn-small-add { background: #2e7d32; color: white; }
+.btn-small-add:hover { opacity: 0.9; }
+.btn-small-edit { background: #e3f2fd; color: #1565c0; }
+.btn-small-delete { background: #ffebee; color: #d32f2f; }
+.btn-small-edit:hover { background: #bbdefb; }
+.btn-small-delete:hover { background: #ffcdd2; }
+
+.public-container { max-width: 800px; margin: 40px auto; padding: 0 20px; }
+.public-search-box { background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); padding: 30px; text-align: center; }
+.public-search-box h2 { color: #1a237e; margin-bottom: 8px; }
+.public-search-box p { color: #666; margin-bottom: 20px; font-size: 0.9em; }
+.public-search-box .search-row { display: flex; gap: 10px; max-width: 500px; margin: 0 auto; }
+.public-search-box input { flex: 1; padding: 12px 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 1em; }
+.public-search-box input:focus { outline: none; border-color: #1a237e; }
+.public-result { background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); margin-top: 20px; padding: 24px; }
+.public-result h3 { color: #1a237e; margin-bottom: 15px; border-bottom: 2px solid #e8eaf6; padding-bottom: 10px; }
+.public-result .info-row { display: flex; padding: 6px 0; border-bottom: 1px solid #f5f5f5; font-size: 0.9em; }
+.public-result .info-row .label { color: #666; width: 140px; flex-shrink: 0; }
+.public-result .info-row .value { color: #333; flex: 1; }
+.public-result .section { margin-top: 20px; }
+.public-result .section h4 { color: #333; margin-bottom: 10px; font-size: 0.95em; }
+.public-result .item { background: #f8f9fa; border-radius: 8px; padding: 12px 15px; margin-bottom: 8px; font-size: 0.88em; }
+.public-result .item .item-date { color: #1a237e; font-weight: 600; font-size: 0.82em; }
+.public-result .item p { margin: 3px 0; color: #555; }
+.public-not-found { text-align: center; color: #d32f2f; padding: 20px; }
+.doctor-login-link { text-align: center; margin-top: 20px; font-size: 0.85em; color: #999; }
+.doctor-login-link a { color: #1a237e; cursor: pointer; text-decoration: underline; }
+
+.config-doctors { margin-bottom: 20px; }
+.doctor-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; background: #f8f9fa; border-radius: 8px; margin-bottom: 8px; }
+.doctor-item .doc-info { font-size: 0.9em; }
+.doctor-item .doc-info strong { color: #333; }
+.doctor-item .doc-info span { color: #888; margin-left: 10px; }
+.doctor-item .btn-delete-doc { background: none; border: none; color: #d32f2f; cursor: pointer; font-size: 1.2em; }
+
+.emergency-section { margin-bottom: 20px; }
+.emergency-section h3 { color: #c62828; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+.emergency-item { background: #fff5f5; border-left: 4px solid #c62828; border-radius: 8px; padding: 15px; margin-bottom: 12px; }
+.emergency-item .em-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.emergency-item .em-date { color: #c62828; font-weight: 600; font-size: 0.85em; }
+.emergency-item .em-patient { font-weight: 600; color: #333; }
+.emergency-item .em-type { display: inline-block; background: #c62828; color: white; padding: 2px 10px; border-radius: 4px; font-size: 0.78em; font-weight: 600; }
+.em-vitals { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 6px; margin: 8px 0; padding: 8px; background: rgba(198,40,40,0.05); border-radius: 6px; }
+.em-vitals span { font-size: 0.82em; color: #555; }
+.em-vitals strong { color: #333; }
+
+@media (max-width: 768px) {
+  header { flex-direction: column; gap: 10px; text-align: center; }
+  .dashboard-header { flex-direction: column; }
+  .search-box { min-width: 100%; }
+  .modal { width: 95%; }
+  .tabs { flex-wrap: wrap; }
+  .tab { flex: 1 0 50%; }
+  .public-search-box .search-row { flex-direction: column; }
+  .form-row { flex-direction: column; gap: 0; }
+}
+</style>
+</head>
+<body>
+
+<header id="mainHeader">
+  <h1>&#x1fa7a; SAMU <span>| Sistema de Atención Médica</span></h1>
+  <div class="user-info" id="headerUserInfo">
+    <span id="headerUserName"></span>
+    <button class="btn-back hidden" id="btnBackToDashboard" onclick="showDashboard()">Volver al panel</button>
+    <button class="btn-back hidden" id="btnBackFromEmerg" onclick="showDashboard()">Volver al panel</button>
+    <button class="btn-logout hidden" id="btnLogout" onclick="logout()">Cerrar sesión</button>
+  </div>
+</header>
+
+<!-- LOGIN -->
+<div class="login-container" id="loginContainer">
+  <h2>&#x1fa7a; Acceso Médicos</h2>
+  <p class="subtitle">Ingrese sus credenciales para acceder al sistema</p>
+  <div class="form-group">
+    <label for="loginUser">Usuario</label>
+    <input type="text" id="loginUser" placeholder="Nombre de usuario" autocomplete="off">
+  </div>
+  <div class="form-group">
+    <label for="loginPass">Contraseña</label>
+    <input type="password" id="loginPass" placeholder="Contraseña" onkeydown="if(event.key==='Enter')doLogin()">
+  </div>
+  <button class="btn-primary" onclick="doLogin()">Iniciar sesión</button>
+  <div class="login-error" id="loginError"></div>
+  <div class="login-footer">
+    <a onclick="showPublicSearch()">&#x1f50d; Buscar paciente (sin sesión)</a>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="dashboard hidden" id="dashboardContainer">
+  <div class="dashboard-header">
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Buscar por nombre, apellidos o DNI..." onkeydown="if(event.key==='Enter')searchPatients()">
+      <button class="btn-search" onclick="searchPatients()">Buscar</button>
+    </div>
+    <button class="btn-add" onclick="openNewPatient()">+ Nuevo paciente</button>
+    <button class="btn-action" onclick="showPublicSearch()">&#x1f50d; Búsqueda pública</button>
+    <button class="btn-emergency" onclick="showEmergencySection()">&#x1f691; Informes de emergencia</button>
+    <button class="btn-action" style="background:#f57c00;" onclick="showDoctorConfig()">&#x2699; Médicos</button>
+    <button class="archive-toggle" id="archiveToggleBtn" onclick="toggleArchived()">&#x1f4c2; Ver archivados</button>
+  </div>
+
+  <!-- Patient List View -->
+  <div id="patientListView">
+    <div class="table-container">
+      <h3>&#x1f465; Pacientes <span id="patientCount" style="font-size:0.8em;color:#999;font-weight:400;"></span></h3>
+      <div id="patientTableBody">
+        <div class="no-data">Utilice el buscador para encontrar pacientes o cree uno nuevo.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Emergency Reports Section -->
+  <div id="emergencySectionView" style="display:none;">
+    <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;align-items:center;">
+      <div class="search-box" style="max-width:400px;">
+        <input type="text" id="emergSearchInput" placeholder="Buscar por paciente o DNI..." onkeydown="if(event.key==='Enter')searchEmergencies()">
+        <button class="btn-search" onclick="searchEmergencies()">Buscar</button>
+      </div>
+      <button class="btn-emergency" onclick="openNewEmergency()">+ Nuevo informe</button>
+    </div>
+    <div class="table-container">
+      <h3>&#x1f691; Informes de atención de emergencia</h3>
+      <div id="emergencyListBody">
+        <div class="no-data">No hay informes de emergencia registrados.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Patient Detail View -->
+  <div class="patient-detail" id="patientDetailView">
+    <div class="patient-header">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <div>
+          <h2 id="detailName"></h2>
+          <div class="patient-meta">
+            <span id="detailCitizen"></span>
+            <span id="detailBirth"></span>
+            <span id="detailPhone"></span>
+            <span id="detailAddress"></span>
+          </div>
+        </div>
+        <div>
+          <button class="btn-edit" onclick="editPatient(currentPatientId)" style="padding:8px 18px;font-size:0.85em;">Editar datos</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" data-tab="diagnoses" onclick="switchTab('diagnoses')">Diagnósticos</button>
+      <button class="tab" data-tab="prescriptions" onclick="switchTab('prescriptions')">Recetas</button>
+      <button class="tab" data-tab="appointments" onclick="switchTab('appointments')">Citas</button>
+      <button class="tab" data-tab="emergency" onclick="switchTab('emergency')" style="color:#c62828;">&#x1f691; Emergencias</button>
+    </div>
+
+    <div class="tab-content">
+      <div class="tab-pane active" id="tab-diagnoses">
+        <h4>Historial de diagnósticos
+          <button class="btn-small btn-small-add" onclick="openAddDiagnosis()">+ Añadir</button>
+        </h4>
+        <div id="diagnosesList"><div class="no-data">Sin diagnósticos registrados.</div></div>
+      </div>
+      <div class="tab-pane" id="tab-prescriptions">
+        <h4>Recetas médicas
+          <button class="btn-small btn-small-add" onclick="openAddPrescription()">+ Recetar</button>
+        </h4>
+        <div id="prescriptionsList"><div class="no-data">Sin recetas registradas.</div></div>
+      </div>
+      <div class="tab-pane" id="tab-appointments">
+        <h4>Citas programadas
+          <button class="btn-small btn-small-add" onclick="openAddAppointment()">+ Nueva cita</button>
+        </h4>
+        <div id="appointmentsList"><div class="no-data">Sin citas registradas.</div></div>
+      </div>
+      <div class="tab-pane" id="tab-emergency">
+        <h4>Informes de emergencia
+          <button class="btn-small btn-small-add" onclick="openNewEmergencyFromPatient()" style="background:#c62828;">+ Nuevo informe</button>
+        </h4>
+        <div id="emergencyReportsList"><div class="no-data">Sin informes de emergencia.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PUBLIC SEARCH -->
+<div class="public-container hidden" id="publicContainer">
+  <div class="public-search-box">
+    <h2>&#x1f50d; Consulta de expediente</h2>
+    <p>Busque por nombre completo o número de ciudadano (DNI) para ver su información médica.</p>
+    <div class="search-row">
+      <input type="text" id="publicSearchInput" placeholder="Nombre, apellidos o DNI..." onkeydown="if(event.key==='Enter')doPublicSearch()">
+      <button class="btn-primary" style="width:auto; padding:12px 25px;" onclick="doPublicSearch()">Buscar</button>
+    </div>
+    <div id="publicResult"></div>
+  </div>
+  <div class="doctor-login-link">
+    <a onclick="showLogin()">&#x1f512; Acceso para médicos</a>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay hidden" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modalTitle">Título</h3>
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+    </div>
+    <div class="modal-body" id="modalBody">
+    </div>
+    <div class="modal-footer" id="modalFooter">
+      <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+      <button class="btn-save" id="modalSaveBtn" onclick="modalSave()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
+<script>
+// ===== CONFIGURACIÓN DE FIREBASE =====
+// 1. Ve a https://console.firebase.google.com y crea un proyecto
+// 2. Ve a "Realtime Database" > "Crear base de datos" > modo "prueba"
+// 3. En "Configuración del proyecto" > "Tus apps" > "Web" copia los datos aquí:
+const firebaseConfig = {
+  apiKey: "AIzaSyAu6Bk2dTKyWVLxDwSNNK4xKqBukpWuDME",
+  authDomain: "emsdbrevo.firebaseapp.com",
+  databaseURL: "https://emsdbrevo-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "emsdbrevo",
+  storageBucket: "emsdbrevo.firebasestorage.app",
+  messagingSenderId: "553197209214",
+  appId: "1:553197209214:web:5d17e4ac48664070faba2f",
+  measurementId: "G-TQ17VFH770"
+};
+
+// ===== DATA LAYER =====
+const STORAGE_KEY = 'samu_ems_db';
+let dataCache = null;
+let firebaseReady = false;
+let firebaseRef = null;
+
+function initFirebase() {
+  if (!firebaseConfig || !firebaseConfig.databaseURL || firebaseConfig.databaseURL.includes('tu-proyecto')) {
+    return false;
+  }
+  try {
+    const app = firebase.initializeApp(firebaseConfig);
+    firebaseRef = firebase.database().ref('samuData');
+    firebaseReady = true;
+    return true;
+  } catch (e) {
+    console.warn('Error al iniciar Firebase:', e.message);
+    return false;
+  }
+}
+
+async function loadDataFromFirebase() {
+  if (!firebaseReady) return false;
+  try {
+    const snapshot = await firebaseRef.once('value');
+    const data = snapshot.val();
+    if (data) {
+      dataCache = data;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      return true;
+    }
+  } catch (e) {
+    console.warn('Error al leer de Firebase:', e.message);
+  }
+  return false;
+}
+
+function getData() {
+  if (dataCache) return dataCache;
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (raw) {
+    try { dataCache = JSON.parse(raw); return dataCache; } catch(e) {}
+  }
+  dataCache = { doctors: [], patients: [], nextPatientId: 1, nextDoctorId: 1, nextEmergencyId: 1 };
+  return dataCache;
+}
+
+function saveData(data) {
+  dataCache = data;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  if (firebaseReady && firebaseRef) {
+    firebaseRef.set(data).catch(e => console.warn('Error al guardar en Firebase:', e.message));
+  }
+}
+
+async function initData() {
+  initFirebase();
+  const connected = await loadDataFromFirebase();
+  const data = getData();
+  if (data.doctors.length === 0) {
+    data.doctors.push(
+      { id: 1, username: 'medico1', password: 'medico1', name: 'Dr. García', specialty: 'Medicina General' },
+      { id: 2, username: 'medico2', password: 'medico2', name: 'Dra. López', specialty: 'Emergencias' },
+      { id: 3, username: 'medico3', password: 'medico3', name: 'Dr. Rodríguez', specialty: 'Traumatología' }
+    );
+    data.nextDoctorId = 4;
+    saveData(data);
+  }
+  console.log(connected ? 'Firebase conectado - datos compartidos en la nube' : 'Modo local - datos solo en este navegador');
+}
+
+// ===== AUTH =====
+let currentDoctor = null;
+
+function doLogin() {
+  const user = document.getElementById('loginUser').value.trim();
+  const pass = document.getElementById('loginPass').value.trim();
+  const errEl = document.getElementById('loginError');
+  errEl.textContent = '';
+  if (!user || !pass) { errEl.textContent = 'Ingrese usuario y contraseña.'; return; }
+  const data = getData();
+  const doc = data.doctors.find(d => d.username === user && d.password === pass);
+  if (!doc) { errEl.textContent = 'Credenciales inválidas.'; return; }
+  currentDoctor = doc;
+  document.getElementById('loginContainer').classList.add('hidden');
+  document.getElementById('dashboardContainer').classList.remove('hidden');
+  document.getElementById('publicContainer').classList.add('hidden');
+  document.getElementById('headerUserName').textContent = doc.name + ' (' + doc.specialty + ')';
+  document.getElementById('btnLogout').classList.remove('hidden');
+  document.getElementById('btnBackToDashboard').classList.add('hidden');
+  document.getElementById('btnBackFromEmerg').classList.add('hidden');
+  document.getElementById('loginUser').value = '';
+  document.getElementById('loginPass').value = '';
+  errEl.textContent = '';
+  document.getElementById('patientDetailView').classList.remove('active');
+  document.getElementById('patientListView').style.display = 'block';
+  document.getElementById('emergencySectionView').style.display = 'none';
+  searchPatients();
+}
+
+function logout() {
+  currentDoctor = null;
+  document.getElementById('loginContainer').classList.remove('hidden');
+  document.getElementById('dashboardContainer').classList.add('hidden');
+  document.getElementById('publicContainer').classList.add('hidden');
+  document.getElementById('headerUserName').textContent = '';
+  document.getElementById('btnLogout').classList.add('hidden');
+  document.getElementById('btnBackToDashboard').classList.add('hidden');
+  document.getElementById('btnBackFromEmerg').classList.add('hidden');
+  document.getElementById('patientDetailView').classList.remove('active');
+  document.getElementById('patientListView').style.display = 'block';
+  document.getElementById('emergencySectionView').style.display = 'none';
+}
+
+function showLogin() {
+  document.getElementById('publicContainer').classList.add('hidden');
+  document.getElementById('loginContainer').classList.remove('hidden');
+  document.getElementById('dashboardContainer').classList.add('hidden');
+  document.getElementById('headerUserName').textContent = '';
+  document.getElementById('btnLogout').classList.add('hidden');
+}
+
+function showPublicSearch() {
+  document.getElementById('publicContainer').classList.remove('hidden');
+  document.getElementById('loginContainer').classList.add('hidden');
+  document.getElementById('dashboardContainer').classList.add('hidden');
+  document.getElementById('headerUserName').textContent = '';
+  document.getElementById('btnLogout').classList.add('hidden');
+  document.getElementById('publicSearchInput').value = '';
+  document.getElementById('publicResult').innerHTML = '';
+}
+
+// ===== PATIENTS LIST =====
+let showArchived = false;
+
+function toggleArchived() {
+  showArchived = !showArchived;
+  const btn = document.getElementById('archiveToggleBtn');
+  btn.textContent = showArchived ? '&#x1f4c2; Ocultar archivados' : '&#x1f4c2; Ver archivados';
+  btn.classList.toggle('active', showArchived);
+  searchPatients();
+}
+
+function searchPatients() {
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  const data = getData();
+  let results = data.patients;
+  if (!showArchived) {
+    results = results.filter(p => !p.archived);
+  }
+  if (q) {
+    results = results.filter(p =>
+      p.firstName.toLowerCase().includes(q) ||
+      p.lastName.toLowerCase().includes(q) ||
+      p.citizenNumber.toLowerCase().includes(q)
+    );
+  }
+  renderPatientList(results);
+  document.getElementById('patientCount').textContent = '(' + results.length + ' total)';
+}
+
+function renderPatientList(patients) {
+  const container = document.getElementById('patientTableBody');
+  if (patients.length === 0) {
+    container.innerHTML = '<div class="no-data">No se encontraron pacientes.</div>';
+    return;
+  }
+  let html = '<table><thead><tr><th>DNI</th><th>Nombre</th><th>Teléfono</th><th>Acciones</th></tr></thead><tbody>';
+  patients.forEach(p => {
+    const isArchived = p.archived;
+    html += '<tr class="' + (isArchived ? 'archived-row' : '') + '">' +
+      '<td>' + escHtml(p.citizenNumber) + (isArchived ? ' &#x1f4c2;' : '') + '</td>' +
+      '<td><strong>' + escHtml(p.firstName + ' ' + p.lastName) + '</strong>' + (isArchived ? ' <span style="color:#999;font-size:0.8em;">(archivado)</span>' : '') + '</td>' +
+      '<td>' + escHtml(p.phone || '-') + '</td>' +
+      '<td>' +
+        '<button class="btn-view" onclick="viewPatient(' + p.id + ')">Ver</button>' +
+        '<button class="btn-edit" onclick="editPatient(' + p.id + ')">Editar</button>' +
+        (isArchived
+          ? '<button class="btn-archive" onclick="restorePatient(' + p.id + ')">Restaurar</button>'
+          : '<button class="btn-archive" onclick="archivePatient(' + p.id + ')">Archivar</button>') +
+      '</td>' +
+      '</tr>';
+  });
+  html += '</tbody></table>';
+  container.innerHTML = html;
+}
+
+function archivePatient(id) {
+  if (!confirm('¿Archivar este expediente? El paciente no se borrará, quedará archivado y podrá restaurarse después.')) return;
+  const data = getData();
+  const p = data.patients.find(x => x.id === id);
+  if (p) { p.archived = true; }
+  saveData(data);
+  if (currentPatientId === id) { showDashboard(); }
+  searchPatients();
+}
+
+function restorePatient(id) {
+  const data = getData();
+  const p = data.patients.find(x => x.id === id);
+  if (p) { p.archived = false; }
+  saveData(data);
+  searchPatients();
+}
+
+// ===== PATIENT DETAIL =====
+let currentPatientId = null;
+
+function viewPatient(id) {
+  const data = getData();
+  const p = data.patients.find(x => x.id === id);
+  if (!p) return;
+  currentPatientId = id;
+  document.getElementById('patientListView').style.display = 'none';
+  document.getElementById('emergencySectionView').style.display = 'none';
+  document.getElementById('patientDetailView').classList.add('active');
+  document.getElementById('btnBackToDashboard').classList.remove('hidden');
+  document.getElementById('btnBackFromEmerg').classList.add('hidden');
+
+  document.getElementById('detailName').textContent = p.firstName + ' ' + p.lastName;
+  document.getElementById('detailCitizen').textContent = 'DNI: ' + p.citizenNumber;
+  document.getElementById('detailBirth').textContent = 'FN: ' + (p.dateOfBirth || '-');
+  document.getElementById('detailPhone').textContent = 'Tel: ' + (p.phone || '-');
+  document.getElementById('detailAddress').textContent = 'Dir: ' + (p.address || '-');
+
+  renderDiagnoses();
+  renderPrescriptions();
+  renderAppointments();
+  renderPatientEmergencies();
+  switchTab('diagnoses');
+}
+
+function showDashboard() {
+  document.getElementById('patientDetailView').classList.remove('active');
+  document.getElementById('patientListView').style.display = 'block';
+  document.getElementById('emergencySectionView').style.display = 'none';
+  document.getElementById('btnBackToDashboard').classList.add('hidden');
+  document.getElementById('btnBackFromEmerg').classList.add('hidden');
+  searchPatients();
+}
+
+// ===== TABS =====
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+  document.querySelectorAll('.tab-pane').forEach(t => t.classList.toggle('active', t.id === 'tab-' + tab));
+}
+
+// ===== RENDER SECTIONS =====
+function renderDiagnoses() {
+  const data = getData();
+  const p = data.patients.find(x => x.id === currentPatientId);
+  if (!p) return;
+  const list = document.getElementById('diagnosesList');
+  if (!p.diagnoses || p.diagnoses.length === 0) {
+    list.innerHTML = '<div class="no-data">Sin diagnósticos registrados.</div>'; return;
+  }
+  let html = '';
+  p.diagnoses.forEach((d, i) => {
+    html += '<div class="item" style="background:#f8f9fa;border-radius:8px;padding:12px 15px;margin-bottom:8px;">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;">' +
+      '<span class="item-date">' + escHtml(d.date) + ' | ' + escHtml(d.doctor) + '</span>' +
+      '<div><button class="btn-small btn-small-edit" onclick="editDiagnosis(' + i + ')">Editar</button> ' +
+      '<button class="btn-small btn-small-delete" onclick="deleteDiagnosis(' + i + ')">Eliminar</button></div></div>' +
+      '<p style="margin-top:6px;"><strong>' + escHtml(d.description) + '</strong></p>' +
+      (d.notes ? '<p style="color:#666;font-size:0.85em;">' + escHtml(d.notes) + '</p>' : '') + '</div>';
+  });
+  list.innerHTML = html;
+}
+
+function renderPrescriptions() {
+  const data = getData();
+  const p = data.patients.find(x => x.id === currentPatientId);
+  if (!p) return;
+  const list = document.getElementById('prescriptionsList');
+  if (!p.prescriptions || p.prescriptions.length === 0) {
+    list.innerHTML = '<div class="no-data">Sin recetas registradas.</div>'; return;
+  }
+  let html = '';
+  p.prescriptions.forEach((r, i) => {
+    html += '<div class="item" style="background:#f8f9fa;border-radius:8px;padding:12px 15px;margin-bottom:8px;">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;">' +
+      '<span class="item-date">' + escHtml(r.date) + ' | ' + escHtml(r.doctor) + '</span>' +
+      '<div><button class="btn-small btn-small-edit" onclick="editPrescription(' + i + ')">Editar</button> ' +
+      '<button class="btn-small btn-small-delete" onclick="deletePrescription(' + i + ')">Eliminar</button></div></div>' +
+      '<p style="margin-top:6px;"><strong>' + escHtml(r.medication) + '</strong> - ' + escHtml(r.dosage) + '</p>' +
+      (r.instructions ? '<p style="color:#666;font-size:0.85em;">' + escHtml(r.instructions) + '</p>' : '') + '</div>';
+  });
+  list.innerHTML = html;
+}
+
+function renderAppointments() {
+  const data = getData();
+  const p = data.patients.find(x => x.id === currentPatientId);
+  if (!p) return;
+  const list = document.getElementById('appointmentsList');
+  if (!p.appointments || p.appointments.length === 0) {
+    list.innerHTML = '<div class="no-data">Sin citas registradas.</div>'; return;
+  }
+  let html = '';
+  p.appointments.forEach((c, i) => {
+    const sc = c.status === 'Completada' ? '#2e7d32' : c.status === 'Cancelada' ? '#d32f2f' : '#f57c00';
+    html += '<div class="item" style="background:#f8f9fa;border-radius:8px;padding:12px 15px;margin-bottom:8px;">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;">' +
+      '<span class="item-date">' + escHtml(c.date) + ' ' + escHtml(c.time || '') + ' | ' + escHtml(c.doctor) + '</span>' +
+      '<div><button class="btn-small btn-small-edit" onclick="editAppointment(' + i + ')">Editar</button> ' +
+      '<button class="btn-small btn-small-delete" onclick="deleteAppointment(' + i + ')">Eliminar</button></div></div>' +
+      '<p style="margin-top:6px;"><strong>' + escHtml(c.reason) + '</strong></p>' +
+      '<p style="color:' + sc + ';font-weight:600;font-size:0.85em;">' + escHtml(c.status) + '</p></div>';
+  });
+  list.innerHTML = html;
+}
+
+function renderPatientEmergencies() {
+  const data = getData();
+  const p = data.patients.find(x => x.id === currentPatientId);
+  if (!p) return;
+  const list = document.getElementById('emergencyReportsList');
+  const reports = data.emergencyReports ? data.emergencyReports.filter(r => r.patientId === currentPatientId) : [];
+  if (reports.length === 0) {
+    list.innerHTML = '<div class="no-data">Sin informes de emergencia.</div>'; return;
+  }
+  let html = '';
+  reports.forEach((r, i) => {
+    html += '<div class="emergency-item">' +
+      '<div class="em-header"><span class="em-date">' + escHtml(r.date) + ' ' + escHtml(r.time || '') + '</span>' +
+      '<span class="em-type">' + escHtml(r.type) + '</span></div>' +
+      '<div><button class="btn-small btn-small-edit" onclick="editEmergency(' + r.id + ')">Editar</button> ' +
+      '<button class="btn-small btn-small-delete" onclick="deleteEmergency(' + r.id + ')">Eliminar</button></div>' +
+      '<p style="margin-top:6px;"><strong>Ubicación:</strong> ' + escHtml(r.location || '-') + '</p>' +
+      '<p><strong>Descripción:</strong> ' + escHtml(r.description) + '</p>' +
+      (r.vitalSigns ? '<div class="em-vitals">' +
+        (r.vitalSigns.bp ? '<span>PA: <strong>' + escHtml(r.vitalSigns.bp) + '</strong></span>' : '') +
+        (r.vitalSigns.hr ? '<span>FC: <strong>' + escHtml(r.vitalSigns.hr) + '</strong></span>' : '') +
+        (r.vitalSigns.temp ? '<span>Temp: <strong>' + escHtml(r.vitalSigns.temp) + '</strong></span>' : '') +
+        (r.vitalSigns.sat ? '<span>SatO2: <strong>' + escHtml(r.vitalSigns.sat) + '</strong></span>' : '') +
+        (r.vitalSigns.rr ? '<span>FR: <strong>' + escHtml(r.vitalSigns.rr) + '</strong></span>' : '') +
+        '</div>' : '') +
+      (r.treatment ? '<p><strong>Tratamiento:</strong> ' + escHtml(r.treatment) + '</p>' : '') +
+      (r.observations ? '<p style="color:#666;font-size:0.85em;"><strong>Observaciones:</strong> ' + escHtml(r.observations) + '</p>' : '') +
+      '<p style="font-size:0.8em;color:#999;margin-top:4px;">Atendido por: ' + escHtml(r.doctor) + '</p></div>';
+  });
+  list.innerHTML = html;
+}
+
+// ===== EMERGENCY REPORTS SECTION =====
+function showEmergencySection() {
+  document.getElementById('patientListView').style.display = 'none';
+  document.getElementById('patientDetailView').classList.remove('active');
+  document.getElementById('emergencySectionView').style.display = 'block';
+  document.getElementById('btnBackToDashboard').classList.add('hidden');
+  document.getElementById('btnBackFromEmerg').classList.remove('hidden');
+  document.getElementById('emergSearchInput').value = '';
+  searchEmergencies();
+}
+
+function searchEmergencies() {
+  const q = document.getElementById('emergSearchInput').value.trim().toLowerCase();
+  const data = getData();
+  let reports = data.emergencyReports || [];
+  if (q) {
+    reports = reports.filter(r => {
+      const p = data.patients.find(x => x.id === r.patientId);
+      return p && (
+        p.firstName.toLowerCase().includes(q) ||
+        p.lastName.toLowerCase().includes(q) ||
+        p.citizenNumber.toLowerCase().includes(q)
+      );
+    });
+  }
+  renderEmergencyList(reports);
+}
+
+function renderEmergencyList(reports) {
+  const container = document.getElementById('emergencyListBody');
+  const data = getData();
+  if (!reports || reports.length === 0) {
+    container.innerHTML = '<div class="no-data">No hay informes de emergencia.</div>'; return;
+  }
+  let html = '<table><thead><tr><th>Fecha</th><th>Paciente</th><th>DNI</th><th>Tipo</th><th>Acciones</th></tr></thead><tbody>';
+  reports.sort((a, b) => (b.date + ' ' + (b.time || '')) < (a.date + ' ' + (a.time || '')) ? -1 : 1);
+  reports.forEach(r => {
+    const p = data.patients.find(x => x.id === r.patientId);
+    const pName = p ? p.firstName + ' ' + p.lastName : 'Desconocido';
+    const pDNI = p ? p.citizenNumber : '-';
+    const dateStr = r.date + (r.time ? ' ' + r.time : '');
+    html += '<tr>' +
+      '<td>' + escHtml(dateStr) + '</td>' +
+      '<td><strong>' + escHtml(pName) + '</strong></td>' +
+      '<td>' + escHtml(pDNI) + '</td>' +
+      '<td><span class="em-type">' + escHtml(r.type) + '</span></td>' +
+      '<td>' +
+        '<button class="btn-view" onclick="viewEmergency(' + r.id + ')">Ver</button> ' +
+        '<button class="btn-edit" onclick="editEmergency(' + r.id + ')">Editar</button> ' +
+        '<button class="btn-archive" style="background:#ffebee;color:#d32f2f;" onclick="deleteEmergency(' + r.id + ')">Eliminar</button>' +
+      '</td></tr>';
+  });
+  html += '</tbody></table>';
+  container.innerHTML = html;
+}
+
+function viewEmergency(id) {
+  const data = getData();
+  const r = (data.emergencyReports || []).find(x => x.id === id);
+  if (!r) return;
+  const p = data.patients.find(x => x.id === r.patientId);
+  const pName = p ? p.firstName + ' ' + p.lastName + ' (DNI: ' + p.citizenNumber + ')' : 'Desconocido';
+  const vs = r.vitalSigns || {};
+  const html =
+    '<div class="emergency-item" style="margin:0;">' +
+    '<p><strong>Paciente:</strong> ' + escHtml(pName) + '</p>' +
+    '<p><strong>Fecha:</strong> ' + escHtml(r.date) + ' ' + escHtml(r.time || '') + '</p>' +
+    '<p><strong>Tipo de emergencia:</strong> ' + escHtml(r.type) + '</p>' +
+    '<p><strong>Ubicación:</strong> ' + escHtml(r.location || '-') + '</p>' +
+    '<p><strong>Descripción:</strong> ' + escHtml(r.description) + '</p>' +
+    (vs.bp || vs.hr || vs.temp || vs.sat || vs.rr ? '<p><strong>Signos vitales:</strong></p>' +
+    '<div class="em-vitals">' +
+      (vs.bp ? '<span>PA: <strong>' + escHtml(vs.bp) + '</strong></span>' : '') +
+      (vs.hr ? '<span>FC: <strong>' + escHtml(vs.hr) + '</strong></span>' : '') +
+      (vs.temp ? '<span>Temp: <strong>' + escHtml(vs.temp) + '</strong></span>' : '') +
+      (vs.sat ? '<span>SatO2: <strong>' + escHtml(vs.sat) + '</strong></span>' : '') +
+      (vs.rr ? '<span>FR: <strong>' + escHtml(vs.rr) + '</strong></span>' : '') +
+    '</div>' : '') +
+    (r.treatment ? '<p><strong>Tratamiento aplicado:</strong> ' + escHtml(r.treatment) + '</p>' : '') +
+    (r.observations ? '<p><strong>Observaciones:</strong> ' + escHtml(r.observations) + '</p>' : '') +
+    '<p style="font-size:0.85em;color:#999;margin-top:8px;">Atendido por: ' + escHtml(r.doctor) + '</p></div>';
+  openModal('Informe de emergencia', html, null);
+}
+
+let editingEmergencyId = null;
+
+function openNewEmergency() {
+  editingEmergencyId = null;
+  const data = getData();
+  let patientOpts = '<option value="">-- Seleccionar o escribir DNI/nombre --</option>';
+  data.patients.forEach(p => {
+    patientOpts += '<option value="' + p.id + '">' + escHtml(p.firstName + ' ' + p.lastName + ' (DNI: ' + p.citizenNumber + ')') + '</option>';
+  });
+  const html =
+    '<div class="form-group"><label>Paciente</label>' +
+    '<select id="fEmergPatient" onchange="document.getElementById(\'fEmergPatientName\').value=this.value">' +
+    patientOpts + '</select></div>' +
+    '<div class="form-group"><label>O buscar por DNI o nombre</label><input type="text" id="fEmergPatientSearch" placeholder="Escriba nombre o DNI..." oninput="filterEmergPatientList()"></div>' +
+    '<div class="form-group"><label>Fecha</label><input type="date" id="fEmergDate"></div>' +
+    '<div class="form-group"><label>Hora</label><input type="time" id="fEmergTime"></div>' +
+    '<div class="form-group"><label>Tipo de emergencia</label>' +
+    '<select id="fEmergType"><option value="Accidente">Accidente</option><option value="Paro cardíaco">Paro cardíaco</option><option value="Traumatismo">Traumatismo</option><option value="Quemadura">Quemadura</option><option value="Intoxicación">Intoxicación</option><option value="Problema respiratorio">Problema respiratorio</option><option value="Problema neurológico">Problema neurológico</option><option value="Parto">Parto</option><option value="Agresión">Agresión</option><option value="Otro">Otro</option></select></div>' +
+    '<div class="form-group"><label>Ubicación del incidente</label><input type="text" id="fEmergLocation" placeholder="Calle, zona, etc."></div>' +
+    '<div class="form-group"><label>Descripción de la emergencia</label><textarea id="fEmergDesc" rows="3" placeholder="Describa lo ocurrido..."></textarea></div>' +
+    '<h5 style="color:#333;margin:15px 0 10px;">Signos vitales</h5>' +
+    '<div class="form-row"><div class="form-group"><label>Presión arterial</label><input type="text" id="fEmergBP" placeholder="Ej: 120/80"></div>' +
+    '<div class="form-group"><label>Frec. cardíaca</label><input type="text" id="fEmergHR" placeholder="Ej: 80 lpm"></div></div>' +
+    '<div class="form-row"><div class="form-group"><label>Temperatura</label><input type="text" id="fEmergTemp" placeholder="Ej: 36.5 °C"></div>' +
+    '<div class="form-group"><label>Sat O2</label><input type="text" id="fEmergSat" placeholder="Ej: 98%"></div></div>' +
+    '<div class="form-group"><label>Frec. respiratoria</label><input type="text" id="fEmergRR" placeholder="Ej: 16 rpm"></div>' +
+    '<div class="form-group"><label>Tratamiento aplicado</label><textarea id="fEmergTreatment" rows="2" placeholder="Tratamiento pre-hospitalario..."></textarea></div>' +
+    '<div class="form-group"><label>Observaciones</label><textarea id="fEmergObs" rows="2" placeholder="Observaciones adicionales..."></textarea></div>';
+  openModal('Nuevo informe de emergencia', html, () => saveEmergencyModal());
+  document.getElementById('modalSaveBtn').textContent = 'Guardar informe';
+  document.getElementById('fEmergDate').value = new Date().toISOString().split('T')[0];
+  document.getElementById('fEmergTime').value = new Date().toTimeString().slice(0,5);
+}
+
+function openNewEmergencyFromPatient() {
+  openNewEmergency();
+  if (currentPatientId) {
+    document.getElementById('fEmergPatient').value = currentPatientId;
+  }
+}
+
+function filterEmergPatientList() {
+  const q = document.getElementById('fEmergPatientSearch').value.trim().toLowerCase();
+  const data = getData();
+  const sel = document.getElementById('fEmergPatient');
+  let opts = '<option value="">-- Seleccionar paciente --</option>';
+  const matches = data.patients.filter(p =>
+    !q || p.firstName.toLowerCase().includes(q) ||
+    p.lastName.toLowerCase().includes(q) ||
+    p.citizenNumber.toLowerCase().includes(q)
+  );
+  matches.forEach(p => {
+    opts += '<option value="' + p.id + '">' + escHtml(p.firstName + ' ' + p.lastName + ' (DNI: ' + p.citizenNumber + ')') + '</option>';
+  });
+  sel.innerHTML = opts;
+}
+
+function saveEmergencyModal() {
+  const patientId = parseInt(document.getElementById('fEmergPatient').value);
+  if (!patientId) { alert('Debe seleccionar un paciente.'); return; }
+  const date = document.getElementById('fEmergDate').value;
+  const time = document.getElementById('fEmergTime').value;
+  const type = document.getElementById('fEmergType').value;
+  const location = document.getElementById('fEmergLocation').value.trim();
+  const description = document.getElementById('fEmergDesc').value.trim();
+  const bp = document.getElementById('fEmergBP').value.trim();
+  const hr = document.getElementById('fEmergHR').value.trim();
+  const temp = document.getElementById('fEmergTemp').value.trim();
+  const sat = document.getElementById('fEmergSat').value.trim();
+  const rr = document.getElementById('fEmergRR').value.trim();
+  const treatment = document.getElementById('fEmergTreatment').value.trim();
+  const observations = document.getElementById('fEmergObs').value.trim();
+
+  if (!date || !description || !type) { alert('Fecha, tipo y descripción son obligatorios.'); return; }
+
+  const data = getData();
+
+  if (editingEmergencyId) {
+    const r = (data.emergencyReports || []).find(x => x.id === editingEmergencyId);
+    if (r) {
+      r.patientId = patientId;
+      r.date = date;
+      r.time = time;
+      r.type = type;
+      r.location = location;
+      r.description = description;
+      r.vitalSigns = { bp, hr, temp, sat, rr };
+      r.treatment = treatment;
+      r.observations = observations;
+    }
+  } else {
+    if (!data.emergencyReports) data.emergencyReports = [];
+    if (!data.nextEmergencyId) data.nextEmergencyId = 1;
+    data.emergencyReports.push({
+      id: data.nextEmergencyId++,
+      patientId: patientId,
+      date: date,
+      time: time,
+      type: type,
+      location: location,
+      description: description,
+      vitalSigns: { bp, hr, temp, sat, rr },
+      treatment: treatment,
+      observations: observations,
+      doctor: currentDoctor.name
+    });
+  }
+  saveData(data);
+  closeModal();
+  searchEmergencies();
+  if (currentPatientId) renderPatientEmergencies();
+}
+
+function editEmergency(id) {
+  editingEmergencyId = id;
+  const data = getData();
+  const r = (data.emergencyReports || []).find(x => x.id === id);
+  if (!r) return;
+  let patientOpts = '<option value="">-- Seleccionar paciente --</option>';
+  data.patients.forEach(p => {
+    const sel = p.id === r.patientId ? ' selected' : '';
+    patientOpts += '<option value="' + p.id + '"' + sel + '>' + escHtml(p.firstName + ' ' + p.lastName + ' (DNI: ' + p.citizenNumber + ')') + '</option>';
+  });
+  const vs = r.vitalSigns || {};
+  const html =
+    '<div class="form-group"><label>Paciente</label>' +
+    '<select id="fEmergPatient">' + patientOpts + '</select></div>' +
+    '<div class="form-group"><label>Fecha</label><input type="date" id="fEmergDate" value="' + escAttr(r.date) + '"></div>' +
+    '<div class="form-group"><label>Hora</label><input type="time" id="fEmergTime" value="' + escAttr(r.time || '') + '"></div>' +
+    '<div class="form-group"><label>Tipo de emergencia</label>' +
+    '<select id="fEmergType">' +
+    ['Accidente','Paro cardíaco','Traumatismo','Quemadura','Intoxicación','Problema respiratorio','Problema neurológico','Parto','Agresión','Otro']
+      .map(t => '<option value="' + t + '"' + (r.type === t ? ' selected' : '') + '>' + t + '</option>').join('') +
+    '</select></div>' +
+    '<div class="form-group"><label>Ubicación</label><input type="text" id="fEmergLocation" value="' + escAttr(r.location || '') + '"></div>' +
+    '<div class="form-group"><label>Descripción</label><textarea id="fEmergDesc" rows="3">' + escHtml(r.description) + '</textarea></div>' +
+    '<h5 style="color:#333;margin:15px 0 10px;">Signos vitales</h5>' +
+    '<div class="form-row"><div class="form-group"><label>PA</label><input type="text" id="fEmergBP" value="' + escAttr(vs.bp || '') + '"></div>' +
+    '<div class="form-group"><label>FC</label><input type="text" id="fEmergHR" value="' + escAttr(vs.hr || '') + '"></div></div>' +
+    '<div class="form-row"><div class="form-group"><label>Temperatura</label><input type="text" id="fEmergTemp" value="' + escAttr(vs.temp || '') + '"></div>' +
+    '<div class="form-group"><label>Sat O2</label><input type="text" id="fEmergSat" value="' + escAttr(vs.sat || '') + '"></div></div>' +
+    '<div class="form-group"><label>FR</label><input type="text" id="fEmergRR" value="' + escAttr(vs.rr || '') + '"></div>' +
+    '<div class="form-group"><label>Tratamiento</label><textarea id="fEmergTreatment" rows="2">' + escHtml(r.treatment || '') + '</textarea></div>' +
+    '<div class="form-group"><label>Observaciones</label><textarea id="fEmergObs" rows="2">' + escHtml(r.observations || '') + '</textarea></div>';
+  openModal('Editar informe de emergencia', html, () => saveEmergencyModal());
+  document.getElementById('modalSaveBtn').textContent = 'Guardar cambios';
+}
+
+function deleteEmergency(id) {
+  if (!confirm('¿Eliminar este informe de emergencia?')) return;
+  const data = getData();
+  if (data.emergencyReports) {
+    data.emergencyReports = data.emergencyReports.filter(r => r.id !== id);
+  }
+  saveData(data);
+  searchEmergencies();
+  if (currentPatientId) renderPatientEmergencies();
+}
+
+// ===== MODAL SYSTEM =====
+let modalCallback = null;
+
+function openModal(title, html, saveCallback) {
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalBody').innerHTML = html;
+  document.getElementById('modalOverlay').classList.remove('hidden');
+  modalCallback = saveCallback;
+  document.getElementById('modalSaveBtn').style.display = saveCallback ? 'inline-block' : 'none';
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.add('hidden');
+  modalCallback = null;
+}
+
+function modalSave() {
+  if (modalCallback) modalCallback();
+}
+
+// ===== NEW / EDIT PATIENT =====
+let editingPatientId = null;
+
+function openNewPatient() {
+  editingPatientId = null;
+  const html =
+    '<div class="form-group"><label>DNI / Nº Ciudadano</label><input type="text" id="fCitizen" placeholder="Ej: 123456"></div>' +
+    '<div class="form-group"><label>Nombre</label><input type="text" id="fFirstName" placeholder="Nombre"></div>' +
+    '<div class="form-group"><label>Apellidos</label><input type="text" id="fLastName" placeholder="Apellidos"></div>' +
+    '<div class="form-group"><label>Fecha de nacimiento</label><input type="date" id="fBirth"></div>' +
+    '<div class="form-group"><label>Teléfono</label><input type="text" id="fPhone" placeholder="Teléfono"></div>' +
+    '<div class="form-group"><label>Dirección</label><input type="text" id="fAddress" placeholder="Dirección"></div>';
+  openModal('Nuevo paciente', html, () => savePatientModal());
+}
+
+function editPatient(id) {
+  const data = getData();
+  const p = data.patients.find(x => x.id === id);
+  if (!p) return;
+  editingPatientId = id;
+  const html =
+    '<div class="form-group"><label>DNI / Nº Ciudadano</label><input type="text" id="fCitizen" value="' + escAttr(p.citizenNumber) + '"></div>' +
+    '<div class="form-group"><label>Nombre</label><input type="text" id="fFirstName" value="' + escAttr(p.firstName) + '"></div>' +
+    '<div class="form-group"><label>Apellidos</label><input type="text" id="fLastName" value="' + escAttr(p.lastName) + '"></div>' +
+    '<div class="form-group"><label>Fecha de nacimiento</label><input type="date" id="fBirth" value="' + escAttr(p.dateOfBirth || '') + '"></div>' +
+    '<div class="form-group"><label>Teléfono</label><input type="text" id="fPhone" value="' + escAttr(p.phone || '') + '"></div>' +
+    '<div class="form-group"><label>Dirección</label><input type="text" id="fAddress" value="' + escAttr(p.address || '') + '"></div>';
+  openModal('Editar paciente', html, () => savePatientModal());
+}
+
+function savePatientModal() {
+  const citizen = document.getElementById('fCitizen').value.trim();
+  const firstName = document.getElementById('fFirstName').value.trim();
+  const lastName = document.getElementById('fLastName').value.trim();
+  const dateOfBirth = document.getElementById('fBirth').value;
+  const phone = document.getElementById('fPhone').value.trim();
+  const address = document.getElementById('fAddress').value.trim();
+  if (!citizen || !firstName || !lastName) { alert('DNI, nombre y apellidos son obligatorios.'); return; }
+  const data = getData();
+  if (editingPatientId) {
+    const p = data.patients.find(x => x.id === editingPatientId);
+    if (p) {
+      p.citizenNumber = citizen; p.firstName = firstName; p.lastName = lastName;
+      p.dateOfBirth = dateOfBirth; p.phone = phone; p.address = address;
+    }
+  } else {
+    const newId = data.nextPatientId++;
+    data.patients.push({
+      id: newId, citizenNumber: citizen, firstName, lastName,
+      dateOfBirth, phone, address, archived: false,
+      diagnoses: [], prescriptions: [], appointments: []
+    });
+  }
+  saveData(data);
+  closeModal();
+  if (editingPatientId && currentPatientId === editingPatientId) { viewPatient(editingPatientId); }
+  searchPatients();
+}
+
+// ===== DIAGNOSES =====
+let editDiagnosisIndex = -1;
+
+function openAddDiagnosis() {
+  editDiagnosisIndex = -1;
+  const html =
+    '<div class="form-group"><label>Fecha</label><input type="date" id="fDiagDate"></div>' +
+    '<div class="form-group"><label>Diagnóstico</label><textarea id="fDiagDesc" rows="3" placeholder="Descripción del diagnóstico"></textarea></div>' +
+    '<div class="form-group"><label>Notas adicionales</label><textarea id="fDiagNotes" rows="2" placeholder="Notas..."></textarea></div>';
+  openModal('Nuevo diagnóstico', html, () => saveDiagnosisModal());
+  document.getElementById('fDiagDate').value = new Date().toISOString().split('T')[0];
+}
+
+function editDiagnosis(idx) {
+  const data = getData();
+  const p = data.patients.find(x => x.id === currentPatientId);
+  if (!p || !p.diagnoses[idx]) return;
+  editDiagnosisIndex = idx;
+  const d = p.diagnoses[idx];
+  const html =
+    '<div class="form-group"><label>Fecha</label><input type="date" id="fDiagDate" value="' + escAttr(d.date) + '"></div>' +
+    '<div class="form-group"><label>Diagnóstico</label><textarea id="fDiagDesc" rows="3">' + escHtml(d.description) + '</textarea></div>' +
+    '<div class="form-group"><label>Notas adicionales</label><textarea id="fDiagNotes" rows="2">' + escHtml(d.notes || '') + '</textarea></div>';
+  openModal('Editar diagnóstico', html, () => saveDiagnosisModal());
+}
+
+function saveDiagnosisModal() {
+  const date = document.getElementById('fDiagDate').value;
+  const description = document.getElementById('fDiagDesc').value.trim();
+  const notes = document.getElementById('fDiagNotes').value.trim();
+  if (!date || !description) { alert('Fecha y diagnóstico son obligatorios.'); return; }
+  const data = getData();
+  const p = data.patients.find(x => x.id === currentPatientId);
+  if (!p) return;
+  if (editDiagnosisIndex >= 0 && p.diagnoses[editDiagnosisIndex]) {
+    p.diagnoses[editDiagnosisIndex].date = date;
+    p.diagnoses[editDiagnosisIndex].description = description;
+    p.diagnoses[editDiagnosisIndex].notes = notes;
+  } else {
+    p.diagnoses.push({ date, description, notes, doctor: currentDoctor.name });
+  }
+  saveData(data);
+  closeModal();
+  renderDiagnoses();
+}
+
+function deleteDiagnosis(idx) {
+  if (!confirm('¿Eliminar este diagnóstico?')) return;
+  const data = getData();
+  const p = data.patients.find(x => x.id === currentPatientId);
+  if (!p) return;
+  p.diagnoses.splice(idx, 1);
+  saveData(data);
+  renderDiagnoses();
+}
+
+// ===== PRESCRIPTIONS =====
+let editPrescriptionIndex = -1;
+
+function openAddPrescription() {
+  editPrescriptionIndex = -1;
+  const html =
+    '<div class="form-group"><label>Fecha</label><input type="date" id="fRxDate"></div>' +
+    '<div class="form-group"><label>Medicamento</label><input type="text" id="fRxMed" placeholder="Nombre del fármaco"></div>' +
+    '<div class="form-group"><label>Dosis / Concentración</label><input type="text" id="fRxDosage" placeholder="Ej: 500mg, 1 comprimido"></div>' +
+    '<div class="form-group"><label>Instrucciones</label><textarea id="fRxInst" rows="2" placeholder="Ej: Cada 8 horas por 7 días"></textarea></div>';
+  openModal('Nueva receta', html, () => savePrescriptionModal());
+  document.getElementById('fRxDate').value = new Date().toISOString().split('T')[0];
+}
+
+function editPrescription(idx) {
+  const data = getData();
+  const p = data.patients.find(x => x.id === currentPatientId);
+  if (!p || !p.prescriptions[idx]) return;
+  editPrescriptionIndex = idx;
+  const r = p.prescriptions[idx];
+  const html =
+    '<div class="form-group"><label>Fecha</label><input type="date" id="fRxDate" value="' + escAttr(r.date) + '"></div>' +
+    '<div class="form-group"><label>Medicamento</label><input type="text" id="fRxMed" value="' + escAttr(r.medication) + '"></div>' +
+    '<div class="form-group"><label>Dosis / Concentración</label><input type="text" id="fRxDosage" value="' + escAttr(r.dosage) + '"></div>' +
+    '<div class="form-group"><label>Instrucciones</label><textarea id="fRxInst" rows="2">' + escHtml(r.instructions || '') + '</textarea></div>';
+  openModal('Editar receta', html, () => savePrescriptionModal());
+}
+
+function savePrescriptionModal() {
+  const date = document.getElementById('fRxDate').value;
+  const medication = document.getElementById('fRxMed').value.trim();
+  const dosage = document.getElementById('fRxDosage').value.trim();
+  const instructions = document.getElementById('fRxInst').value.trim();
+  if (!date || !medication || !dosage) { alert('Fecha, medicamento y dosis son obligatorios.'); return; }
+  const data = getData();
+  const p = data.patients.find(x => x.id === currentPatientId);
+  if (!p) return;
+  if (editPrescriptionIndex >= 0 && p.prescriptions[editPrescriptionIndex]) {
+    p.prescriptions[editPrescriptionIndex].date = date;
+    p.prescriptions[editPrescriptionIndex].medication = medication;
+    p.prescriptions[editPrescriptionIndex].dosage = dosage;
+    p.prescriptions[editPrescriptionIndex].instructions = instructions;
+  } else {
+    p.prescriptions.push({ date, medication, dosage, instructions, doctor: currentDoctor.name });
+  }
+  saveData(data);
+  closeModal();
+  renderPrescriptions();
+}
+
+function deletePrescription(idx) {
+  if (!confirm('¿Eliminar esta receta?')) return;
+  const data = getData();
+  const p = data.patients.find(x => x.id === currentPatientId);
+  if (!p) return;
+  p.prescriptions.splice(idx, 1);
+  saveData(data);
+  renderPrescriptions();
+}
+
+// ===== APPOINTMENTS =====
+let editAppointmentIndex = -1;
+
+function openAddAppointment() {
+  editAppointmentIndex = -1;
+  const html =
+    '<div class="form-group"><label>Fecha</label><input type="date" id="fCitaDate"></div>' +
+    '<div class="form-group"><label>Hora</label><input type="time" id="fCitaTime"></div>' +
+    '<div class="form-group"><label>Motivo</label><input type="text" id="fCitaReason" placeholder="Motivo de la cita"></div>' +
+    '<div class="form-group"><label>Estado</label><select id="fCitaStatus"><option value="Pendiente">Pendiente</option><option value="Completada">Completada</option><option value="Cancelada">Cancelada</option></select></div>';
+  openModal('Nueva cita', html, () => saveAppointmentModal());
+  document.getElementById('fCitaDate').value = new Date().toISOString().split('T')[0];
+}
+
+function editAppointment(idx) {
+  const data = getData();
+  const p = data.patients.find(x => x.id === currentPatientId);
+  if (!p || !p.appointments[idx]) return;
+  editAppointmentIndex = idx;
+  const c = p.appointments[idx];
+  const html =
+    '<div class="form-group"><label>Fecha</label><input type="date" id="fCitaDate" value="' + escAttr(c.date) + '"></div>' +
+    '<div class="form-group"><label>Hora</label><input type="time" id="fCitaTime" value="' + escAttr(c.time || '') + '"></div>' +
+    '<div class="form-group"><label>Motivo</label><input type="text" id="fCitaReason" value="' + escAttr(c.reason) + '"></div>' +
+    '<div class="form-group"><label>Estado</label><select id="fCitaStatus"><option value="Pendiente"' + (c.status === 'Pendiente' ? ' selected' : '') + '>Pendiente</option><option value="Completada"' + (c.status === 'Completada' ? ' selected' : '') + '>Completada</option><option value="Cancelada"' + (c.status === 'Cancelada' ? ' selected' : '') + '>Cancelada</option></select></div>';
+  openModal('Editar cita', html, () => saveAppointmentModal());
+}
+
+function saveAppointmentModal() {
+  const date = document.getElementById('fCitaDate').value;
+  const time = document.getElementById('fCitaTime').value;
+  const reason = document.getElementById('fCitaReason').value.trim();
+  const status = document.getElementById('fCitaStatus').value;
+  if (!date || !reason) { alert('Fecha y motivo son obligatorios.'); return; }
+  const data = getData();
+  const p = data.patients.find(x => x.id === currentPatientId);
+  if (!p) return;
+  if (editAppointmentIndex >= 0 && p.appointments[editAppointmentIndex]) {
+    p.appointments[editAppointmentIndex].date = date;
+    p.appointments[editAppointmentIndex].time = time;
+    p.appointments[editAppointmentIndex].reason = reason;
+    p.appointments[editAppointmentIndex].status = status;
+  } else {
+    p.appointments.push({ date, time, reason, status, doctor: currentDoctor.name });
+  }
+  saveData(data);
+  closeModal();
+  renderAppointments();
+}
+
+function deleteAppointment(idx) {
+  if (!confirm('¿Eliminar esta cita?')) return;
+  const data = getData();
+  const p = data.patients.find(x => x.id === currentPatientId);
+  if (!p) return;
+  p.appointments.splice(idx, 1);
+  saveData(data);
+  renderAppointments();
+}
+
+// ===== PUBLIC SEARCH =====
+function doPublicSearch() {
+  const q = document.getElementById('publicSearchInput').value.trim().toLowerCase();
+  const resultEl = document.getElementById('publicResult');
+  if (!q) { resultEl.innerHTML = '<div class="public-not-found">Ingrese un nombre o DNI para buscar.</div>'; return; }
+  const data = getData();
+  const matches = data.patients.filter(p =>
+    !p.archived && (
+      p.firstName.toLowerCase().includes(q) ||
+      p.lastName.toLowerCase().includes(q) ||
+      (p.firstName + ' ' + p.lastName).toLowerCase().includes(q) ||
+      p.citizenNumber.toLowerCase().includes(q)
+    )
+  );
+  if (matches.length === 0) {
+    resultEl.innerHTML = '<div class="public-not-found">No se encontraron pacientes con ese criterio.</div>'; return;
+  }
+  let html = '';
+  matches.forEach(p => {
+    html += '<div class="public-result">' +
+      '<h3>' + escHtml(p.firstName + ' ' + p.lastName) + '</h3>' +
+      '<div class="info-row"><span class="label">DNI:</span><span class="value">' + escHtml(p.citizenNumber) + '</span></div>' +
+      '<div class="info-row"><span class="label">Fecha nac.:</span><span class="value">' + escHtml(p.dateOfBirth || '-') + '</span></div>' +
+      '<div class="info-row"><span class="label">Teléfono:</span><span class="value">' + escHtml(p.phone || '-') + '</span></div>' +
+      '<div class="info-row"><span class="label">Dirección:</span><span class="value">' + escHtml(p.address || '-') + '</span></div>';
+
+    html += '<div class="section"><h4>&#x1f4cb; Diagnósticos</h4>';
+    if (p.diagnoses && p.diagnoses.length > 0) {
+      p.diagnoses.forEach(d => {
+        html += '<div class="item"><span class="item-date">' + escHtml(d.date) + ' | ' + escHtml(d.doctor) + '</span><p><strong>' + escHtml(d.description) + '</strong></p>' + (d.notes ? '<p>' + escHtml(d.notes) + '</p>' : '') + '</div>';
+      });
+    } else { html += '<div class="item" style="color:#999;">No hay diagnósticos registrados.</div>'; }
+    html += '</div>';
+
+    html += '<div class="section"><h4>&#x1f48a; Recetas</h4>';
+    if (p.prescriptions && p.prescriptions.length > 0) {
+      p.prescriptions.forEach(r => {
+        html += '<div class="item"><span class="item-date">' + escHtml(r.date) + ' | ' + escHtml(r.doctor) + '</span><p><strong>' + escHtml(r.medication) + '</strong> - ' + escHtml(r.dosage) + '</p>' + (r.instructions ? '<p>' + escHtml(r.instructions) + '</p>' : '') + '</div>';
+      });
+    } else { html += '<div class="item" style="color:#999;">No hay recetas registradas.</div>'; }
+    html += '</div>';
+
+    html += '<div class="section"><h4>&#x1f4c5; Citas</h4>';
+    if (p.appointments && p.appointments.length > 0) {
+      p.appointments.forEach(c => {
+        const sc = c.status === 'Completada' ? '#2e7d32' : c.status === 'Cancelada' ? '#d32f2f' : '#f57c00';
+        html += '<div class="item"><span class="item-date">' + escHtml(c.date) + ' ' + escHtml(c.time || '') + ' | ' + escHtml(c.doctor) + '</span><p><strong>' + escHtml(c.reason) + '</strong></p><p style="color:' + sc + ';font-weight:600;">' + escHtml(c.status) + '</p></div>';
+      });
+    } else { html += '<div class="item" style="color:#999;">No hay citas registradas.</div>'; }
+    html += '</div>';
+
+    html += '</div>';
+  });
+  resultEl.innerHTML = html;
+}
+
+// ===== DOCTOR CONFIG =====
+function showDoctorConfig() {
+  const data = getData();
+  let listHtml = '';
+  data.doctors.forEach(d => {
+    listHtml += '<div class="doctor-item"><div class="doc-info"><strong>' + escHtml(d.name) + '</strong> <span>@' + escHtml(d.username) + ' | ' + escHtml(d.specialty) + '</span></div>' +
+      '<button class="btn-delete-doc" onclick="deleteDoctor(' + d.id + ')" title="Eliminar médico">&#10005;</button></div>';
+  });
+  const html =
+    '<div class="config-doctors"><h4 style="margin-bottom:10px;">Médicos registrados</h4>' + listHtml + '</div>' +
+    '<hr style="margin:20px 0;border:none;border-top:1px solid #eee;">' +
+    '<h4 style="margin-bottom:12px;">Añadir nuevo médico</h4>' +
+    '<div class="form-group"><label>Nombre completo</label><input type="text" id="fNewDocName" placeholder="Ej: Dr. Pérez"></div>' +
+    '<div class="form-group"><label>Usuario</label><input type="text" id="fNewDocUser" placeholder="Ej: dr_perez"></div>' +
+    '<div class="form-group"><label>Contraseña</label><input type="text" id="fNewDocPass" placeholder="Contraseña"></div>' +
+    '<div class="form-group"><label>Especialidad</label><input type="text" id="fNewDocSpec" placeholder="Ej: Medicina General" value="Medicina General"></div>';
+  openModal('Configuración de médicos', html, () => addNewDoctor());
+  document.getElementById('modalSaveBtn').textContent = 'Añadir médico';
+}
+
+function addNewDoctor() {
+  const name = document.getElementById('fNewDocName').value.trim();
+  const username = document.getElementById('fNewDocUser').value.trim();
+  const password = document.getElementById('fNewDocPass').value.trim();
+  const specialty = document.getElementById('fNewDocSpec').value.trim();
+  if (!name || !username || !password) { alert('Todos los campos son obligatorios.'); return; }
+  const data = getData();
+  if (data.doctors.find(d => d.username === username)) { alert('Ese nombre de usuario ya existe.'); return; }
+  data.doctors.push({ id: data.nextDoctorId++, username, password, name, specialty });
+  saveData(data);
+  document.getElementById('modalSaveBtn').textContent = 'Añadir médico';
+  showDoctorConfig();
+}
+
+function deleteDoctor(id) {
+  const data = getData();
+  if (data.doctors.length <= 1) { alert('Debe haber al menos un médico.'); return; }
+  if (currentDoctor && currentDoctor.id === id) { alert('No puede eliminar su propia cuenta mientras está logueado.'); return; }
+  if (!confirm('¿Eliminar este médico?')) return;
+  data.doctors = data.doctors.filter(d => d.id !== id);
+  saveData(data);
+  showDoctorConfig();
+}
+
+// ===== UTILITIES =====
+function escHtml(str) {
+  if (!str) return '';
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+function escAttr(str) {
+  if (!str) return '';
+  return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+// ===== INIT =====
+initData();
+
+document.getElementById('modalOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+</script>
+</body>
+</html>
