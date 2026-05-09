@@ -194,7 +194,7 @@ tr:last-child td { border-bottom: none; }
     <button class="btn-add" onclick="openNewPatient()">+ Nuevo paciente</button>
     <button class="btn-action" onclick="showPublicSearch()">&#x1f50d; Búsqueda pública</button>
     <button class="btn-emergency" onclick="showEmergencySection()">&#x1f691; Informes de emergencia</button>
-    <button class="btn-action" style="background:#f57c00;" onclick="showDoctorConfig()">&#x2699; Médicos</button>
+    <button class="btn-action" style="background:#f57c00;" id="btnDoctorConfig" onclick="showDoctorConfig()">&#x2699; Médicos</button>
     <button class="archive-toggle" id="archiveToggleBtn" onclick="toggleArchived()">&#x1f4c2; Ver archivados</button>
   </div>
 
@@ -419,6 +419,7 @@ function doLogin() {
   document.getElementById('publicContainer').classList.add('hidden');
   document.getElementById('headerUserName').textContent = doc.name + ' (' + doc.specialty + ')';
   document.getElementById('btnLogout').classList.remove('hidden');
+  document.getElementById('btnDoctorConfig').style.display = doc.username === 'LVargas' ? 'inline-block' : 'none';
   document.getElementById('btnBackToDashboard').classList.add('hidden');
   document.getElementById('btnBackFromEmerg').classList.add('hidden');
   document.getElementById('loginUser').value = '';
@@ -1230,6 +1231,7 @@ function doPublicSearch() {
 
 // ===== DOCTOR CONFIG =====
 function showDoctorConfig() {
+  if (!currentDoctor || currentDoctor.username !== 'LVargas') { alert('Solo el Dr. Lucas Vargas puede gestionar médicos.'); return; }
   const data = getData();
   let listHtml = '';
   data.doctors.forEach(d => {
@@ -1249,6 +1251,7 @@ function showDoctorConfig() {
 }
 
 function addNewDoctor() {
+  if (!currentDoctor || currentDoctor.username !== 'LVargas') { alert('Solo el Dr. Lucas Vargas puede añadir médicos.'); return; }
   const name = document.getElementById('fNewDocName').value.trim();
   const username = document.getElementById('fNewDocUser').value.trim();
   const password = document.getElementById('fNewDocPass').value.trim();
@@ -1263,6 +1266,7 @@ function addNewDoctor() {
 }
 
 function deleteDoctor(id) {
+  if (!currentDoctor || currentDoctor.username !== 'LVargas') { alert('Solo el Dr. Lucas Vargas puede eliminar médicos.'); return; }
   const data = getData();
   if (data.doctors.length <= 1) { alert('Debe haber al menos un médico.'); return; }
   if (currentDoctor && currentDoctor.id === id) { alert('No puede eliminar su propia cuenta mientras está logueado.'); return; }
