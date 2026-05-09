@@ -779,6 +779,7 @@ function showDashboard() {
 function switchTab(tab) {
   document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
   document.querySelectorAll('.tab-pane').forEach(t => t.classList.toggle('active', t.id === 'tab-' + tab));
+  if (tab === 'timeline') renderTimeline();
 }
 
 // ===== RENDER SECTIONS =====
@@ -888,13 +889,24 @@ function renderTimeline() {
   if (!p) return;
   const container = document.getElementById('timelineContainer');
   var events = [];
-  if (p.diagnoses) p.diagnoses.forEach(function(d) { events.push({ date: d.date, type: 'diagnosis', data: d, label: 'Diagnóstico', order: 1 }); });
-  if (p.prescriptions) p.prescriptions.forEach(function(r) { events.push({ date: r.date, type: 'prescription', data: r, label: 'Receta', order: 2 }); });
-  if (p.appointments) p.appointments.forEach(function(c) { events.push({ date: c.date, type: 'appointment', data: c, label: 'Cita', order: 3 }); });
-  if (data.emergencyReports) data.emergencyReports.filter(function(r) { return r.patientId === currentPatientId; }).forEach(function(r) { events.push({ date: r.date, type: 'emergency', data: r, label: 'Emergencia', order: 4 }); });
+
+  if (p.diagnoses) p.diagnoses.forEach(function(d) {
+    events.push({ date: d.date, time: d.time || '', type: 'diagnosis', data: d, label: 'Diagnóstico', order: 1 });
+  });
+  if (p.prescriptions) p.prescriptions.forEach(function(r) {
+    events.push({ date: r.date, time: r.time || '', type: 'prescription', data: r, label: 'Receta', order: 2 });
+  });
+  if (p.appointments) p.appointments.forEach(function(c) {
+    events.push({ date: c.date, time: c.time || '', type: 'appointment', data: c, label: 'Cita', order: 3 });
+  });
+  if (data.emergencyReports) data.emergencyReports.filter(function(r) { return r.patientId === currentPatientId; }).forEach(function(r) {
+    events.push({ date: r.date, time: r.time || '', type: 'emergency', data: r, label: 'Emergencia', order: 4 });
+  });
 
   events.sort(function(a, b) {
-    if (a.date !== b.date) return a.date < b.date ? 1 : -1;
+    var dateA = a.date + ' ' + a.time;
+    var dateB = b.date + ' ' + b.time;
+    if (dateA !== dateB) return dateA < dateB ? 1 : -1;
     return a.order - b.order;
   });
 
@@ -903,25 +915,42 @@ function renderTimeline() {
     return;
   }
 
-  var html = '<div class="timeline">';
+  // Summary counts
+  var counts = { diagnosis: 0, prescription: 0, appointment: 0, emergency: 0 };
+  events.forEach(function(e) { counts[e.type]++; });
+  var summaryHtml = '<div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;">' +
+    '<span style="background:#e3f2fd;color:#1565c0;padding:4px 12px;border-radius:12px;font-size:0.82em;">' + counts.diagnosis + ' diagnósticos</span>' +
+    '<span style="background:#e8f5e9;color:#2e7d32;padding:4px 12px;border-radius:12px;font-size:0.82em;">' + counts.prescription + ' recetas</span>' +
+    '<span style="background:#fff3e0;color:#f57c00;padding:4px 12px;border-radius:12px;font-size:0.82em;">' + counts.appointment + ' citas</span>' +
+    '<span style="background:#ffebee;color:#c62828;padding:4px 12px;border-radius:12px;font-size:0.82em;">' + counts.emergency + ' emergencias</span>' +
+    '</div>';
+
+  var html = summaryHtml + '<div class="timeline">';
   events.forEach(function(e) {
     var tlClass = 'tl-' + e.type;
     var typeClass = { diagnosis: 'tl-type-diag', prescription: 'tl-type-rx', appointment: 'tl-type-cita', emergency: 'tl-type-emerg' }[e.type];
+    var icon = { diagnosis: '\u{1f4cb}', prescription: '\u{1f48a}', appointment: '\u{1f4c5}', emergency: '\u{1f691}' }[e.type];
     var body = '';
 
     if (e.type === 'diagnosis') {
       body = '<strong>' + escHtml(e.data.description) + '</strong>' + (e.data.notes ? '<br><span style="color:#666;">' + escHtml(e.data.notes) + '</span>' : '');
     } else if (e.type === 'prescription') {
-      body = '<strong>' + escHtml(e.data.medication) + '</strong> - ' + escHtml(e.data.dosage) + (e.data.instructions ? '<br><span style="color:#666;">' + escHtml(e.data.instructions) + '</span>' : '');
+      body = '<strong>' + escHtml(e.data.medication) + '</strong> — ' + escHtml(e.data.dosage) + (e.data.instructions ? '<br><span style="color:#666;">' + escHtml(e.data.instructions) + '</span>' : '');
     } else if (e.type === 'appointment') {
-      body = '<strong>' + escHtml(e.data.reason) + '</strong> - <span style="color:' + (e.data.status === 'Completada' ? '#2e7d32' : e.data.status === 'Cancelada' ? '#d32f2f' : '#f57c00') + ';">' + escHtml(e.data.status) + '</span>';
+      body = '<strong>' + escHtml(e.data.reason) + '</strong> — <span style="color:' + (e.data.status === 'Completada' ? '#2e7d32' : e.data.status === 'Cancelada' ? '#d32f2f' : '#f57c00') + ';font-weight:600;">' + escHtml(e.data.status) + '</span>';
     } else if (e.type === 'emergency') {
-      body = '<strong>' + escHtml(e.data.type) + '</strong> - ' + escHtml(e.data.description.substring(0, 100)) + (e.data.description.length > 100 ? '...' : '');
+      var triageBadge = '';
+      if (e.data.triage) {
+        var tc = 'triage-' + e.data.triage;
+        var tl = { rojo: 'ROJO', amarillo: 'AMARILLO', verde: 'VERDE' }[e.data.triage];
+        triageBadge = ' <span class="' + tc + '" style="font-size:0.75em;">' + tl + '</span>';
+      }
+      body = '<strong>' + escHtml(e.data.type) + '</strong>' + triageBadge + '<br>' + escHtml(e.data.description.substring(0, 120)) + (e.data.description.length > 120 ? '...' : '');
     }
 
     html += '<div class="timeline-item ' + tlClass + '">' +
       '<div class="tl-header">' +
-      '<span class="tl-date">' + escHtml(e.date) + (e.data.time ? ' ' + escHtml(e.data.time) : '') + ' | ' + escHtml(e.data.doctor || '') + '</span>' +
+      '<span class="tl-date">' + icon + ' ' + escHtml(e.date) + (e.time ? ' ' + escHtml(e.time) : '') + ' — ' + escHtml(e.data.doctor || 'Médico') + '</span>' +
       '<span class="tl-type ' + typeClass + '">' + e.label + '</span></div>' +
       '<div class="tl-body">' + body + '</div></div>';
   });
