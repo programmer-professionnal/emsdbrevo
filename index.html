@@ -892,7 +892,6 @@ function logout() {
   document.getElementById('btnDarkMode').classList.add('hidden');
   document.getElementById('notifBadge').classList.add('hidden');
 }
-}
 
 function showPublicSearch() {
   document.getElementById('publicContainer').classList.remove('hidden');
@@ -908,6 +907,8 @@ function showPublicSearch() {
   document.getElementById('patientDetailView').classList.remove('active');
   document.getElementById('patientListView').style.display = 'block';
   document.getElementById('emergencySectionView').style.display = 'none';
+  document.getElementById('publicSearchInput').value = '';
+  document.getElementById('publicResult').innerHTML = '';
 }
 
 function showLogin() {
@@ -919,18 +920,6 @@ function showLogin() {
   document.getElementById('btnNotifications').classList.add('hidden');
   document.getElementById('btnDarkMode').classList.add('hidden');
   document.getElementById('notifBadge').classList.add('hidden');
-}
-
-function showPublicSearch() {
-  document.getElementById('publicContainer').classList.remove('hidden');
-  document.getElementById('loginContainer').classList.add('hidden');
-  document.getElementById('dashboardContainer').classList.add('hidden');
-  document.getElementById('headerUserName').textContent = '';
-  document.getElementById('btnLogout').classList.add('hidden');
-  document.getElementById('btnNotifications').classList.add('hidden');
-  document.getElementById('notifBadge').classList.add('hidden');
-  document.getElementById('publicSearchInput').value = '';
-  document.getElementById('publicResult').innerHTML = '';
 }
 
 // ===== PATIENTS LIST =====
