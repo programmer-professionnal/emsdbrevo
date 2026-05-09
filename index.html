@@ -465,12 +465,22 @@ function getData() {
     }
   }
   if (!dataCache.patients) dataCache.patients = [];
+  else {
+    dataCache.patients.forEach(function(p) {
+      if (!p.diagnoses) p.diagnoses = [];
+      if (!p.prescriptions) p.prescriptions = [];
+      if (!p.appointments) p.appointments = [];
+      if (!p.allergies) p.allergies = [];
+      if (!p.chronicConditions) p.chronicConditions = [];
+    });
+  }
   if (!dataCache.doctors) { dataCache.doctors = []; }
   else { dataCache.doctors.forEach(d => { if (d.onDuty === undefined) d.onDuty = false; }); }
   if (!dataCache.nextPatientId) dataCache.nextPatientId = 1;
   if (!dataCache.nextDoctorId) dataCache.nextDoctorId = 1;
   if (!dataCache.nextEmergencyId) dataCache.nextEmergencyId = 1;
   if (!dataCache.emergencyReports) dataCache.emergencyReports = [];
+  else { dataCache.emergencyReports.forEach(function(r) { if (!r.triage) r.triage = 'amarillo'; }); }
   if (!dataCache.internalNotes) dataCache.internalNotes = '';
   if (!dataCache.auditLog) dataCache.auditLog = [];
   return dataCache;
