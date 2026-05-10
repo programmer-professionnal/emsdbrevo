@@ -4263,7 +4263,8 @@ function selectDrugForPrescription(name) {
       '<div class="form-group"><label>Fecha</label><input type="date" id="fRxDate" value="' + escAttr(d.date) + '"></div>' +
       '<div class="form-group"><label>Medicamento</label><div style="display:flex;gap:6px"><input type="text" id="fRxMed" value="' + escAttr(name) + '" style="flex:1"><button type="button" onclick="openDrugFromPrescription()" style="padding:6px 12px;background:#00695c;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:0.85em">&#x1f4d6;</button></div></div>' +
       '<div class="form-group"><label>Dosis / Concentración</label><input type="text" id="fRxDosage" value="' + escAttr(dosage || d.dosage) + '" placeholder="Ej: 500mg, 1 comprimido"></div>' +
-      '<div class="form-group"><label>Instrucciones</label><textarea id="fRxInst" rows="2" placeholder="Ej: Cada 8 horas por 7 días">' + escHtml(d.instructions) + '</textarea></div>';
+      '<div class="form-group"><label>Instrucciones</label><textarea id="fRxInst" rows="2" placeholder="Ej: Cada 8 horas por 7 días">' + escHtml(d.instructions) + '</textarea></div>' +
+      '<div class="form-group" style="margin-top:8px;"><label><input type="checkbox" id="fRxSigned"> Firma digital — <span style="font-size:0.82em;color:#666;">Certifico que la receta es válida</span></label></div>';
     var title = d.editIndex >= 0 ? 'Editar receta' : 'Nueva receta';
     editPrescriptionIndex = d.editIndex;
     openModal(title, html, function() { savePrescriptionModal(); });
@@ -4402,7 +4403,7 @@ function renderPrescriptions() {
     html += '<div class="lab-card"><div class="lab-date">' + escHtml(r.date) + ' | ' + escHtml(r.doctor) + sigHtml + '</div>' +
       '<div class="lab-test"><strong>' + escHtml(r.medication) + '</strong> — ' + escHtml(r.dosage) + '</div>' +
       (r.instructions ? '<div style="font-size:0.85em;color:var(--text-secondary);margin:2px 0;">' + escHtml(r.instructions) + '</div>' : '') +
-      '<div style="margin-top:4px;"><button class="btn-small btn-small-edit" onclick="editPrescription(' + i + ')">Editar</button> <button class="btn-small btn-small-delete" onclick="deletePrescription(' + i + ')">Eliminar</button> <button class="btn-small btn-view" style="background:#2e7d32;" onclick="printPrescription(' + i + ')">&#x1f5a8; Imprimir</button></div></div>';
+      '<div style="margin-top:4px;"><button class="btn-small btn-small-edit" onclick="editPrescription(' + i + ')">Editar</button> <button class="btn-small btn-small-delete" onclick="deletePrescription(' + i + ')">Eliminar</button> <button class="btn-small btn-view" style="background:#2e7d32;color:#fff;" onclick="printPrescription(' + i + ')">&#x1f5a8; Imprimir</button></div></div>';
   });
   container.innerHTML = html;
 }
@@ -4413,7 +4414,7 @@ function printPrescription(idx) {
   if (!p || !p.prescriptions || !p.prescriptions[idx]) return;
   var r = p.prescriptions[idx];
   var win = window.open('', '_blank');
-  win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Receta Médica</title><style>body{font-family:Georgia,serif;padding:40px;color:#333;max-width:700px;margin:0 auto;}h1{text-align:center;font-size:1.2em;color:#1a237e;border-bottom:2px solid #1a237e;padding-bottom:8px;}h2{text-align:center;font-size:0.9em;color:#666;font-weight:400;margin-bottom:30px;}.rx-box{border:2px dashed #333;padding:24px;margin:24px 0;border-radius:8px;}.rx-med{font-size:1.3em;font-weight:700;margin-bottom:6px;}.rx-dose{font-size:1em;color:#555;margin-bottom:4px;}.rx-instr{font-size:0.95em;color:#333;margin-top:8px;}.rx-meta{font-size:0.85em;color:#999;margin-top:20px;border-top:1px solid #eee;padding-top:10px;}.rx-footer{display:flex;justify-content:space-between;margin-top:40px;font-size:0.85em;}.rx-sign{text-align:right;margin-top:30px;}@media print{body{padding:20px;}}</style></head><body>');
+  win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Receta Médica</title><style>body{font-family:Georgia,serif;padding:40px;color:#333;max-width:700px;margin:0 auto;}h1{text-align:center;font-size:1.2em;color:#1a237e;border-bottom:2px solid #1a237e;padding-bottom:8px;}h2{text-align:center;font-size:0.9em;color:#666;font-weight:400;margin-bottom:30px;}.rx-box{border:2px dashed #333;padding:24px;margin:24px 0;border-radius:8px;}.rx-med{font-size:1.3em;font-weight:700;margin-bottom:6px;}.rx-dose{font-size:1em;color:#555;margin-bottom:4px;}.rx-instr{font-size:0.95em;color:#333;margin-top:8px;}.rx-meta{font-size:0.85em;color:#999;margin-top:20px;border-top:1px solid #eee;padding-top:10px;}.rx-footer{display:flex;justify-content:space-between;margin-top:40px;font-size:0.85em;}.rx-sign{text-align:right;margin-top:30px;}.rx-signature{font-family:\'Brush Script MT\',cursive,\'Segoe Script\',\'Pacifico\',sans-serif;font-size:1.4em;color:#1a237e;}@media print{body{padding:20px;}}</style></head><body>');
   win.document.write('<h1>RECETA MÉDICA</h1>');
   win.document.write('<h2>SAMU RevoRP - Sistema de Atención Médica</h2>');
   win.document.write('<div class="rx-meta"><strong>Paciente:</strong> ' + escHtml(p.firstName + ' ' + p.lastName) + ' | <strong>DNI:</strong> ' + escHtml(p.citizenNumber) + ' | <strong>Fecha:</strong> ' + escHtml(r.date) + '</div>');
@@ -4422,7 +4423,7 @@ function printPrescription(idx) {
   win.document.write('<div class="rx-dose">' + escHtml(r.dosage) + '</div>');
   if (r.instructions) win.document.write('<div class="rx-instr">' + escHtml(r.instructions) + '</div>');
   win.document.write('</div>');
-  win.document.write('<div class="rx-footer"><div><strong>Médico:</strong> ' + escHtml(r.doctor) + '</div>' + (r.signedConsent ? '<div><strong>Firma digital:</strong> ' + escHtml(r.signedConsent.doctor) + ' - ' + r.signedConsent.date.split('T')[0] + '</div>' : '<div><em>Sin firma digital</em></div>') + '</div>');
+  win.document.write('<div class="rx-footer"><div><strong>Médico:</strong> ' + escHtml(r.doctor) + '</div>' + (r.signedConsent ? '<div><strong>Firmado digitalmente por:</strong> <span class="rx-signature">' + escHtml(r.signedConsent.doctor) + '</span> — ' + r.signedConsent.date.split('T')[0] + '</div>' : '<div><em>Sin firma digital</em></div>') + '</div>');
   win.document.write('<div class="rx-sign">_________________________<br>Firma y sello del médico</div>');
   win.document.write('</body></html>');
   win.document.close();
