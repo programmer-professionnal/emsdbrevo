@@ -1548,7 +1548,7 @@ function viewEmergency(id) {
     (r.treatment ? '<p><strong>Tratamiento aplicado:</strong> ' + escHtml(r.treatment) + '</p>' : '') +
     outcomeHtml + derivationHtml +
     (r.observations ? '<p><strong>Observaciones:</strong> ' + escHtml(r.observations) + '</p>' : '') +
-    (r.signedConsent ? '<p style="margin-top:8px;"><span style="display:inline-block;background:#e8f5e9;color:#2e7d32;padding:2px 10px;border-radius:4px;font-weight:600;">? Firmado digitalmente</span> <span style="font-size:0.82em;color:#666;">por ' + escHtml(r.signedConsent.doctor) + ' el ' + escHtml(r.signedConsent.date ? r.signedConsent.date.split('T')[0] : '') + '</span></p>' : '<p style="margin-top:8px;"><span style="display:inline-block;background:#fff3e0;color:#e65100;padding:2px 10px;border-radius:4px;font-weight:600;">? Sin firma digital</span></p>') +
+    (r.signedConsent ? '<p style="margin-top:8px;"><span style="display:inline-block;background:#e8f5e9;color:#2e7d32;padding:2px 10px;border-radius:4px;font-weight:600;">&#x2714; Firmado digitalmente</span> <span style="font-size:0.82em;color:#666;">por ' + escHtml(r.signedConsent.doctor) + ' el ' + escHtml(r.signedConsent.date ? r.signedConsent.date.split('T')[0] : '') + '</span></p>' : '<p style="margin-top:8px;"><span style="display:inline-block;background:#fff3e0;color:#e65100;padding:2px 10px;border-radius:4px;font-weight:600;">&#x26a0; Sin firma digital</span></p>') +
     '<p style="font-size:0.85em;color:#999;margin-top:8px;">Atendido por: ' + escHtml(r.doctor) + '</p></div>';
   openModal('Informe de emergencia', html, null);
 }
@@ -2466,9 +2466,9 @@ function showProtocols() {
     };
   }
   var editable = currentDoctor && currentDoctor.username === 'LVargas';
-  var html = '<div class="protocol-card prot-rojo"><h4>?? Rojo — Crítico</h4><p>' + escHtml(data.protocols.rojo) + '</p></div>' +
-    '<div class="protocol-card prot-amarillo"><h4>?? Amarillo — Moderado</h4><p>' + escHtml(data.protocols.amarillo) + '</p></div>' +
-    '<div class="protocol-card prot-verde"><h4>?? Verde — Leve</h4><p>' + escHtml(data.protocols.verde) + '</p></div>';
+  var html = '<div class="protocol-card prot-rojo"><h4>&#128308; Rojo — Crítico</h4><p>' + escHtml(data.protocols.rojo) + '</p></div>' +
+    '<div class="protocol-card prot-amarillo"><h4>&#128993; Amarillo — Moderado</h4><p>' + escHtml(data.protocols.amarillo) + '</p></div>' +
+    '<div class="protocol-card prot-verde"><h4>&#128994; Verde — Leve</h4><p>' + escHtml(data.protocols.verde) + '</p></div>';
   if (!editable && currentDoctor) {
     if (!ensureProtocolConfirmed()) { return; }
   }
@@ -2522,9 +2522,9 @@ function renderCalendar() {
   var today = new Date();
   var todayStr = today.getFullYear() + '-' + (today.getMonth()+1) + '-' + today.getDate();
 
-  var html = '<div class="cal-nav"><button class="btn-small btn-small-edit" onclick="calendarMonth--;if(calendarMonth<0){calendarMonth=11;calendarYear--;}renderCalendar();">?</button>' +
+  var html = '<div class="cal-nav"><button class="btn-small btn-small-edit" onclick="calendarMonth--;if(calendarMonth<0){calendarMonth=11;calendarYear--;}renderCalendar();">&#9664;</button>' +
     '<h3>' + monthNames[calendarMonth] + ' ' + calendarYear + '</h3>' +
-    '<button class="btn-small btn-small-edit" onclick="calendarMonth++;if(calendarMonth>11){calendarMonth=0;calendarYear++;}renderCalendar();">?</button></div>';
+    '<button class="btn-small btn-small-edit" onclick="calendarMonth++;if(calendarMonth>11){calendarMonth=0;calendarYear++;}renderCalendar();">&#9654;</button></div>';
 
   html += '<div class="cal-grid">';
   dayNames.forEach(function(d) { html += '<div class="cal-day-header">' + d + '</div>'; });
@@ -2573,9 +2573,9 @@ function renderAppointmentCalendar() {
   var today = new Date();
   var todayStr = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + String(today.getDate()).padStart(2,'0');
 
-  var html = '<div class="cal-nav"><button class="btn-small btn-small-edit" onclick="appCalMonth--;if(appCalMonth<0){appCalMonth=11;appCalYear--;}renderAppointmentCalendar();">?</button>' +
+  var html = '<div class="cal-nav"><button class="btn-small btn-small-edit" onclick="appCalMonth--;if(appCalMonth<0){appCalMonth=11;appCalYear--;}renderAppointmentCalendar();">&#9664;</button>' +
     '<h3>' + monthNames[appCalMonth] + ' ' + appCalYear + '</h3>' +
-    '<button class="btn-small btn-small-edit" onclick="appCalMonth++;if(appCalMonth>11){appCalMonth=0;appCalYear++;}renderAppointmentCalendar();">?</button></div>';
+    '<button class="btn-small btn-small-edit" onclick="appCalMonth++;if(appCalMonth>11){appCalMonth=0;appCalYear++;}renderAppointmentCalendar();">&#9654;</button></div>';
 
   html += '<div class="cal-grid" style="margin-bottom:12px;">';
   dayNames.forEach(function(d) { html += '<div class="cal-day-header">' + d + '</div>'; });
@@ -4261,7 +4261,7 @@ function selectDrugForPrescription(name) {
     // Rebuild the prescription form with the selected drug
     var html = '<div id="fRxAllergyInfo"></div>' +
       '<div class="form-group"><label>Fecha</label><input type="date" id="fRxDate" value="' + escAttr(d.date) + '"></div>' +
-      '<div class="form-group"><label>Medicamento</label><div style="display:flex;gap:6px"><input type="text" id="fRxMed" value="' + escAttr(name) + '" style="flex:1"><button type="button" onclick="openDrugFromPrescription()" style="padding:6px 12px;background:#00695c;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:0.85em">??</button></div></div>' +
+      '<div class="form-group"><label>Medicamento</label><div style="display:flex;gap:6px"><input type="text" id="fRxMed" value="' + escAttr(name) + '" style="flex:1"><button type="button" onclick="openDrugFromPrescription()" style="padding:6px 12px;background:#00695c;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:0.85em">&#x1f4d6;</button></div></div>' +
       '<div class="form-group"><label>Dosis / Concentración</label><input type="text" id="fRxDosage" value="' + escAttr(dosage || d.dosage) + '" placeholder="Ej: 500mg, 1 comprimido"></div>' +
       '<div class="form-group"><label>Instrucciones</label><textarea id="fRxInst" rows="2" placeholder="Ej: Cada 8 horas por 7 días">' + escHtml(d.instructions) + '</textarea></div>';
     var title = d.editIndex >= 0 ? 'Editar receta' : 'Nueva receta';
@@ -4340,7 +4340,7 @@ function openAddPrescription() {
   editPrescriptionIndex = -1;
   var html = '<div id="fRxAllergyInfo"></div>' +
     '<div class="form-group"><label>Fecha</label><input type="date" id="fRxDate"></div>' +
-    '<div class="form-group"><label>Medicamento</label><div style="display:flex;gap:6px"><input type="text" id="fRxMed" placeholder="Nombre del fármaco" style="flex:1"><button type="button" onclick="openDrugFromPrescription()" style="padding:6px 12px;background:#00695c;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:0.85em">??</button></div></div>' +
+    '<div class="form-group"><label>Medicamento</label><div style="display:flex;gap:6px"><input type="text" id="fRxMed" placeholder="Nombre del fármaco" style="flex:1"><button type="button" onclick="openDrugFromPrescription()" style="padding:6px 12px;background:#00695c;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:0.85em">&#x1f4d6;</button></div></div>' +
     '<div class="form-group"><label>Dosis / Concentración</label><input type="text" id="fRxDosage" placeholder="Ej: 500mg, 1 comprimido"></div>' +
     '<div class="form-group"><label>Instrucciones</label><textarea id="fRxInst" rows="2" placeholder="Ej: Cada 8 horas por 7 días"></textarea></div>' +
     '<div class="form-group" style="margin-top:8px;"><label><input type="checkbox" id="fRxSigned"> Firma digital — <span style="font-size:0.82em;color:#666;">Certifico que la receta es válida</span></label></div>';
@@ -4356,7 +4356,7 @@ function editPrescription(idx) {
   const r = p.prescriptions[idx];
   var html = '<div id="fRxAllergyInfo"></div>' +
     '<div class="form-group"><label>Fecha</label><input type="date" id="fRxDate" value="' + escAttr(r.date) + '"></div>' +
-    '<div class="form-group"><label>Medicamento</label><div style="display:flex;gap:6px"><input type="text" id="fRxMed" value="' + escAttr(r.medication) + '" style="flex:1"><button type="button" onclick="openDrugFromPrescription()" style="padding:6px 12px;background:#00695c;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:0.85em">??</button></div></div>' +
+    '<div class="form-group"><label>Medicamento</label><div style="display:flex;gap:6px"><input type="text" id="fRxMed" value="' + escAttr(r.medication) + '" style="flex:1"><button type="button" onclick="openDrugFromPrescription()" style="padding:6px 12px;background:#00695c;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:0.85em">&#x1f4d6;</button></div></div>' +
     '<div class="form-group"><label>Dosis / Concentración</label><input type="text" id="fRxDosage" value="' + escAttr(r.dosage) + '"></div>' +
     '<div class="form-group"><label>Instrucciones</label><textarea id="fRxInst" rows="2">' + escHtml(r.instructions || '') + '</textarea></div>' +
     '<div class="form-group" style="margin-top:8px;"><label><input type="checkbox" id="fRxSigned"' + (r.signedConsent ? ' checked' : '') + '> Firma digital — <span style="font-size:0.82em;color:#666;">Certifico que la receta es válida</span></label></div>';
@@ -4398,11 +4398,11 @@ function renderPrescriptions() {
   if (!p || !p.prescriptions || p.prescriptions.length === 0) { container.innerHTML = '<div class="no-data">Sin recetas registradas.</div>'; return; }
   var html = '';
   p.prescriptions.forEach(function(r, i) {
-    var sigHtml = r.signedConsent ? '<span style="display:inline-block;background:#e8f5e9;color:#2e7d32;padding:0 6px;border-radius:3px;font-size:0.72em;font-weight:600;margin-left:4px;">? Firmada</span>' : '';
+    var sigHtml = r.signedConsent ? '<span style="display:inline-block;background:#e8f5e9;color:#2e7d32;padding:0 6px;border-radius:3px;font-size:0.72em;font-weight:600;margin-left:4px;">&#x2714; Firmada</span>' : '';
     html += '<div class="lab-card"><div class="lab-date">' + escHtml(r.date) + ' | ' + escHtml(r.doctor) + sigHtml + '</div>' +
       '<div class="lab-test"><strong>' + escHtml(r.medication) + '</strong> — ' + escHtml(r.dosage) + '</div>' +
       (r.instructions ? '<div style="font-size:0.85em;color:var(--text-secondary);margin:2px 0;">' + escHtml(r.instructions) + '</div>' : '') +
-      '<div style="margin-top:4px;"><button class="btn-small btn-small-edit" onclick="editPrescription(' + i + ')">Editar</button> <button class="btn-small btn-small-delete" onclick="deletePrescription(' + i + ')">Eliminar</button> <button class="btn-small btn-view" style="background:#2e7d32;" onclick="printPrescription(' + i + ')">?? Imprimir</button></div></div>';
+      '<div style="margin-top:4px;"><button class="btn-small btn-small-edit" onclick="editPrescription(' + i + ')">Editar</button> <button class="btn-small btn-small-delete" onclick="deletePrescription(' + i + ')">Eliminar</button> <button class="btn-small btn-view" style="background:#2e7d32;" onclick="printPrescription(' + i + ')">&#x1f5a8; Imprimir</button></div></div>';
   });
   container.innerHTML = html;
 }
@@ -4595,7 +4595,7 @@ function showDischargeSummary() {
         '<div class="dc-row"><strong>Fecha:</strong> ' + escHtml(s.date) + ' | <strong>Médico:</strong> ' + escHtml(s.doctor) + '</div>' +
         '<div class="dc-row"><strong>Diagnóstico:</strong> ' + escHtml(s.diagnosis) + '</div>' +
         (s.derivation ? '<div class="dc-row"><strong>Derivación:</strong> ' + escHtml(s.derivation) + '</div>' : '') +
-        '<div style="margin-top:6px;"><button class="btn-view" onclick="printDischargeSummary(' + s.id + ')">?? Imprimir</button></div></div>';
+        '<div style="margin-top:6px;"><button class="btn-view" onclick="printDischargeSummary(' + s.id + ')">&#x1f5a8; Imprimir</button></div></div>';
     });
   }
   html += '<hr style="margin:15px 0;border:none;border-top:1px solid var(--border);">' +
@@ -4648,8 +4648,8 @@ function renderDischargeSummaries() {
       '<div class="dc-row"><strong>Recomendaciones:</strong> ' + escHtml(s.recommendations) + '</div>' +
       (s.derivation ? '<div class="dc-row"><strong>Derivación a:</strong> ' + escHtml(s.derivation) + '</div>' : '') +
       (s.medicationOnDischarge ? '<div class="dc-row"><strong>Medicación al alta:</strong> ' + escHtml(s.medicationOnDischarge) + '</div>' : '') +
-      (s.signedConsent ? '<div class="dc-row" style="margin-top:6px;"><span style="display:inline-block;background:#e8f5e9;color:#2e7d32;padding:2px 8px;border-radius:4px;font-weight:600;">? Firmado digitalmente</span></div>' : '') +
-      '<div style="margin-top:8px;"><button class="btn-view" onclick="printDischargeSummary(' + s.id + ')">?? Imprimir</button></div></div>';
+      (s.signedConsent ? '<div class="dc-row" style="margin-top:6px;"><span style="display:inline-block;background:#e8f5e9;color:#2e7d32;padding:2px 8px;border-radius:4px;font-weight:600;">&#x2714; Firmado digitalmente</span></div>' : '') +
+      '<div style="margin-top:8px;"><button class="btn-view" onclick="printDischargeSummary(' + s.id + ')">&#x1f5a8; Imprimir</button></div></div>';
   });
   list.innerHTML = html;
 }
@@ -4870,7 +4870,7 @@ function showDeathCertificates() {
         '<div class="dcert-row"><strong>Causa inmediata:</strong> ' + escHtml(c.immediateCause) + '</div>' +
         (c.underlyingCause ? '<div class="dcert-row"><strong>Causa basal:</strong> ' + escHtml(c.underlyingCause) + '</div>' : '') +
         '<div class="dcert-row"><strong>Médico:</strong> ' + escHtml(c.doctor) + (c.medicalLicense ? ' | <strong>Matrícula:</strong> ' + escHtml(c.medicalLicense) : '') + '</div>' +
-        '<div style="margin-top:8px;"><button class="btn-view" onclick="printDeathCertificate(' + c.id + ')">?? Imprimir certificado</button></div></div>';
+        '<div style="margin-top:8px;"><button class="btn-view" onclick="printDeathCertificate(' + c.id + ')">&#x1f5a8; Imprimir certificado</button></div></div>';
     });
   }
   var patientOpts = '<option value="">Seleccionar paciente...</option>';
@@ -4953,12 +4953,12 @@ function showReminders() {
   } else {
     data.reminders.slice().reverse().forEach(function(r) {
       var overdue = r.dueDate < today && !r.completed ? 'reminder-overdue' : '';
-      var completedHtml = r.completed ? '<span style="color:#2e7d32;font-weight:600;">? Completado</span>' : '';
+        var completedHtml = r.completed ? '<span style="color:#2e7d32;font-weight:600;">&#x2714; Completado</span>' : '';
       var p = data.patients.find(function(x) { return x.id === r.patientId; });
       var pName = p ? escHtml(p.firstName + ' ' + p.lastName) : '';
       listHtml += '<div class="reminder-card ' + overdue + '"><div class="rem-info"><div class="rem-date">' + escHtml(r.dueDate) + (pName ? ' | ' + pName : '') + '</div>' +
         '<div class="rem-msg">' + escHtml(r.message) + ' ' + completedHtml + '</div></div>' +
-        (!r.completed ? '<div><button class="btn-small btn-small-edit" onclick="completeReminder(' + r.id + ')">? Ok</button> <button class="btn-small btn-small-delete" onclick="deleteReminder(' + r.id + ')">?</button></div>' : '<div><button class="btn-small btn-small-delete" onclick="deleteReminder(' + r.id + ')">?</button></div>') +
+        (!r.completed ? '<div><button class="btn-small btn-small-edit" onclick="completeReminder(' + r.id + ')">&#x2714; Ok</button> <button class="btn-small btn-small-delete" onclick="deleteReminder(' + r.id + ')">&#x2716;</button></div>' : '<div><button class="btn-small btn-small-delete" onclick="deleteReminder(' + r.id + ')">&#x2716;</button></div>') +
         '</div>';
     });
   }
@@ -5008,7 +5008,7 @@ function deleteReminder(id) {
 function toggleKioskMode() {
   document.body.classList.toggle('kiosk-mode');
   var btn = document.querySelector('.kiosk-btn');
-  if (btn) btn.textContent = document.body.classList.contains('kiosk-mode') ? '? Salir' : '? Kiosko';
+  if (btn) btn.textContent = document.body.classList.contains('kiosk-mode') ? '\u{1f6aa} Salir' : '\u{1f4bb} Kiosko';
 }
 
 // ===== DAILY SUMMARY DASHBOARD =====
@@ -5031,11 +5031,11 @@ function renderDailySummary() {
   if (lowStock > 0) items.push({ label: 'Insumos críticos', count: lowStock, color: '#c62828' });
   var fullName = currentDoctor ? currentDoctor.name.split(' ')[0] : '';
   if (items.length === 0) {
-    el.innerHTML = '<div style="background:var(--card-bg);border-radius:8px;padding:8px 16px;border:1px solid var(--border);display:flex;align-items:center;gap:12px;font-size:0.82em;"><span style="font-weight:600;color:var(--text);">?? Buen día, ' + escHtml(fullName) + '</span> <span style="color:var(--text-muted);">Todo al día — no hay alertas pendientes.</span></div>';
+    el.innerHTML = '<div style="background:var(--card-bg);border-radius:8px;padding:8px 16px;border:1px solid var(--border);display:flex;align-items:center;gap:12px;font-size:0.82em;"><span style="font-weight:600;color:var(--text);">&#x1f44b; Buen día, ' + escHtml(fullName) + '</span> <span style="color:var(--text-muted);">Todo al día — no hay alertas pendientes.</span></div>';
     return;
   }
   var html = '<div style="background:var(--card-bg);border-radius:8px;padding:10px 16px;border:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-size:0.82em;">';
-  html += '<span style="font-weight:600;color:var(--text);margin-right:4px;">?? ' + escHtml(fullName) + '</span>';
+  html += '<span style="font-weight:600;color:var(--text);margin-right:4px;">&#x1f44b; ' + escHtml(fullName) + '</span>';
   items.forEach(function(item) {
     html += '<span style="background:' + item.color + ';color:#fff;padding:3px 10px;border-radius:12px;font-weight:600;font-size:0.85em;">' + item.label + ': ' + item.count + '</span>';
   });
