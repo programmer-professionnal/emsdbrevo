@@ -5030,7 +5030,13 @@ function renderDailySummary() {
   if (pendingTriaje > 0) items.push({ label: 'Triaje pendiente', count: pendingTriaje, color: '#c62828' });
   if (overdueFups > 0) items.push({ label: 'Seguimientos vencidos', count: overdueFups, color: '#e65100' });
   if (lowStock > 0) items.push({ label: 'Insumos críticos', count: lowStock, color: '#c62828' });
-  var fullName = currentDoctor ? currentDoctor.name.replace(/^(Dr\.|Dra\.)\s*/i, '').split(' ')[0] : '';
+  var fullName = '';
+  if (currentDoctor) {
+    var parts = currentDoctor.name.split(' ');
+    var title = parts[0];
+    var firstName = parts.length > 2 ? parts[1] : (parts.length === 2 ? parts[1] : '');
+    fullName = title + ' ' + firstName + (currentDoctor.specialty ? ' (' + currentDoctor.specialty + ')' : '');
+  }
   if (items.length === 0) {
     el.innerHTML = '<div style="background:var(--card-bg);border-radius:8px;padding:8px 16px;border:1px solid var(--border);display:flex;align-items:center;gap:12px;font-size:0.82em;"><span style="font-weight:600;color:var(--text);">&#x1f44b; Buen día, ' + escHtml(fullName) + '</span> <span style="color:var(--text-muted);">Todo al día — no hay alertas pendientes.</span></div>';
     return;
