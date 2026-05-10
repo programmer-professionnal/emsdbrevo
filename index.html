@@ -2530,7 +2530,7 @@ function renderCalendar() {
   dayNames.forEach(function(d) { html += '<div class="cal-day-header">' + d + '</div>'; });
 
   var onDutyDocs = data.doctors.filter(function(d) { return d.onDuty; });
-  var dutyNames = onDutyDocs.map(function(d) { return d.name.split(' ')[0]; }).join(', ') || 'Sin guardia';
+  var dutyNames = onDutyDocs.map(function(d) { return d.name; }).join(', ') || 'Sin guardia';
 
   // Previous month days
   var prevMonthDays = new Date(calendarYear, calendarMonth, 0).getDate();
@@ -2774,7 +2774,7 @@ function checkNotifications() {
 
   var onDuty = data.doctors.filter(function(d) { return d.onDuty; });
   if (onDuty.length > 0) {
-    notifs.push({ icon: '\u{1f4c5}', msg: 'M\u00e9dicos de guardia: ' + onDuty.map(function(d) { return d.name.split(' ')[0]; }).join(', '), urgent: false });
+    notifs.push({ icon: '\u{1f4c5}', msg: 'M\u00e9dicos de guardia: ' + onDuty.map(function(d) { return d.name; }).join(', '), urgent: false });
   }
 
   notifs.sort(function(a, b) { return a.urgent === b.urgent ? 0 : a.urgent ? -1 : 1; });
@@ -5029,7 +5029,7 @@ function renderDailySummary() {
   if (pendingTriaje > 0) items.push({ label: 'Triaje pendiente', count: pendingTriaje, color: '#c62828' });
   if (overdueFups > 0) items.push({ label: 'Seguimientos vencidos', count: overdueFups, color: '#e65100' });
   if (lowStock > 0) items.push({ label: 'Insumos críticos', count: lowStock, color: '#c62828' });
-  var fullName = currentDoctor ? currentDoctor.name.split(' ')[0] : '';
+  var fullName = currentDoctor ? currentDoctor.name.replace(/^(Dr\.|Dra\.)\s*/i, '').split(' ')[0] : '';
   if (items.length === 0) {
     el.innerHTML = '<div style="background:var(--card-bg);border-radius:8px;padding:8px 16px;border:1px solid var(--border);display:flex;align-items:center;gap:12px;font-size:0.82em;"><span style="font-weight:600;color:var(--text);">&#x1f44b; Buen día, ' + escHtml(fullName) + '</span> <span style="color:var(--text-muted);">Todo al día — no hay alertas pendientes.</span></div>';
     return;
