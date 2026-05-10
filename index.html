@@ -1009,6 +1009,7 @@ function setLoggedInUI(doc) {
   document.getElementById('loginContainer').classList.add('hidden');
   document.getElementById('dashboardContainer').classList.remove('hidden');
   document.getElementById('publicContainer').classList.add('hidden');
+  document.getElementById('portalContainer').classList.add('hidden');
   document.getElementById('headerUserName').textContent = doc.name + ' (' + doc.specialty + ')';
   document.getElementById('btnLogout').classList.remove('hidden');
   document.getElementById('btnNotifications').classList.remove('hidden');
@@ -1073,6 +1074,7 @@ function logout() {
   document.getElementById('loginContainer').classList.remove('hidden');
   document.getElementById('dashboardContainer').classList.add('hidden');
   document.getElementById('publicContainer').classList.add('hidden');
+  document.getElementById('portalContainer').classList.add('hidden');
   document.getElementById('headerUserName').textContent = '';
   document.getElementById('btnLogout').classList.add('hidden');
   document.getElementById('btnNotifications').classList.add('hidden');
@@ -1081,6 +1083,7 @@ function logout() {
 }
 
 function showPublicSearch() {
+  document.getElementById('portalContainer').classList.add('hidden');
   document.getElementById('publicContainer').classList.remove('hidden');
   document.getElementById('loginContainer').classList.add('hidden');
   document.getElementById('dashboardContainer').classList.add('hidden');
@@ -1092,13 +1095,14 @@ function showPublicSearch() {
   document.getElementById('btnBackToDashboard').classList.add('hidden');
   document.getElementById('btnBackFromEmerg').classList.add('hidden');
   document.getElementById('patientDetailView').classList.remove('active');
-  document.getElementById('patientListView').style.display = 'block';
+  document.getElementById('patientListView').style.display = 'none';
   document.getElementById('emergencySectionView').style.display = 'none';
   document.getElementById('publicSearchInput').value = '';
   document.getElementById('publicResult').innerHTML = '';
 }
 
 function showLogin() {
+  document.getElementById('portalContainer').classList.add('hidden');
   document.getElementById('publicContainer').classList.add('hidden');
   document.getElementById('loginContainer').classList.remove('hidden');
   document.getElementById('dashboardContainer').classList.add('hidden');
@@ -1107,6 +1111,7 @@ function showLogin() {
   document.getElementById('btnNotifications').classList.add('hidden');
   document.getElementById('btnDarkMode').classList.add('hidden');
   document.getElementById('notifBadge').classList.add('hidden');
+  currentDoctor = null;
 }
 
 // ===== PATIENTS LIST =====
@@ -3347,6 +3352,7 @@ function showPatientPortal() {
   document.getElementById('dashboardContainer').classList.add('hidden');
   document.getElementById('publicContainer').classList.add('hidden');
   document.getElementById('portalContainer').classList.remove('hidden');
+  currentDoctor = null;
   document.getElementById('portalLoginView').classList.remove('hidden');
   document.getElementById('portalPatientView').classList.add('hidden');
   document.getElementById('portalDNI').value = '';
