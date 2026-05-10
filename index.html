@@ -420,14 +420,58 @@ body { background: var(--bg); color: var(--text); }
 }
 
 @media (max-width: 768px) {
-  header { flex-direction: column; gap: 10px; text-align: center; }
+  header { flex-direction: column; gap: 10px; text-align: center; padding: 10px 15px; }
+  header h1 { font-size: 1.1em; }
   .dashboard-header { flex-direction: column; }
+  .dashboard { padding: 0 8px; margin: 10px auto; }
   .search-box { min-width: 100%; }
-  .modal { width: 95%; }
-  .tabs { flex-wrap: wrap; }
-  .tab { flex: 1 0 50%; }
+  .search-box input { font-size: 16px; }
+  .modal { width: 98%; max-height: 85vh; }
+  .modal-body { padding: 12px; }
+  .tabs { flex-wrap: wrap; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .tab { flex: 1 0 auto; font-size: 0.78em; padding: 10px 8px; min-width: 0; }
   .public-search-box .search-row { flex-direction: column; }
   .form-row { flex-direction: column; gap: 0; }
+  .stats-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .stat-card { padding: 12px; }
+  .stat-card .stat-number { font-size: 1.4em; }
+  .chart-row { grid-template-columns: 1fr; }
+  .chart-box { width: 100% !important; }
+  .chart-box canvas { max-height: 160px; }
+  .cal-grid { font-size: 0.7em; }
+  .cal-day { min-height: 40px; padding: 2px; }
+  .table-container { overflow-x: auto; }
+  table { font-size: 0.82em; }
+  th, td { padding: 8px 10px; }
+  .patient-header { padding: 14px; }
+  .patient-header > div { flex-direction: column !important; align-items: flex-start !important; }
+  .patient-avatar { width: 50px; height: 50px; font-size: 1.4em; }
+  .toolbar-buttons .btn-action { font-size: 0.7em; padding: 4px 8px; }
+  .toolbar-buttons { gap: 4px; }
+  .inv-card { flex-direction: column; gap: 6px; }
+  .fup-card { flex-direction: column; gap: 6px; }
+  .backup-actions { flex-direction: column; }
+  .backup-actions button { width: 100%; }
+  .login-container { margin: 40px 15px; padding: 25px; }
+  .emergency-item .em-header { flex-direction: column; gap: 4px; }
+  .em-vitals { grid-template-columns: 1fr 1fr; }
+  .dashboard-header .toolbar-row:first-child { flex-wrap: wrap; }
+  .dashboard-header .toolbar-row:first-child .search-box { order: -1; min-width: 100%; }
+  .public-container { margin: 20px 10px; padding: 0 10px; }
+}
+
+@media (max-width: 480px) {
+  header h1 span { display: none; }
+  .tab { font-size: 0.72em; padding: 8px 5px; }
+  .stats-grid { grid-template-columns: 1fr; }
+  .cal-grid { gap: 2px; }
+  .cal-day-header { font-size: 0.65em; padding: 2px; }
+  .cal-day { min-height: 35px; font-size: 0.65em; }
+  .modal { width: 100%; border-radius: 0; max-height: 100vh; }
+  .modal-overlay { align-items: flex-end; }
+  .patient-header .patient-meta span { display: block; margin-right: 0; }
+  .inv-card .inv-info { width: 100%; }
+  .btn-action { font-size: 0.65em; padding: 3px 6px; }
 }
 
 /* ===== FACTURAS MÉDICAS ===== */
@@ -598,6 +642,8 @@ body { background: var(--bg); color: var(--text); }
       <button class="btn-action" style="background:#1565c0;" onclick="showFollowUps()" title="Seguimientos de pacientes">&#x1f4cb; Seguimientos</button>
       <button class="btn-action" style="background:#f9a825;" onclick="showAppointmentCalendar()" title="Calendario de citas (Ctrl+G)">&#x1f4c5; Agenda</button>
       <button class="btn-action" style="background:#1a237e;" onclick="showStats()" title="Dashboard de KPIs (Ctrl+D)">&#x1f4ca; Stats</button>
+      <button class="btn-action" style="background:#0d47a1;" onclick="showAdvancedStats()" title="KPIs avanzados con gráficos (Ctrl+Shift+D)">&#x1f4c8; KPIs</button>
+      <button class="btn-action" style="background:#00897b;" onclick="showScales()" title="Escalas de valoración (Ctrl+O)">&#x1f4ca; Escalas</button>
       <button class="btn-action" style="background:#6a1b9a;" onclick="showInternalNotes()" title="Notas internas compartidas (Ctrl+I)">&#x1f4dd; Notas</button>
       <button class="btn-action" style="background:#00695c;" onclick="showInventory()" title="Gestión de inventario e insumos">&#x1f4e6; Insumos</button>
       <button class="btn-action" style="background:#37474f;" onclick="showProtocols()" title="Protocolos médicos (Ctrl+P)">&#x1fa7a; Protocolos</button>
@@ -609,10 +655,12 @@ body { background: var(--bg); color: var(--text); }
       <button class="btn-action" style="background:#4a148c;" onclick="showPatientPortal()" title="Portal del paciente">&#x1f465; Portal Paciente</button>
       <button class="btn-action" style="background:#2e7d32;" onclick="showDischargeSummary()" title="Informes de alta y derivación">&#x1f4c4; Altas</button>
       <button class="btn-action" style="background:#1565c0;" onclick="showCSVExport()" title="Exportar datos a CSV">&#x1f4e5; Exportar</button>
+      <button class="btn-action" style="background:#37474f;" onclick="scanBarcode()" title="Escanear código de barras">&#x1f4f7; Scanner</button>
       <button class="btn-action" style="background:#c62828;" onclick="showAdverseEvents()" title="Registro de incidentes y eventos adversos">&#x26a0; Incidentes</button>
       <button class="btn-action" style="background:#555;" onclick="showDeathCertificates()" title="Certificados de defunción">&#x271d; Defunciones</button>
       <button class="btn-action" style="background:#f57c00;" onclick="showReminders()" title="Recordatorios programados">&#x23f0; Recordatorios</button>
       <button class="kiosk-btn" onclick="toggleKioskMode()" title="Modo pantalla completa">&#x26f6; Kiosko</button>
+      <button class="kiosk-btn" onclick="showShortcuts()" title="Atajos de teclado (Ctrl+/)">&#x2328; Atajos</button>
     </div>
   </div>
 
@@ -691,6 +739,7 @@ body { background: var(--bg); color: var(--text); }
       <button class="tab" data-tab="soap" onclick="switchTab('soap')" style="color:#1565c0;">&#x1f9d0; SOAP</button>
       <button class="tab" data-tab="anamnesis" onclick="switchTab('anamnesis')" style="color:#6a1b9a;">&#x1f4dd; Anamnesis</button>
       <button class="tab" data-tab="discharge" onclick="switchTab('discharge')" style="color:#2e7d32;">&#x1f4c4; Alta</button>
+      <button class="tab" data-tab="interconsultas" onclick="switchTab('interconsultas')" style="color:#4a148c;">&#x1f91d; Interconsultas</button>
     </div>
 
     <div class="tab-content">
@@ -761,6 +810,12 @@ body { background: var(--bg); color: var(--text); }
           <button class="btn-small btn-small-add" onclick="openAddDischargeSummary()" style="background:#2e7d32;">+ Generar informe</button>
         </h4>
         <div id="dischargeSummaryList"><div class="no-data">Sin informes de alta.</div></div>
+      </div>
+      <div class="tab-pane" id="tab-interconsultas">
+        <h4>&#x1f91d; Interconsultas / Derivaciones
+          <button class="btn-small btn-small-add" onclick="openAddInterconsulta()" style="background:#4a148c;">+ Solicitar</button>
+        </h4>
+        <div id="interconsultasList"><div class="no-data">Sin interconsultas registradas.</div></div>
       </div>
     </div>
   </div>
@@ -973,6 +1028,8 @@ function getData() {
     if (r.createdAt === undefined) r.createdAt = r.date ? new Date(r.date + 'T' + (r.time || '00:00')).toISOString() : new Date().toISOString();
     if (r.requiresFollowUp === undefined) r.requiresFollowUp = false;
   });
+  if (!dataCache.dutyAssignments) dataCache.dutyAssignments = {};
+  if (!dataCache.dutyNote) dataCache.dutyNote = '';
   if (!dataCache.protocols) {
     dataCache.protocols = {
       rojo: 'Paciente crítico con amenaza vital. Priorizar vía aérea, respiración y circulación (ABC). Solicitar apoyo avanzado. Preparar traslado inmediato.',
@@ -2564,6 +2621,7 @@ function showCalendar() {
 
 function renderCalendar() {
   const data = getData();
+  if (!data.dutyAssignments) data.dutyAssignments = {};
   var monthNames = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
   var dayNames = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
   var firstDay = new Date(calendarYear, calendarMonth, 1).getDay();
@@ -2575,32 +2633,117 @@ function renderCalendar() {
     '<h3>' + monthNames[calendarMonth] + ' ' + calendarYear + '</h3>' +
     '<button class="btn-small btn-small-edit" onclick="calendarMonth++;if(calendarMonth>11){calendarMonth=0;calendarYear++;}renderCalendar();">&#9654;</button></div>';
 
+  html += '<div style="margin-bottom:10px;font-size:0.82em;color:var(--text-secondary);text-align:center;">Haga clic en un día para asignar médicos de guardia</div>';
   html += '<div class="cal-grid">';
   dayNames.forEach(function(d) { html += '<div class="cal-day-header">' + d + '</div>'; });
 
-  var onDutyDocs = data.doctors.filter(function(d) { return d.onDuty; });
-  var dutyNames = onDutyDocs.map(function(d) { return d.name; }).join(', ') || 'Sin guardia';
-
-  // Previous month days
   var prevMonthDays = new Date(calendarYear, calendarMonth, 0).getDate();
   for (var i = firstDay - 1; i >= 0; i--) {
     html += '<div class="cal-day cal-other"><div class="cal-date">' + (prevMonthDays - i) + '</div></div>';
   }
 
   for (var day = 1; day <= daysInMonth; day++) {
-    var dateStr = calendarYear + '-' + (calendarMonth+1) + '-' + day;
+    var dateStr = calendarYear + '-' + String(calendarMonth+1).padStart(2,'0') + '-' + String(day).padStart(2,'0');
     var isToday = dateStr === todayStr ? ' cal-today' : '';
-    html += '<div class="cal-day' + isToday + '"><div class="cal-date">' + day + '</div>';
-    if (onDutyDocs.length > 0) {
-      html += '<span class="cal-duty" title="' + escAttr(dutyNames) + '">' + escHtml(dutyNames) + '</span>';
+    var dayAssignment = data.dutyAssignments[dateStr] || [];
+    var dayDocs = dayAssignment.map(function(id) { return data.doctors.find(function(d) { return d.id === id; }); }).filter(Boolean);
+    html += '<div class="cal-day' + isToday + '" onclick="editDutyDay(\'' + dateStr + '\')" style="cursor:pointer;" title="Asignar guardias"><div class="cal-date">' + day + '</div>';
+    if (dayDocs.length > 0) {
+      dayDocs.forEach(function(d) {
+        html += '<span class="cal-duty" title="' + escAttr(d.name) + '">' + escHtml(d.name.split(' ').pop()) + '</span>';
+      });
+    } else if (data.doctors.some(function(d) { return d.onDuty; })) {
+      // If no per-day assignment but there are general on-duty doctors, show a placeholder
+      html += '<span style="font-size:0.65em;color:#999;">—</span>';
     }
     html += '</div>';
   }
   html += '</div>';
-  html += '<div style="margin-top:12px;font-size:0.82em;color:#666;">Médicos de guardia: <strong>' + escHtml(dutyNames) + '</strong></div>';
+
+  // Add note about rotation
+  html += '<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">' +
+    '<button class="btn-small btn-small-add" onclick="showDutyNote()">&#x1f4dd; Nota de guardia</button>' +
+    '<button class="btn-small btn-small-edit" onclick="copyDutyWeek()" title="Copiar asignación de esta semana a próxima semana">&#x1f4cb; Copiar semana</button>' +
+    '</div>';
+
+  if (data.dutyNote) {
+    html += '<div style="margin-top:8px;padding:8px 12px;background:var(--item-bg);border-radius:6px;font-size:0.82em;color:var(--text-secondary);border-left:3px solid #f57c00;">' +
+      '<strong>Nota:</strong> ' + escHtml(data.dutyNote) + '</div>';
+  }
 
   openModal('&#x1f4c5; Calendario de guardias', html, null);
   document.getElementById('modalSaveBtn').style.display = 'none';
+}
+
+function editDutyDay(dateStr) {
+  const data = getData();
+  if (!data.dutyAssignments) data.dutyAssignments = {};
+  var current = data.dutyAssignments[dateStr] || [];
+  var html = '<p style="margin-bottom:12px;font-weight:600;color:var(--text);">Asignar guardias para <strong>' + dateStr + '</strong></p>' +
+    '<div style="max-height:300px;overflow-y:auto;">';
+  data.doctors.forEach(function(d) {
+    var checked = current.indexOf(d.id) !== -1 ? 'checked' : '';
+    html += '<label style="display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:4px;cursor:pointer;hover:background:var(--hover-bg);">' +
+      '<input type="checkbox" ' + checked + ' onchange="toggleDutyAssign(\'' + dateStr + '\',' + d.id + ',this.checked)">' +
+      '<strong>' + escHtml(d.name) + '</strong>' +
+      (d.specialty ? ' <span style="font-size:0.82em;color:#888;">(' + escHtml(d.specialty) + ')</span>' : '') +
+      '</label>';
+  });
+  html += '</div><div style="margin-top:12px;display:flex;gap:8px;justify-content:space-between;">' +
+    '<button class="btn-cancel" onclick="closeModal();renderCalendar();">Cerrar</button>' +
+    '<button class="btn-small btn-small-delete" onclick="clearDutyDay(\'' + dateStr + '\')">Limpiar día</button></div>';
+  openModal('&#x1f4c5; Asignar guardia - ' + dateStr, html, null);
+  document.getElementById('modalSaveBtn').style.display = 'none';
+}
+function toggleDutyAssign(dateStr, doctorId, checked) {
+  const data = getData();
+  if (!data.dutyAssignments) data.dutyAssignments = {};
+  if (!data.dutyAssignments[dateStr]) data.dutyAssignments[dateStr] = [];
+  var arr = data.dutyAssignments[dateStr];
+  if (checked && arr.indexOf(doctorId) === -1) arr.push(doctorId);
+  if (!checked) data.dutyAssignments[dateStr] = arr.filter(function(id) { return id !== doctorId; });
+  if (data.dutyAssignments[dateStr].length === 0) delete data.dutyAssignments[dateStr];
+  saveData(data);
+}
+function clearDutyDay(dateStr) {
+  const data = getData();
+  if (data.dutyAssignments) delete data.dutyAssignments[dateStr];
+  saveData(data);
+  closeModal();
+  renderCalendar();
+}
+function showDutyNote() {
+  const data = getData();
+  var html = '<div class="form-group"><label>Nota general para el calendario de guardias</label>' +
+    '<textarea id="fDutyNote" rows="4" style="width:100%;">' + escHtml(data.dutyNote || '') + '</textarea></div>' +
+    '<p style="font-size:0.82em;color:#888;">Ej: Recordatorio de reunión, cambios de horario, etc.</p>';
+  openModal('&#x1f4dd; Nota de guardia', html, function() {
+    data.dutyNote = document.getElementById('fDutyNote').value.trim();
+    saveData(data);
+    closeModal();
+    renderCalendar();
+  });
+}
+function copyDutyWeek() {
+  const data = getData();
+  var assignments = data.dutyAssignments || {};
+  var keys = Object.keys(assignments).filter(function(k) { return k.match(/^\d{4}-\d{2}-\d{2}$/); });
+  var sorted = keys.sort();
+  if (sorted.length === 0) { alert('No hay asignaciones para copiar.'); return; }
+  var copied = 0;
+  sorted.forEach(function(k) {
+    var d = new Date(k);
+    d.setDate(d.getDate() + 7);
+    var newKey = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+    if (!assignments[newKey]) {
+      assignments[newKey] = assignments[k].slice();
+      copied++;
+    }
+  });
+  data.dutyAssignments = assignments;
+  saveData(data);
+  alert('Se copiaron ' + copied + ' días a la próxima semana.');
+  renderCalendar();
 }
 
 // ===== CALENDARIO DE CITAS =====
@@ -3582,9 +3725,23 @@ function openAddLabOrder() {
     '<div class="form-group"><label>Prueba / Análisis</label><input type="text" id="fLabTest" placeholder="Ej: Hemograma completo, Glucosa, PCR..."></div>' +
     '<div class="form-group"><label>Resultado</label><textarea id="fLabResult" rows="2" placeholder="Resultado del análisis..."></textarea></div>' +
     '<div class="form-group"><label>Rango normal</label><input type="text" id="fLabRange" placeholder="Ej: 70-110 mg/dL"></div>' +
-    '<div class="form-group"><label>Estado</label><select id="fLabStatus"><option value="pendiente">Pendiente</option><option value="normal">Normal</option><option value="anormal">Anormal</option></select></div>';
+    '<div class="form-group"><label>Estado</label><select id="fLabStatus"><option value="pendiente">Pendiente</option><option value="normal">Normal</option><option value="anormal">Anormal</option></select></div>' +
+    '<div class="form-group"><label>Imagen del resultado (opcional)</label><input type="file" id="fLabImage" accept="image/*" onchange="previewLabImage(event)">' +
+    '<div id="labImagePreview" style="margin-top:6px;max-width:200px;border-radius:6px;overflow:hidden;display:none;"><img id="labImagePreviewImg" style="width:100%;border-radius:6px;border:1px solid var(--border);"></div></div>';
   openModal('Nueva orden de laboratorio', html, function() { saveLabOrder(); });
   document.getElementById('fLabDate').value = new Date().toISOString().split('T')[0];
+}
+function previewLabImage(e) {
+  var file = e.target.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(ev) {
+    var preview = document.getElementById('labImagePreview');
+    var img = document.getElementById('labImagePreviewImg');
+    img.src = ev.target.result;
+    preview.style.display = 'block';
+  };
+  reader.readAsDataURL(file);
 }
 
 function saveLabOrder() {
@@ -3593,16 +3750,38 @@ function saveLabOrder() {
   var result = document.getElementById('fLabResult').value.trim();
   var normalRange = document.getElementById('fLabRange').value.trim();
   var status = document.getElementById('fLabStatus').value;
+  var imageInput = document.getElementById('fLabImage');
+  var imageData = null;
+  if (imageInput && imageInput.files && imageInput.files[0]) {
+    // Convert to base64 data URL (for small images only - localStorage limit ~5MB)
+    var imgFile = imageInput.files[0];
+    if (imgFile.size > 500 * 1024) { alert('La imagen es demasiado grande (máx 500KB). Reduzca el tamaño o use un formato más ligero.'); return; }
+    imageData = URL.createObjectURL(imgFile);
+    // We'll store as base64 via FileReader - but async, so we need to handle differently
+  }
   if (!date || !test) { alert('Fecha y prueba son obligatorias.'); return; }
   const data = getData();
   var p = data.patients.find(function(x) { return x.id === currentPatientId; });
   if (!p) return;
   if (!p.labOrders) p.labOrders = [];
-  p.labOrders.push({ date: date, test: test, result: result, normalRange: normalRange, status: status, doctor: currentDoctor ? currentDoctor.name : '' });
-  addAuditLog('Orden laboratorio: ' + test + ' para ' + p.firstName + ' ' + p.lastName, currentPatientId);
-  saveData(data);
-  closeModal();
-  renderLabOrders();
+  // Handle image asynchronously if present
+  if (imageInput && imageInput.files && imageInput.files[0]) {
+    var reader = new FileReader();
+    reader.onload = function(ev) {
+      p.labOrders.push({ date: date, test: test, result: result, normalRange: normalRange, status: status, image: ev.target.result, doctor: currentDoctor ? currentDoctor.name : '' });
+      addAuditLog('Orden laboratorio: ' + test + ' para ' + p.firstName + ' ' + p.lastName, currentPatientId);
+      saveData(data);
+      closeModal();
+      renderLabOrders();
+    };
+    reader.readAsDataURL(imageInput.files[0]);
+  } else {
+    p.labOrders.push({ date: date, test: test, result: result, normalRange: normalRange, status: status, doctor: currentDoctor ? currentDoctor.name : '' });
+    addAuditLog('Orden laboratorio: ' + test + ' para ' + p.firstName + ' ' + p.lastName, currentPatientId);
+    saveData(data);
+    closeModal();
+    renderLabOrders();
+  }
 }
 
 function renderLabOrders() {
@@ -3618,6 +3797,7 @@ function renderLabOrders() {
       '<div class="lab-test">' + escHtml(o.test) + ' <span class="lab-result ' + statusClass + '">' + statusLabel + '</span></div>' +
       (o.result ? '<div style="font-size:0.85em;color:var(--text-secondary);margin:4px 0;"><strong>Resultado:</strong> ' + escHtml(o.result) + '</div>' : '') +
       (o.normalRange ? '<div style="font-size:0.78em;color:var(--text-muted);">Rango normal: ' + escHtml(o.normalRange) + '</div>' : '') +
+      (o.image ? '<div style="margin-top:6px;"><a href="javascript:void(0)" onclick="window.open(\'' + o.image + '\',\'_blank\')" style="color:#00695c;font-size:0.82em;">&#x1f5bc; Ver imagen</a></div>' : '') +
       '<div style="margin-top:6px;"><button class="btn-small btn-small-edit" onclick="editLabOrder(' + i + ')">Editar</button> <button class="btn-small btn-small-delete" onclick="deleteLabOrder(' + i + ')">Eliminar</button></div></div>';
   });
   list.innerHTML = html;
@@ -3632,11 +3812,25 @@ function editLabOrder(idx) {
     '<div class="form-group"><label>Prueba</label><input type="text" id="fLabTest" value="' + escAttr(o.test) + '"></div>' +
     '<div class="form-group"><label>Resultado</label><textarea id="fLabResult" rows="2">' + escHtml(o.result || '') + '</textarea></div>' +
     '<div class="form-group"><label>Rango normal</label><input type="text" id="fLabRange" value="' + escAttr(o.normalRange || '') + '"></div>' +
-    '<div class="form-group"><label>Estado</label><select id="fLabStatus"><option value="pendiente"' + (o.status === 'pendiente' ? ' selected' : '') + '>Pendiente</option><option value="normal"' + (o.status === 'normal' ? ' selected' : '') + '>Normal</option><option value="anormal"' + (o.status === 'anormal' ? ' selected' : '') + '>Anormal</option></select></div>';
+    '<div class="form-group"><label>Estado</label><select id="fLabStatus"><option value="pendiente"' + (o.status === 'pendiente' ? ' selected' : '') + '>Pendiente</option><option value="normal"' + (o.status === 'normal' ? ' selected' : '') + '>Normal</option><option value="anormal"' + (o.status === 'anormal' ? ' selected' : '') + '>Anormal</option></select></div>' +
+    (o.image ? '<div style="margin-top:6px;font-size:0.82em;">Imagen actual: <a href="javascript:void(0)" onclick="window.open(\'' + o.image + '\',\'_blank\')">Ver</a></div>' : '') +
+    '<div class="form-group" style="margin-top:6px;"><label>Cambiar imagen</label><input type="file" id="fLabImageEdit" accept="image/*" onchange="previewLabImageEdit(event)"><div id="labImagePreviewEdit" style="margin-top:4px;max-width:150px;display:none;"><img id="labImagePreviewImgEdit" style="width:100%;border-radius:4px;"></div></div>';
   window._editLabIdx = idx;
   openModal('Editar orden de laboratorio', html, function() { saveEditedLabOrder(); });
 }
 
+function previewLabImageEdit(e) {
+  var file = e.target.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(ev) {
+    var preview = document.getElementById('labImagePreviewEdit');
+    var img = document.getElementById('labImagePreviewImgEdit');
+    img.src = ev.target.result;
+    preview.style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
 function saveEditedLabOrder() {
   var date = document.getElementById('fLabDate').value;
   var test = document.getElementById('fLabTest').value.trim();
@@ -3647,7 +3841,19 @@ function saveEditedLabOrder() {
   const data = getData();
   var p = data.patients.find(function(x) { return x.id === currentPatientId; });
   if (!p || !p.labOrders || !p.labOrders[window._editLabIdx]) return;
-  p.labOrders[window._editLabIdx] = { date: date, test: test, result: result, normalRange: normalRange, status: status, doctor: currentDoctor ? currentDoctor.name : '' };
+  var oldOrder = p.labOrders[window._editLabIdx];
+  var imageFile = document.getElementById('fLabImageEdit');
+  if (imageFile && imageFile.files && imageFile.files[0]) {
+    var reader = new FileReader();
+    reader.onload = function(ev) {
+      p.labOrders[window._editLabIdx] = { date: date, test: test, result: result, normalRange: normalRange, status: status, image: ev.target.result, doctor: currentDoctor ? currentDoctor.name : '' };
+      saveData(data);
+      closeModal(); renderLabOrders();
+    };
+    reader.readAsDataURL(imageFile.files[0]);
+    return;
+  }
+  p.labOrders[window._editLabIdx] = { date: date, test: test, result: result, normalRange: normalRange, status: status, image: oldOrder.image || null, doctor: currentDoctor ? currentDoctor.name : '' };
   saveData(data);
   closeModal();
   renderLabOrders();
@@ -5400,6 +5606,13 @@ document.addEventListener('keydown', function(e) {
     else if (key === 't' && currentDoctor) { e.preventDefault(); showDoctorConfig(); }
     else if (key === 'g' && currentDoctor) { e.preventDefault(); showAppointmentCalendar(); }
     else if (key === 'l' && currentDoctor) { e.preventDefault(); toggleDarkMode(); }
+    else if (key === 'o' && currentDoctor) { e.preventDefault(); showScales(); }
+    else if (key === 'k' && currentDoctor) { e.preventDefault(); showGlobalSearch(); }
+    else if (key === '/' && currentDoctor) { e.preventDefault(); showShortcuts(); }
+  }
+  if (e.shiftKey && (e.ctrlKey || e.metaKey)) {
+    var key = e.key.toLowerCase();
+    if (key === 'd' && currentDoctor) { e.preventDefault(); showAdvancedStats(); }
   }
 });
 
@@ -5467,7 +5680,743 @@ function deleteDoctor(id) {
   showDoctorConfig();
 }
 
-// ===== UTILITIES =====
+// ===== PANEL DE ATAJOS DE TECLADO =====
+function showShortcuts() {
+  var html = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:0.85em;">' +
+    '<div><kbd>Ctrl+N</kbd> Nuevo paciente</div>' +
+    '<div><kbd>Ctrl+E</kbd> Emergencias</div>' +
+    '<div><kbd>Ctrl+F</kbd> Buscar paciente</div>' +
+    '<div><kbd>Ctrl+R</kbd> Emergencia rápida</div>' +
+    '<div><kbd>Ctrl+S</kbd> Estadísticas</div>' +
+    '<div><kbd>Ctrl+I</kbd> Notas internas</div>' +
+    '<div><kbd>Ctrl+P</kbd> Protocolos</div>' +
+    '<div><kbd>Ctrl+B</kbd> Respaldo</div>' +
+    '<div><kbd>Ctrl+D</kbd> Dashboard</div>' +
+    '<div><kbd>Ctrl+Q</kbd> Triaje</div>' +
+    '<div><kbd>Ctrl+T</kbd> Médicos</div>' +
+    '<div><kbd>Ctrl+G</kbd> Agenda</div>' +
+    '<div><kbd>Ctrl+L</kbd> Modo oscuro</div>' +
+    '<div><kbd>Ctrl+K</kbd> Búsqueda global</div>' +
+    '<div><kbd>Ctrl+O</kbd> Escalas valoración</div>' +
+    '<div><kbd>Ctrl+/</kbd> Este panel</div>' +
+    '</div><p style="margin-top:12px;font-size:0.78em;color:#999;">Presione <kbd>Ctrl+/</kbd> en cualquier momento para ver esta ayuda.</p>';
+  openModal('&#x2328; Atajos de teclado', html, null);
+  document.getElementById('modalSaveBtn').style.display = 'none';
+}
+
+// ===== BÚSQUEDA GLOBAL (Ctrl+K) =====
+function showGlobalSearch() {
+  const data = getData();
+  var html = '<div class="form-group"><input type="text" id="globalSearchInput" placeholder="Buscar pacientes, diagnósticos, medicamentos..." onkeyup="filterGlobalSearch()" autofocus style="width:100%;padding:10px;font-size:1em;"></div>' +
+    '<div id="globalSearchResults" style="max-height:400px;overflow-y:auto;margin-top:8px;"></div>';
+  openModal('&#x1f50d; Búsqueda global', html, null);
+  document.getElementById('modalSaveBtn').style.display = 'none';
+  setTimeout(function() { var el = document.getElementById('globalSearchInput'); if (el) el.focus(); }, 100);
+}
+function filterGlobalSearch() {
+  var q = (document.getElementById('globalSearchInput').value || '').trim().toLowerCase();
+  const data = getData();
+  var results = document.getElementById('globalSearchResults');
+  if (!q || q.length < 2) { results.innerHTML = '<div style="color:#999;padding:10px;font-size:0.85em;">Escriba al menos 2 caracteres...</div>'; return; }
+  var found = [];
+  data.patients.forEach(function(p) {
+    var match = (p.firstName && p.firstName.toLowerCase().includes(q)) || (p.lastName && p.lastName.toLowerCase().includes(q)) || (p.citizenNumber && p.citizenNumber.toLowerCase().includes(q));
+    if (match) found.push({ type: 'patient', label: escHtml(p.firstName + ' ' + p.lastName + ' (DNI: ' + p.citizenNumber + ')'), id: p.id });
+    (p.diagnoses || []).forEach(function(d) { if (d.description && d.description.toLowerCase().includes(q)) found.push({ type: 'diagnosis', label: 'Diagnóstico: ' + escHtml(d.description) + ' — ' + escHtml(p.firstName + ' ' + p.lastName), id: p.id }); });
+    (p.prescriptions || []).forEach(function(r) { if (r.medication && r.medication.toLowerCase().includes(q)) found.push({ type: 'rx', label: 'Receta: ' + escHtml(r.medication) + ' — ' + escHtml(p.firstName + ' ' + p.lastName), id: p.id }); });
+  });
+  if (found.length === 0) { results.innerHTML = '<div style="color:#999;padding:10px;">Sin resultados.</div>'; return; }
+  results.innerHTML = found.slice(0, 20).map(function(f) {
+    return '<div style="padding:8px 10px;cursor:pointer;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;" onmouseover="this.style.background=\'var(--item-hover)\'" onmouseout="this.style.background=\'\'" onclick="closeModal();viewPatient(' + f.id + ')">' +
+      '<span style="font-size:1.2em;">' + (f.type === 'diagnosis' ? '&#x1f9d1;&#x200d;&#x2695;&#xfe0f;' : f.type === 'rx' ? '&#x1f48a;' : '&#x1f465;') + '</span> ' + f.label + '</div>';
+  }).join('');
+}
+
+// ===== TUTORIAL INTERACTIVO PRIMER LOGIN =====
+function showFirstLoginTutorial() {
+  var steps = [
+    { title: '&#x1f44b; Bienvenido a SAMU RevoRP', text: 'Este sistema le permite gestionar pacientes, emergencias, recetas y más. Le mostraremos las funciones principales.' },
+    { title: '&#x1f465; Pacientes', text: 'Use la barra de búsqueda para encontrar pacientes por nombre, apellido o DNI. Haga clic en "Ver" para abrir el expediente completo.' },
+    { title: '&#x1f691; Emergencias', text: 'Registre informes de emergencia con triaje (rojo/amarillo/verde), signos vitales y derivación.' },
+    { title: '&#x1f4c5; Agenda y Guardias', text: 'Gestione citas de pacientes y vea el calendario de médicos de guardia.' },
+    { title: '&#x2328; Atajos', text: 'Presione Ctrl+/ en cualquier momento para ver todos los atajos de teclado disponibles.' }
+  ];
+  var step = 0;
+  function showStep() {
+    var s = steps[step];
+    var html = '<div style="text-align:center;padding:10px;"><div style="font-size:3em;margin-bottom:12px;">' + s.title.split(' ')[0] + '</div>' +
+      '<h4>' + s.title + '</h4><p style="color:var(--text-secondary);margin:12px 0 20px;line-height:1.5;">' + s.text + '</p>' +
+      '<div style="display:flex;justify-content:center;gap:8px;">' +
+      (step > 0 ? '<button class="btn-search" onclick="step--;showStep()">&#x25c0; Anterior</button>' : '') +
+      (step < steps.length - 1 ? '<button class="btn-add" onclick="step++;showStep()">Siguiente &#x25b6;</button>' : '<button class="btn-add" onclick="closeModal();renderDailySummary()">&#x2714; Finalizar</button>') +
+      '</div></div>';
+    openModal(s.title, html, null);
+    document.getElementById('modalSaveBtn').style.display = 'none';
+  }
+  step = 0;
+  showStep();
+}
+
+// ===== PER-DOCTOR DARK MODE =====
+function toggleDarkMode() {
+  var enabled = !document.body.classList.contains('dark-mode');
+  document.body.classList.toggle('dark-mode', enabled);
+  document.getElementById('btnDarkMode').textContent = enabled ? '\u{2600}\u{fe0f}' : '\u{1f319}';
+  if (currentDoctor) {
+    const data = getData();
+    var doc = data.doctors.find(function(d) { return d.id === currentDoctor.id; });
+    if (doc) { doc.darkMode = enabled; saveData(data); }
+  }
+  localStorage.setItem('samu_dark_mode', enabled ? '1' : '0');
+}
+function initDarkMode() {
+  var useDark = false;
+  if (currentDoctor) {
+    const data = getData();
+    var doc = data.doctors.find(function(d) { return d.id === currentDoctor.id; });
+    if (doc && doc.darkMode !== undefined) { useDark = doc.darkMode; }
+  }
+  if (useDark === undefined) { useDark = localStorage.getItem('samu_dark_mode') === '1'; }
+  if (useDark === undefined || useDark === null) { useDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches; }
+  document.body.classList.toggle('dark-mode', useDark);
+  document.getElementById('btnDarkMode').textContent = useDark ? '\u{2600}\u{fe0f}' : '\u{1f319}';
+  if (window.matchMedia) {
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+      if (!currentDoctor) { document.body.classList.toggle('dark-mode', e.matches);
+        document.getElementById('btnDarkMode').textContent = e.matches ? '\u{2600}\u{fe0f}' : '\u{1f319}'; }
+    });
+  }
+}
+
+// ===== NOTAS DE ENFERMERÍA =====
+function renderNursingNotes() {
+  const data = getData();
+  const p = data.patients.find(function(x) { return x.id === currentPatientId; });
+  var container = document.getElementById('nursingNotesList');
+  if (!p) { container.innerHTML = '<div class="no-data">Seleccione un paciente.</div>'; return; }
+  if (!p.nursingNotes || p.nursingNotes.length === 0) { container.innerHTML = '<div class="no-data">Sin notas de enfermería.</div>'; return; }
+  var html = '';
+  p.nursingNotes.slice().reverse().forEach(function(n, i) {
+    var idx = p.nursingNotes.length - 1 - i;
+    html += '<div class="soap-card" style="border-left-color:#00897b;"><div class="soap-meta">' + escHtml(n.date) + ' | ' + escHtml(n.nurse) + '</div>' +
+      (n.observation ? '<div class="soap-text">' + escHtml(n.observation) + '</div>' : '') +
+      (n.plan ? '<div class="soap-text" style="margin-top:4px;"><strong>Plan:</strong> ' + escHtml(n.plan) + '</div>' : '') +
+      '<div style="margin-top:6px;"><button class="btn-small btn-small-delete" onclick="deleteNursingNote(' + idx + ')">Eliminar</button></div></div>';
+  });
+  container.innerHTML = html;
+}
+function addNursingNote() {
+  var html = '<div class="form-group"><label>Fecha</label><input type="date" id="fNurseDate"></div>' +
+    '<div class="form-group"><label>Observaciones</label><textarea id="fNurseObs" rows="3" placeholder="Signos, cuidados, respuesta al tratamiento..."></textarea></div>' +
+    '<div class="form-group"><label>Plan de cuidados</label><textarea id="fNursePlan" rows="2" placeholder="Próximas acciones de enfermería..."></textarea></div>' +
+    '<div class="form-group" style="margin-top:8px;"><label><input type="checkbox" id="fNurseSigned"> Firma digital de enfermería</label></div>';
+  openModal('&#x1fa7a; Nueva nota de enfermería', html, function() { saveNursingNote(); });
+  document.getElementById('fNurseDate').value = new Date().toISOString().split('T')[0];
+}
+function saveNursingNote() {
+  var date = document.getElementById('fNurseDate').value;
+  var observation = document.getElementById('fNurseObs').value.trim();
+  var plan = document.getElementById('fNursePlan').value.trim();
+  if (!date || !observation) { alert('Fecha y observaciones son obligatorios.'); return; }
+  const data = getData();
+  const p = data.patients.find(function(x) { return x.id === currentPatientId; });
+  if (!p) return;
+  if (!p.nursingNotes) p.nursingNotes = [];
+  p.nursingNotes.push({ date: date, observation: observation, plan: plan, nurse: currentDoctor ? currentDoctor.name : '', createdAt: new Date().toISOString() });
+  addAuditLog('Nota de enfermería agregada');
+  saveData(data);
+  closeModal();
+  renderNursingNotes();
+}
+function deleteNursingNote(idx) {
+  if (!confirm('¿Eliminar esta nota de enfermería?')) return;
+  const data = getData();
+  const p = data.patients.find(function(x) { return x.id === currentPatientId; });
+  if (!p || !p.nursingNotes) return;
+  p.nursingNotes.splice(idx, 1);
+  saveData(data);
+  renderNursingNotes();
+}
+
+// ===== INTERCONSULTAS / DERIVACIONES INTERNAS =====
+function renderInterconsultas() {
+  const data = getData();
+  const p = data.patients.find(function(x) { return x.id === currentPatientId; });
+  var container = document.getElementById('interconsultasList');
+  if (!p) { container.innerHTML = '<div class="no-data">Seleccione un paciente.</div>'; return; }
+  if (!p.interconsultas || p.interconsultas.length === 0) { container.innerHTML = '<div class="no-data">Sin interconsultas.</div>'; return; }
+  var html = '';
+  p.interconsultas.slice().reverse().forEach(function(ic) {
+    html += '<div class="lab-card"><div class="lab-date">' + escHtml(ic.date) + ' | ' + escHtml(ic.fromDoctor) + ' &rarr; ' + escHtml(ic.toSpecialty) + '</div>' +
+      '<div class="lab-test"><strong>' + escHtml(ic.reason) + '</strong></div>' +
+      (ic.response ? '<div style="font-size:0.85em;color:var(--text-secondary);margin:4px 0;padding:8px;background:var(--item-bg);border-radius:4px;"><strong>Respuesta:</strong> ' + escHtml(ic.response) + '</div>' : '<div style="margin-top:6px;"><button class="btn-small btn-small-edit" onclick="respondInterconsulta(' + ic.id + ')">Responder</button></div>') +
+      '</div>';
+  });
+  container.innerHTML = html;
+}
+function addInterconsulta() {
+  const data = getData();
+  var docOpts = data.doctors.map(function(d) { return '<option value="' + escAttr(d.name) + '">' + escHtml(d.name) + ' (' + escHtml(d.specialty) + ')</option>'; }).join('');
+  var html = '<div class="form-group"><label>Fecha</label><input type="date" id="fICDate"></div>' +
+    '<div class="form-group"><label>Especialidad / Servicio solicitado</label><select id="fICSpecialty"><option value="Cardiología">Cardiología</option><option value="Neurología">Neurología</option><option value="Traumatología">Traumatología</option><option value="Pediatría">Pediatría</option><option value="Cirugía General">Cirugía General</option><option value="Terapia Intensiva">Terapia Intensiva</option><option value="Medicina Interna">Medicina Interna</option><option value="Psiquiatría">Psiquiatría</option></select></div>' +
+    '<div class="form-group"><label>Médico consultor (opcional)</label><select id="fICDoctor"><option value="">-- Cualquier disponible --</option>' + docOpts + '</select></div>' +
+    '<div class="form-group"><label>Motivo de interconsulta</label><textarea id="fICReason" rows="3" placeholder="Describa el motivo de la consulta..."></textarea></div>';
+  openModal('&#x1f91d; Nueva interconsulta', html, function() { saveInterconsulta(); });
+  document.getElementById('fICDate').value = new Date().toISOString().split('T')[0];
+}
+function saveInterconsulta() {
+  var date = document.getElementById('fICDate').value;
+  var toSpecialty = document.getElementById('fICSpecialty').value;
+  var toDoctor = document.getElementById('fICDoctor').value;
+  var reason = document.getElementById('fICReason').value.trim();
+  if (!date || !reason) { alert('Fecha y motivo son obligatorios.'); return; }
+  const data = getData();
+  const p = data.patients.find(function(x) { return x.id === currentPatientId; });
+  if (!p) return;
+  if (!p.interconsultas) p.interconsultas = [];
+  if (!p.icNextId) p.icNextId = 1;
+  p.interconsultas.push({ id: p.icNextId++, date: date, toSpecialty: toSpecialty, toDoctor: toDoctor || null, reason: reason, fromDoctor: currentDoctor ? currentDoctor.name : '', response: null, respondedAt: null, createdAt: new Date().toISOString() });
+  addAuditLog('Interconsulta solicitada a ' + toSpecialty);
+  saveData(data);
+  closeModal();
+  renderInterconsultas();
+}
+function respondInterconsulta(id) {
+  openModal('&#x1f4ac; Responder interconsulta', '<div class="form-group"><label>Respuesta</label><textarea id="fICResponse" rows="4" placeholder="Escriba su respuesta..."></textarea></div>', function() { saveICResponse(id); });
+}
+function saveICResponse(id) {
+  var response = document.getElementById('fICResponse').value.trim();
+  if (!response) { alert('Escriba una respuesta.'); return; }
+  const data = getData();
+  const p = data.patients.find(function(x) { return x.id === currentPatientId; });
+  if (!p || !p.interconsultas) return;
+  var ic = p.interconsultas.find(function(x) { return x.id === id; });
+  if (ic) { ic.response = response; ic.respondedAt = new Date().toISOString(); }
+  addAuditLog('Interconsulta respondida');
+  saveData(data);
+  closeModal();
+  renderInterconsultas();
+}
+
+// ===== ESCALAS DE VALORACIÓN =====
+var GLASGOW_LEVELS = [
+  { name: 'Ocular', items: [{ pts: 4, desc: 'Espontánea' }, { pts: 3, desc: 'Al llamado verbal' }, { pts: 2, desc: 'Al dolor' }, { pts: 1, desc: 'Ninguna' }] },
+  { name: 'Verbal', items: [{ pts: 5, desc: 'Orientado' }, { pts: 4, desc: 'Confuso' }, { pts: 3, desc: 'Palabras inapropiadas' }, { pts: 2, desc: 'Sonidos incomprensibles' }, { pts: 1, desc: 'Ninguna' }] },
+  { name: 'Motora', items: [{ pts: 6, desc: 'Obedece órdenes' }, { pts: 5, desc: 'Localiza dolor' }, { pts: 4, desc: 'Retira al dolor' }, { pts: 3, desc: 'Flexión al dolor' }, { pts: 2, desc: 'Extensión al dolor' }, { pts: 1, desc: 'Ninguna' }] }
+];
+function showScales() {
+  const data = getData();
+  var html = '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:15px;">' +
+    '<button class="btn-action" style="background:#1565c0;" onclick="showGlasgowScale()">&#x1f9e0; Glasgow</button>' +
+    '<button class="btn-action" style="background:#e65100;" onclick="showEVAScale()">&#x1f4aa; EVA Dolor</button>' +
+    '<button class="btn-action" style="background:#00695c;" onclick="showNEWSScale()">&#x1f4ca; NEWS2</button>' +
+    '<button class="btn-action" style="background:#4a148c;" onclick="showAPACHEII()">&#x1f9ec; APACHE II</button>' +
+    '</div><div id="scalesHistory"><h5 style="margin-bottom:8px;">Historial de valoraciones</h5>';
+  if (currentPatientId) {
+    var p = data.patients.find(function(x) { return x.id === currentPatientId; });
+    if (p && p.scales && p.scales.length > 0) {
+      p.scales.slice().reverse().forEach(function(s) {
+        html += '<div class="lab-card"><div class="lab-date">' + escHtml(s.date) + ' | <strong>' + escHtml(s.type) + '</strong> | Puntaje: <strong>' + s.score + '</strong></div>' +
+          (s.details ? '<div style="font-size:0.82em;color:var(--text-secondary);">' + escHtml(s.details) + '</div>' : '') +
+          '<div style="font-size:0.78em;color:var(--text-muted);">' + escHtml(s.doctor) + '</div></div>';
+      });
+    } else { html += '<div class="no-data">Sin valoraciones registradas.</div>'; }
+  } else { html += '<div class="no-data">Seleccione un paciente para ver su historial.</div>'; }
+  html += '</div>';
+  openModal('&#x1f4ca; Escalas de valoración', html, null);
+  document.getElementById('modalSaveBtn').style.display = 'none';
+}
+function showGlasgowScale() {
+  var html = '<div style="font-size:0.85em;margin-bottom:12px;"><strong>Escala de Coma de Glasgow</strong></div>';
+  GLASGOW_LEVELS.forEach(function(g) {
+    html += '<div class="form-group"><label>' + g.name + '</label><select id="gcs_' + g.name.toLowerCase() + '" onchange="updateGlasgowScore()">';
+    g.items.forEach(function(item) { html += '<option value="' + item.pts + '">' + item.desc + ' (' + item.pts + ' pts)</option>'; });
+    html += '</select></div>';
+  });
+  html += '<div style="margin:10px 0;padding:12px;background:#e8f5e9;border-radius:6px;text-align:center;"><span style="font-size:1.2em;font-weight:700;" id="gcsTotal">15</span>/15</div>' +
+    '<div class="form-group"><label>Fecha</label><input type="date" id="gcsDate"></div>' +
+    '<div class="form-group"><label>Notas</label><textarea id="gcsNotes" rows="2"></textarea></div>';
+  openModal('&#x1f9e0; Escala de Glasgow', html, function() { saveGlasgowScale(); });
+  document.getElementById('gcsDate').value = new Date().toISOString().split('T')[0];
+}
+function updateGlasgowScore() { document.getElementById('gcsTotal').textContent = parseInt(document.getElementById('gcs_ocular').value || 4) + parseInt(document.getElementById('gcs_verbal').value || 5) + parseInt(document.getElementById('gcs_motora').value || 6); }
+function saveGlasgowScale() {
+  var ocular = parseInt(document.getElementById('gcs_ocular').value);
+  var verbal = parseInt(document.getElementById('gcs_verbal').value);
+  var motora = parseInt(document.getElementById('gcs_motora').value);
+  var date = document.getElementById('gcsDate').value;
+  var notes = document.getElementById('gcsNotes').value.trim();
+  var total = ocular + verbal + motora;
+  const data = getData(); var p = data.patients.find(function(x) { return x.id === currentPatientId; });
+  if (!p) return; if (!p.scales) p.scales = [];
+  p.scales.push({ type: 'Glasgow', date: date, score: total, details: 'O:' + ocular + ' V:' + verbal + ' M:' + motora + (notes ? ' | ' + notes : ''), doctor: currentDoctor ? currentDoctor.name : '', createdAt: new Date().toISOString() });
+  saveData(data); closeModal(); showScales();
+}
+function showEVAScale() {
+  var html = '<div style="font-size:0.85em;margin-bottom:12px;"><strong>Escala Visual Analógica (EVA) del Dolor</strong></div>' +
+    '<p style="font-size:0.82em;color:var(--text-secondary);margin-bottom:12px;">Seleccione el nivel de dolor (0 = sin dolor, 10 = máximo).</p>' +
+    '<div style="display:flex;gap:2px;margin:15px 0;" id="evaContainer">';
+  for (var i = 0; i <= 10; i++) {
+    var color = i <= 3 ? '#2e7d32' : i <= 6 ? '#f57c00' : '#c62828';
+    html += '<div style="flex:1;text-align:center;padding:8px 2px;background:' + color + ';color:#fff;border-radius:4px;cursor:pointer;font-weight:600;font-size:0.85em;" onclick="selectEVA(' + i + ')" id="eva_' + i + '">' + i + '</div>';
+  }
+  html += '</div><div id="evaSelected" style="text-align:center;font-weight:600;font-size:1.1em;margin-bottom:12px;">Seleccione un valor</div>' +
+    '<div class="form-group"><label>Fecha</label><input type="date" id="evaDate"></div>' +
+    '<div class="form-group"><label>Notas</label><textarea id="evaNotes" rows="2" placeholder="Localización, tipo de dolor, etc."></textarea></div>';
+  openModal('&#x1f4aa; Escala EVA de Dolor', html, function() { saveEVAScale(); });
+  document.getElementById('evaDate').value = new Date().toISOString().split('T')[0];
+}
+function selectEVA(val) {
+  for (var i = 0; i <= 10; i++) { document.getElementById('eva_' + i).style.opacity = i === val ? '1' : '0.5'; document.getElementById('eva_' + i).style.border = i === val ? '3px solid #fff' : 'none'; }
+  var labels = ['Sin dolor', 'Muy leve', 'Leve', 'Moderado', 'Moderado-Sev', 'Severo', 'Muy severo', 'Intenso', 'Muy intenso', 'Insoportable', 'Máximo'];
+  document.getElementById('evaSelected').textContent = 'EVA: ' + val + '/10 — ' + labels[val];
+  window._evaVal = val;
+}
+function saveEVAScale() {
+  var val = window._evaVal; if (val === undefined) { alert('Seleccione un valor en la escala.'); return; }
+  var date = document.getElementById('evaDate').value; var notes = document.getElementById('evaNotes').value.trim();
+  const data = getData(); var p = data.patients.find(function(x) { return x.id === currentPatientId; });
+  if (!p) return; if (!p.scales) p.scales = [];
+  p.scales.push({ type: 'EVA', date: date, score: val + '/10', details: notes || 'EVA ' + val, doctor: currentDoctor ? currentDoctor.name : '', createdAt: new Date().toISOString() });
+  saveData(data); closeModal(); showScales();
+}
+function showNEWSScale() {
+  var html = '<div style="font-size:0.85em;margin-bottom:12px;"><strong>National Early Warning Score (NEWS2)</strong></div>' +
+    '<p style="font-size:0.82em;color:var(--text-secondary);margin-bottom:12px;">Registre parámetros para calcular alerta temprana.</p>';
+  ['FR (resp/min)', 'SatO2 (%)', 'Temperatura (°C)', 'PAS (mmHg)', 'FC (lpm)', 'AVPU'].forEach(function(label) {
+    html += '<div class="form-group"><label>' + label + '</label><input type="number" id="news_' + label.replace(/[^a-zA-Z0-9]/g, '') + '" step="0.1" onchange="calcNEWS()" style="width:120px;"></div>';
+  });
+  html += '<div style="margin:10px 0;padding:12px;background:#e8f5e9;border-radius:6px;text-align:center;"><span style="font-size:1.2em;font-weight:700;" id="newsTotal">0</span> pts — <span id="newsLabel" style="font-weight:600;">Bajo</span></div>' +
+    '<div class="form-group"><label>Fecha</label><input type="date" id="newsDate"></div>' +
+    '<div class="form-group"><label>Notas</label><textarea id="newsNotes" rows="2"></textarea></div>';
+  openModal('&#x1f4ca; NEWS2 Score', html, function() { saveNEWS(); });
+  document.getElementById('newsDate').value = new Date().toISOString().split('T')[0];
+}
+function calcNEWS() {
+  var fr = parseFloat(document.getElementById('newsFRrespmin').value) || 0;
+  var sat = parseFloat(document.getElementById('newsSatO2').value) || 0;
+  var temp = parseFloat(document.getElementById('newsTemperaturaC').value) || 0;
+  var pas = parseFloat(document.getElementById('newsPASmmHg').value) || 0;
+  var fc = parseFloat(document.getElementById('newsFClpm').value) || 0;
+  var score = 0;
+  if (fr <= 8 || fr >= 25) score += 3; else if (fr >= 21) score += 2; else if (fr >= 12) score += 0; else score += 1;
+  if (sat <= 91) score += 3; else if (sat <= 93) score += 2; else if (sat <= 95) score += 1;
+  if (temp <= 35) score += 3; else if (temp >= 39.1) score += 2; else if (temp >= 38.1) score += 1;
+  if (pas <= 90) score += 3; else if (pas >= 220) score += 3; else if (pas >= 111) score += 1; else if (pas >= 101) score += 0; else score += 2;
+  if (fc <= 40) score += 3; else if (fc >= 131) score += 3; else if (fc >= 111) score += 2; else if (fc >= 91) score += 1; else if (fc >= 51) score += 0; else score += 2;
+  document.getElementById('newsTotal').textContent = score;
+  var label = score >= 7 ? 'Alto - Emergencia' : score >= 5 ? 'Alto' : score >= 3 ? 'Medio' : 'Bajo';
+  document.getElementById('newsLabel').textContent = label;
+  document.getElementById('newsLabel').style.color = score >= 7 ? '#c62828' : score >= 5 ? '#e65100' : score >= 3 ? '#f57c00' : '#2e7d32';
+}
+function saveNEWS() {
+  var score = parseInt(document.getElementById('newsTotal').textContent);
+  var date = document.getElementById('newsDate').value; var notes = document.getElementById('newsNotes').value.trim();
+  const data = getData(); var p = data.patients.find(function(x) { return x.id === currentPatientId; });
+  if (!p) return; if (!p.scales) p.scales = [];
+  p.scales.push({ type: 'NEWS2', date: date, score: score, details: notes || 'NEWS2: ' + score, doctor: currentDoctor ? currentDoctor.name : '', createdAt: new Date().toISOString() });
+  saveData(data); closeModal(); showScales();
+}
+
+// ===== APACHE II SCORE =====
+function showAPACHEII() {
+  var html = '<div style="font-size:0.85em;margin-bottom:12px;"><strong>APACHE II - Acute Physiology And Chronic Health Evaluation</strong></div>' +
+    '<p style="font-size:0.82em;color:var(--text-secondary);margin-bottom:12px;">Complete los parámetros fisiológicos para calcular el score de gravedad.</p>' +
+    '<div class="form-row"><div class="form-group"><label>Temp (°C)</label><input type="number" id="apache_temp" step="0.1" onchange="calcAPACHE()" value="37"></div>' +
+    '<div class="form-group"><label>PAM (mmHg)</label><input type="number" id="apache_pam" step="1" onchange="calcAPACHE()" value="90"></div></div>' +
+    '<div class="form-row"><div class="form-group"><label>FC (lpm)</label><input type="number" id="apache_fc" step="1" onchange="calcAPACHE()" value="80"></div>' +
+    '<div class="form-group"><label>FR (resp/min)</label><input type="number" id="apache_fr" step="1" onchange="calcAPACHE()" value="16"></div></div>' +
+    '<div class="form-row"><div class="form-group"><label>pH arterial</label><input type="number" id="apache_ph" step="0.01" onchange="calcAPACHE()" value="7.4"></div>' +
+    '<div class="form-group"><label>Na+ (mEq/L)</label><input type="number" id="apache_na" step="1" onchange="calcAPACHE()" value="140"></div></div>' +
+    '<div class="form-row"><div class="form-group"><label>K+ (mEq/L)</label><input type="number" id="apache_k" step="0.1" onchange="calcAPACHE()" value="4.0"></div>' +
+    '<div class="form-group"><label>Creatinina (mg/dL)</label><input type="number" id="apache_crea" step="0.1" onchange="calcAPACHE()" value="1.0"></div></div>' +
+    '<div class="form-row"><div class="form-group"><label>Hematocrito (%)</label><input type="number" id="apache_hct" step="1" onchange="calcAPACHE()" value="42"></div>' +
+    '<div class="form-group"><label>Leucocitos (x10³/mm³)</label><input type="number" id="apache_wbc" step="0.1" onchange="calcAPACHE()" value="8"></div></div>' +
+    '<div class="form-row"><div class="form-group"><label>Glasgow (3-15)</label><input type="number" id="apache_gcs" step="1" min="3" max="15" onchange="calcAPACHE()" value="15"></div>' +
+    '<div class="form-group"><label>Edad (años)</label><input type="number" id="apache_age" step="1" onchange="calcAPACHE()" value="40"></div></div>' +
+    '<div class="form-group"><label>Insuficiencia orgánica crónica</label><select id="apache_chronic" onchange="calcAPACHE()"><option value="0">No</option><option value="2">Cirugía programada</option><option value="5">Cirugía de urgencia / No quirúrgico</option></select></div>' +
+    '<div style="margin:10px 0;padding:12px;background:#e8f5e9;border-radius:6px;text-align:center;"><span style="font-size:1.2em;font-weight:700;" id="apacheTotal">0</span> pts — <span id="apacheLabel" style="font-weight:600;">Normal</span></div>' +
+    '<div style="font-size:0.78em;color:var(--text-muted);text-align:center;">APACHE II: 0-14 bajo riesgo | 15-24 riesgo moderado | 25+ alto riesgo</div>' +
+    '<div class="form-group"><label>Fecha</label><input type="date" id="apacheDate"></div>' +
+    '<div class="form-group"><label>Notas</label><textarea id="apacheNotes" rows="2"></textarea></div>';
+  openModal('&#x1f9ec; Escala APACHE II', html, function() { saveAPACHE(); });
+  document.getElementById('apacheDate').value = new Date().toISOString().split('T')[0];
+  calcAPACHE();
+}
+function calcAPACHE() {
+  var temp = parseFloat(document.getElementById('apache_temp').value) || 37;
+  var pam = parseFloat(document.getElementById('apache_pam').value) || 90;
+  var fc = parseFloat(document.getElementById('apache_fc').value) || 80;
+  var fr = parseFloat(document.getElementById('apache_fr').value) || 16;
+  var ph = parseFloat(document.getElementById('apache_ph').value) || 7.4;
+  var na = parseFloat(document.getElementById('apache_na').value) || 140;
+  var k = parseFloat(document.getElementById('apache_k').value) || 4.0;
+  var crea = parseFloat(document.getElementById('apache_crea').value) || 1.0;
+  var hct = parseFloat(document.getElementById('apache_hct').value) || 42;
+  var wbc = parseFloat(document.getElementById('apache_wbc').value) || 8;
+  var gcs = parseInt(document.getElementById('apache_gcs').value) || 15;
+  var age = parseInt(document.getElementById('apache_age').value) || 40;
+  var chronic = parseInt(document.getElementById('apache_chronic').value) || 0;
+  var score = 0;
+  // Temperature points
+  if (temp >= 41 || temp <= 29.9) score += 4;
+  else if (temp >= 39) score += 3;
+  else if (temp >= 38.5 || temp <= 31.9) score += 2;
+  else if (temp >= 36 || temp <= 33.9) score += 1;
+  // MAP points
+  if (pam >= 160 || pam <= 49) score += 4;
+  else if (pam >= 130) score += 3;
+  else if (pam >= 110) score += 2;
+  else if (pam >= 70) score += 0;
+  else if (pam >= 50) score += 2;
+  // Heart rate points
+  if (fc >= 180 || fc <= 39) score += 4;
+  else if (fc >= 140) score += 3;
+  else if (fc >= 110) score += 2;
+  else if (fc >= 70) score += 0;
+  else if (fc >= 40) score += 2;
+  // Respiratory rate points
+  if (fr >= 50 || fr <= 5) score += 4;
+  else if (fr >= 35) score += 3;
+  else if (fr >= 25) score += 2;
+  else if (fr >= 12) score += 0;
+  else if (fr >= 6) score += 2;
+  // pH points
+  if (ph >= 7.7 || ph <= 7.15) score += 4;
+  else if (ph >= 7.6) score += 3;
+  else if (ph >= 7.5) score += 2;
+  else if (ph >= 7.33 || ph <= 7.24) score += 1;
+  else if (ph >= 7.25) score += 2;
+  // Sodium points
+  if (na >= 180 || na <= 110) score += 4;
+  else if (na >= 160) score += 3;
+  else if (na >= 155) score += 2;
+  else if (na >= 150) score += 1;
+  else if (na >= 130) score += 0;
+  else if (na >= 120) score += 2;
+  // Potassium points
+  if (k >= 7 || k <= 2.5) score += 4;
+  else if (k >= 6) score += 3;
+  else if (k >= 5.5) score += 2;
+  else if (k >= 3.5) score += 0;
+  else if (k >= 3) score += 2;
+  // Creatinine points
+  if (crea >= 3.5) score += 4;
+  else if (crea >= 2) score += 3;
+  else if (crea >= 1.5) score += 2;
+  else if (crea >= 0.6) score += 0;
+  else score += 2;
+  // Hematocrit points
+  if (hct >= 60 || hct <= 19.9) score += 4;
+  else if (hct >= 50) score += 2;
+  else if (hct >= 46) score += 1;
+  else if (hct >= 30) score += 0;
+  else if (hct >= 20) score += 2;
+  // WBC points
+  if (wbc >= 40 || wbc <= 1) score += 4;
+  else if (wbc >= 20) score += 2;
+  else if (wbc >= 15) score += 1;
+  else if (wbc >= 3) score += 0;
+  else score += 2;
+  // GCS points = 15 - GCS
+  var gcsPoints = 15 - gcs;
+  score += gcsPoints;
+  // Age points
+  if (age >= 75) score += 6;
+  else if (age >= 65) score += 5;
+  else if (age >= 55) score += 3;
+  else if (age >= 45) score += 2;
+  // Chronic health points
+  score += chronic;
+  document.getElementById('apacheTotal').textContent = score;
+  var label = score >= 25 ? 'Alto riesgo' : score >= 15 ? 'Riesgo moderado' : score >= 5 ? 'Riesgo leve' : 'Bajo riesgo';
+  document.getElementById('apacheLabel').textContent = label;
+  document.getElementById('apacheLabel').style.color = score >= 25 ? '#c62828' : score >= 15 ? '#e65100' : score >= 5 ? '#f57c00' : '#2e7d32';
+}
+function saveAPACHE() {
+  var score = parseInt(document.getElementById('apacheTotal').textContent);
+  var date = document.getElementById('apacheDate').value;
+  var notes = document.getElementById('apacheNotes').value.trim();
+  const data = getData(); var p = data.patients.find(function(x) { return x.id === currentPatientId; });
+  if (!p) return; if (!p.scales) p.scales = [];
+  p.scales.push({ type: 'APACHE II', date: date, score: score, details: notes || 'APACHE II: ' + score, doctor: currentDoctor ? currentDoctor.name : '', createdAt: new Date().toISOString() });
+  saveData(data); closeModal(); showScales();
+}
+
+// ===== PANEL DE AVISOS DEL SISTEMA =====
+function showSystemAnnouncements() {
+  const data = getData();
+  if (!data.announcements) data.announcements = [];
+  var editable = currentDoctor && currentDoctor.username === 'LVargas';
+  var listHtml = data.announcements.length === 0 ? '<div class="no-data">No hay avisos.</div>' : '';
+  data.announcements.slice().reverse().forEach(function(a) {
+    listHtml += '<div class="lab-card"><div class="lab-date">' + escHtml(a.date) + ' | ' + escHtml(a.author) + '</div><div class="lab-test"><strong>' + escHtml(a.title) + '</strong></div><div style="font-size:0.85em;color:var(--text-secondary);margin:4px 0;">' + escHtml(a.message) + '</div></div>';
+  });
+  var html = '<div style="margin-bottom:12px;"><strong>&#x1f514; Avisos del sistema</strong></div>' + listHtml;
+  if (editable) {
+    html += '<hr style="margin:12px 0;border:none;border-top:1px solid var(--border);"><h5 style="margin-bottom:8px;">Nuevo aviso</h5>' +
+      '<div class="form-group"><label>Título</label><input type="text" id="fAnnTitle" placeholder="Título del aviso"></div>' +
+      '<div class="form-group"><label>Mensaje</label><textarea id="fAnnMsg" rows="3" placeholder="Mensaje..."></textarea></div>';
+  }
+  openModal('&#x1f514; Avisos del sistema', html, editable ? function() { addAnnouncement(); } : null);
+  if (editable) document.getElementById('modalSaveBtn').textContent = 'Publicar aviso';
+  else document.getElementById('modalSaveBtn').style.display = 'none';
+}
+function addAnnouncement() {
+  var title = document.getElementById('fAnnTitle').value.trim();
+  var message = document.getElementById('fAnnMsg').value.trim();
+  if (!title || !message) { alert('Título y mensaje son obligatorios.'); return; }
+  const data = getData();
+  if (!data.announcements) data.announcements = [];
+  data.announcements.push({ title: title, message: message, date: new Date().toISOString().split('T')[0], author: currentDoctor ? currentDoctor.name : '', createdAt: new Date().toISOString() });
+  addAuditLog('Aviso publicado: ' + title); saveData(data); closeModal(); showSystemAnnouncements();
+}
+
+// ===== ESTADÍSTICAS AVANZADAS (KPI Dashboard) =====
+function showAdvancedStats() {
+  const data = getData();
+  var totalPatients = data.patients.length;
+  var totalEmergencies = (data.emergencyReports || []).length;
+  var totalDoctors = data.doctors.length;
+  var onDuty = data.doctors.filter(function(d) { return d.onDuty; }).length;
+  var totalInvoices = (data.invoices || []).length;
+  var totalRevenue = (data.invoices || []).reduce(function(s, f) { return f.status === 'pagada' ? s + parseFloat(f.amount || 0) : s; }, 0);
+  var outstandingRevenue = (data.invoices || []).reduce(function(s, f) { return f.status === 'emitida' ? s + parseFloat(f.amount || 0) : s; }, 0);
+  var maleCount = data.patients.filter(function(p) { return p.gender === 'M'; }).length;
+  var femaleCount = data.patients.filter(function(p) { return p.gender === 'F'; }).length;
+  // Age distribution
+  var ageGroups = { '0-18': 0, '19-40': 0, '41-60': 0, '61-80': 0, '81+': 0 };
+  var refYear = new Date().getFullYear();
+  data.patients.forEach(function(p) {
+    if (!p.dateOfBirth) return;
+    var age = refYear - parseInt(p.dateOfBirth.split('-')[0]);
+    if (age <= 18) ageGroups['0-18']++; else if (age <= 40) ageGroups['19-40']++; else if (age <= 60) ageGroups['41-60']++; else if (age <= 80) ageGroups['61-80']++; else ageGroups['81+']++;
+  });
+  // Monthly patients (last 6 months)
+  var monthlyPatients = {};
+  var now = new Date();
+  for (var m = 0; m < 6; m++) {
+    var d = new Date(now.getFullYear(), now.getMonth() - m, 1);
+    var key = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+    monthlyPatients[key] = 0;
+  }
+  data.patients.forEach(function(p) {
+    var created = p.createdAt ? p.createdAt.substring(0, 7) : '';
+    if (monthlyPatients[created] !== undefined) monthlyPatients[created]++;
+  });
+  // Monthly emergencies
+  var monthlyEmerg = {};
+  for (var m = 0; m < 6; m++) {
+    var d = new Date(now.getFullYear(), now.getMonth() - m, 1);
+    var key = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+    monthlyEmerg[key] = 0;
+  }
+  (data.emergencyReports || []).forEach(function(r) {
+    var created = (r.date || '').substring(0, 7);
+    if (monthlyEmerg[created] !== undefined) monthlyEmerg[created]++;
+  });
+  // Monthly revenue
+  var monthlyRevenue = {};
+  for (var m = 0; m < 6; m++) {
+    var d = new Date(now.getFullYear(), now.getMonth() - m, 1);
+    var key = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+    monthlyRevenue[key] = 0;
+  }
+  (data.invoices || []).forEach(function(f) {
+    if (f.status === 'pagada') {
+      var created = (f.date || f.createdAt || '').substring(0, 7);
+      if (monthlyRevenue[created] !== undefined) monthlyRevenue[created] += parseFloat(f.amount || 0);
+    }
+  });
+  // Triage distribution
+  var triageCounts = { rojo: 0, amarillo: 0, verde: 0 };
+  (data.emergencyReports || []).forEach(function(r) { var t = r.triage || 'amarillo'; if (triageCounts[t] !== undefined) triageCounts[t]++; });
+  var monthLabels = Object.keys(monthlyPatients).sort();
+  var monthLabelsRev = monthLabels.slice().reverse();
+  var html = '<div class="stats-grid">' +
+    '<div class="stat-card stat-patients" title="Total de pacientes registrados"><div class="stat-number">' + totalPatients + '</div><div class="stat-label">Pacientes</div></div>' +
+    '<div class="stat-card stat-emerg" title="Total de emergencias"><div class="stat-number">' + totalEmergencies + '</div><div class="stat-label">Emergencias</div></div>' +
+    '<div class="stat-card stat-doctors" title="Médicos en guardia / total"><div class="stat-number">' + onDuty + '/' + totalDoctors + '</div><div class="stat-label">Médicos (guardia)</div></div>' +
+    '<div class="stat-card" style="background:linear-gradient(135deg,#00695c,#004d40);" title="Ingresos cobrados"><div class="stat-number">$' + totalRevenue.toLocaleString() + '</div><div class="stat-label">Ingresos</div></div>' +
+    '<div class="stat-card" style="background:linear-gradient(135deg,#0d47a1,#1a237e);" title="Hombres / Mujeres"><div class="stat-number">' + maleCount + '/' + femaleCount + '</div><div class="stat-label">H/M</div></div>' +
+    '<div class="stat-card" style="background:linear-gradient(135deg,#e65100,#bf360c);" title="Total facturas emitidas"><div class="stat-number">' + totalInvoices + '</div><div class="stat-label">Facturas</div></div>' +
+    '</div>';
+  html += '<div class="chart-row" style="margin-top:15px;"><div class="chart-box"><canvas id="advMonthlyPatients"></canvas></div><div class="chart-box"><canvas id="advMonthlyEmerg"></canvas></div></div>';
+  html += '<div class="chart-row" style="margin-top:15px;"><div class="chart-box"><canvas id="advMonthlyRevenue"></canvas></div><div class="chart-box"><canvas id="advTriageDist"></canvas></div></div>';
+  html += '<div class="chart-row" style="margin-top:15px;"><div class="chart-box"><canvas id="advAgeDist"></canvas></div><div class="chart-box" style="display:flex;flex-direction:column;justify-content:center;padding:15px;"><h5 style="margin-bottom:10px;">Resumen rápido</h5>' +
+    '<div style="font-size:0.85em;color:var(--text-secondary);"><strong>Pacientes activos:</strong> ' + data.patients.filter(function(p) { return !p.archived; }).length + '</div>' +
+    '<div style="font-size:0.85em;color:var(--text-secondary);"><strong>Pacientes archivados:</strong> ' + data.patients.filter(function(p) { return p.archived; }).length + '</div>' +
+    '<div style="font-size:0.85em;color:var(--text-secondary);"><strong>Total recetas:</strong> ' + data.patients.reduce(function(s, p) { return s + (p.prescriptions || []).length; }, 0) + '</div>' +
+    '<div style="font-size:0.85em;color:var(--text-secondary);"><strong>Diagnósticos registrados:</strong> ' + data.patients.reduce(function(s, p) { return s + (p.diagnoses || []).length; }, 0) + '</div>' +
+    '<div style="font-size:0.85em;color:var(--text-secondary);"><strong>Pendiente cobro:</strong> $' + outstandingRevenue.toLocaleString() + '</div></div></div>';
+  openModal('&#x1f4ca; Dashboard de KPIs', html, null);
+  document.getElementById('modalSaveBtn').style.display = 'none';
+  setTimeout(function() {
+    try {
+      if (window._advChart1) window._advChart1.destroy();
+      if (window._advChart2) window._advChart2.destroy();
+      if (window._advChart3) window._advChart3.destroy();
+      if (window._advChart4) window._advChart4.destroy();
+      if (window._advChart5) window._advChart5.destroy();
+      var ctx1 = document.getElementById('advMonthlyPatients');
+      if (ctx1) {
+        window._advChart1 = new Chart(ctx1, {
+          type: 'bar', data: { labels: monthLabelsRev.map(function(m) { var p = m.split('-'); var months = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic']; return months[parseInt(p[1])-1] + ' ' + p[0]; }), datasets: [{ label: 'Nuevos pacientes', data: monthLabelsRev.map(function(m) { return monthlyPatients[m]; }), backgroundColor: '#1a237e', borderRadius: 4 }] },
+          options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
+        });
+      }
+      var ctx2 = document.getElementById('advMonthlyEmerg');
+      if (ctx2) {
+        window._advChart2 = new Chart(ctx2, {
+          type: 'bar', data: { labels: monthLabelsRev.map(function(m) { var p = m.split('-'); var months = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic']; return months[parseInt(p[1])-1] + ' ' + p[0]; }), datasets: [{ label: 'Emergencias', data: monthLabelsRev.map(function(m) { return monthlyEmerg[m]; }), backgroundColor: '#c62828', borderRadius: 4 }] },
+          options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
+        });
+      }
+      var ctx3 = document.getElementById('advAgeDist');
+      if (ctx3) {
+        window._advChart3 = new Chart(ctx3, {
+          type: 'doughnut', data: { labels: Object.keys(ageGroups), datasets: [{ data: Object.values(ageGroups), backgroundColor: ['#42a5f5', '#66bb6a', '#ffa726', '#ef5350', '#ab47bc'] }] },
+          options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+        });
+      }
+      var ctx4 = document.getElementById('advMonthlyRevenue');
+      if (ctx4) {
+        window._advChart4 = new Chart(ctx4, {
+          type: 'line', data: { labels: monthLabelsRev.map(function(m) { var p = m.split('-'); var months = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic']; return months[parseInt(p[1])-1] + ' ' + p[0]; }), datasets: [{ label: 'Ingresos mensuales', data: monthLabelsRev.map(function(m) { return monthlyRevenue[m]; }), borderColor: '#2e7d32', backgroundColor: 'rgba(46,125,50,0.1)', fill: true, tension: 0.3 }] },
+          options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+        });
+      }
+      var ctx5 = document.getElementById('advTriageDist');
+      if (ctx5) {
+        window._advChart5 = new Chart(ctx5, {
+          type: 'doughnut', data: { labels: ['Rojo (Crítico)', 'Amarillo (Urgente)', 'Verde (Leve)'], datasets: [{ data: [triageCounts.rojo, triageCounts.amarillo, triageCounts.verde], backgroundColor: ['#d32f2f', '#f57c00', '#388e3c'] }] },
+          options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+        });
+      }
+    } catch(e) { console.warn('Error rendering advanced charts:', e); }
+  }, 200);
+}
+
+// ===== EXPORTAR HISTORIA CLÍNICA COMPLETA (PDF) =====
+function printFullRecord() {
+  const data = getData();
+  var p = data.patients.find(function(x) { return x.id === currentPatientId; });
+  if (!p) return;
+  var win = window.open('', '_blank');
+  win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Expediente Completo - ' + escHtml(p.firstName + ' ' + p.lastName) + '</title><style>body{font-family:Georgia,serif;padding:30px;color:#333;max-width:800px;margin:0 auto;}h1{color:#1a237e;border-bottom:3px double #1a237e;padding-bottom:8px;font-size:1.3em;}h2{color:#2e7d32;font-size:1.1em;margin-top:20px;border-bottom:1px solid #ddd;padding-bottom:4px;}h3{font-size:0.95em;color:#555;margin:12px 0 6px;}.meta{color:#666;margin:8px 0;font-size:0.9em;}.section{margin:10px 0;padding:10px;background:#f8f9fa;border-radius:6px;border-left:4px solid #1a237e;}.item{margin:6px 0;padding:6px;background:#fff;border-radius:4px;}.label{font-weight:600;color:#555;}.footer{margin-top:30px;padding-top:15px;border-top:1px solid #ddd;font-size:0.8em;color:#999;text-align:center;}@media print{body{padding:15px;}}</style></head><body>');
+  win.document.write('<h1>EXPEDIENTE MÉDICO COMPLETO</h1>');
+  win.document.write('<div class="meta"><strong>Paciente:</strong> ' + escHtml(p.firstName + ' ' + p.lastName) + ' | <strong>DNI:</strong> ' + escHtml(p.citizenNumber || '-') + ' | <strong>FN:</strong> ' + escHtml(p.dateOfBirth || '-') + ' | <strong>Tel:</strong> ' + escHtml(p.phone || '-') + '</div>');
+  win.document.write('<div class="meta"><strong>Obra social:</strong> ' + escHtml(p.insuranceProvider || '-') + ' ' + (p.insuranceNumber ? 'Nº: ' + escHtml(p.insuranceNumber) : '') + ' | <strong>Cobertura:</strong> ' + escHtml(p.coverageType || '-') + '</div>');
+  if (p.allergies && p.allergies.length > 0) {
+    win.document.write('<div class="section" style="border-left-color:#c62828;"><h2>&#x26a0;&#xfe0f; Alergias</h2>');
+    p.allergies.forEach(function(a) { win.document.write('<span style="display:inline-block;background:#ffebee;color:#c62828;padding:2px 8px;border-radius:4px;margin:2px;font-size:0.85em;">' + escHtml(a) + '</span>'); });
+    win.document.write('</div>');
+  }
+  if (p.chronicConditions && p.chronicConditions.length > 0) {
+    win.document.write('<div class="section" style="border-left-color:#e65100;"><h2>&#x1f9a0; Condiciones Crónicas</h2>');
+    p.chronicConditions.forEach(function(c) { win.document.write('<span style="display:inline-block;background:#fff3e0;color:#e65100;padding:2px 8px;border-radius:4px;margin:2px;font-size:0.85em;">' + escHtml(c) + '</span>'); });
+    win.document.write('</div>');
+  }
+  if (p.diagnoses && p.diagnoses.length > 0) {
+    win.document.write('<div class="section" style="border-left-color:#1565c0;"><h2>&#x1f9d1;&#x200d;&#x2695;&#xfe0f; Diagnósticos</h2>');
+    p.diagnoses.forEach(function(d) { win.document.write('<div class="item"><span class="label">' + escHtml(d.date) + '</span> — <strong>' + escHtml(d.description) + '</strong>' + (d.icd10 ? ' (' + escHtml(d.icd10) + ')' : '') + (d.notes ? '<br><em>' + escHtml(d.notes) + '</em>' : '') + '<br><span style="font-size:0.82em;color:#888;">Dr. ' + escHtml(d.doctor) + '</span></div>'); });
+    win.document.write('</div>');
+  }
+  if (p.prescriptions && p.prescriptions.length > 0) {
+    win.document.write('<div class="section" style="border-left-color:#2e7d32;"><h2>&#x1f48a; Recetas</h2>');
+    p.prescriptions.forEach(function(r) { win.document.write('<div class="item"><span class="label">' + escHtml(r.date) + '</span> — <strong>' + escHtml(r.medication) + '</strong> ' + escHtml(r.dosage) + (r.instructions ? '<br><em>' + escHtml(r.instructions) + '</em>' : '') + '<br><span style="font-size:0.82em;color:#888;">Dr. ' + escHtml(r.doctor) + '</span></div>'); });
+    win.document.write('</div>');
+  }
+  var emergs = (data.emergencyReports || []).filter(function(r) { return r.patientId === p.id; });
+  if (emergs.length > 0) {
+    win.document.write('<div class="section" style="border-left-color:#c62828;"><h2>&#x1f691; Emergencias</h2>');
+    emergs.forEach(function(r) { win.document.write('<div class="item"><span class="label">' + escHtml(r.date) + '</span> — <strong>' + escHtml(r.type) + '</strong> (' + (r.triage || 'N/A').toUpperCase() + ')<br>' + escHtml((r.description || '').substring(0, 200)) + (r.outcome ? '<br><strong>Estado:</strong> ' + escHtml(r.outcome) : '') + '<br><span style="font-size:0.82em;color:#888;">Dr. ' + escHtml(r.doctor) + '</span></div>'); });
+    win.document.write('</div>');
+  }
+  if (p.soapNotes && p.soapNotes.length > 0) {
+    win.document.write('<div class="section" style="border-left-color:#1565c0;"><h2>&#x1f9d0; Notas SOAP</h2>');
+    p.soapNotes.slice().reverse().forEach(function(n) { win.document.write('<div class="item"><span class="label">' + escHtml(n.date) + '</span> — ' + (n.subjective ? '<br><strong>S:</strong> ' + escHtml(n.subjective) : '') + (n.objective ? '<br><strong>O:</strong> ' + escHtml(n.objective) : '') + (n.assessment ? '<br><strong>A:</strong> ' + escHtml(n.assessment) : '') + (n.plan ? '<br><strong>P:</strong> ' + escHtml(n.plan) : '') + '<br><span style="font-size:0.82em;color:#888;">Dr. ' + escHtml(n.doctor) + '</span></div>'); });
+    win.document.write('</div>');
+  }
+  if (p.anamnesis && p.anamnesis.length > 0) {
+    win.document.write('<div class="section" style="border-left-color:#6a1b9a;"><h2>&#x1f4dd; Anamnesis</h2>');
+    p.anamnesis.forEach(function(a) { win.document.write('<div class="item"><span class="label">' + escHtml(a.date) + '</span> — ' + (a.chiefComplaint ? '<br><strong>Motivo:</strong> ' + escHtml(a.chiefComplaint) : '') + (a.historyNow ? '<br><strong>Enfermedad actual:</strong> ' + escHtml(a.historyNow) : '') + '<br><span style="font-size:0.82em;color:#888;">Dr. ' + escHtml(a.doctor) + '</span></div>'); });
+    win.document.write('</div>');
+  }
+  if (p.nursingNotes && p.nursingNotes.length > 0) {
+    win.document.write('<div class="section" style="border-left-color:#00897b;"><h2>&#x1fa7a; Notas de Enfermería</h2>');
+    p.nursingNotes.forEach(function(n) { win.document.write('<div class="item"><span class="label">' + escHtml(n.date) + '</span> — ' + escHtml(n.observation) + (n.plan ? '<br><em>Plan: ' + escHtml(n.plan) + '</em>' : '') + '<br><span style="font-size:0.82em;color:#888;">' + escHtml(n.nurse) + '</span></div>'); });
+    win.document.write('</div>');
+  }
+  if (p.scales && p.scales.length > 0) {
+    win.document.write('<div class="section" style="border-left-color:#00695c;"><h2>&#x1f4ca; Escalas de Valoración</h2>');
+    p.scales.forEach(function(s) { win.document.write('<div class="item"><span class="label">' + escHtml(s.date) + '</span> — <strong>' + escHtml(s.type) + '</strong> — Puntaje: ' + s.score + (s.details ? '<br><em>' + escHtml(s.details) + '</em>' : '') + '</div>'); });
+    win.document.write('</div>');
+  }
+  var discharges = (data.dischargeSummaries || []).filter(function(s) { return s.patientId === p.id; });
+  if (discharges.length > 0) {
+    win.document.write('<div class="section" style="border-left-color:#2e7d32;"><h2>&#x1f4c4; Informes de Alta</h2>');
+    discharges.forEach(function(s) { win.document.write('<div class="item"><span class="label">' + escHtml(s.date) + '</span> — <strong>' + escHtml(s.diagnosis) + '</strong>' + (s.derivation ? '<br><strong>Derivación:</strong> ' + escHtml(s.derivation) : '') + '</div>'); });
+    win.document.write('</div>');
+  }
+  win.document.write('<div class="footer">Documento generado electrónicamente desde SAMU RevoRP — ' + new Date().toLocaleString() + '</div>');
+  win.document.write('</body></html>');
+  win.document.close();
+  win.print();
+}
+
+// ===== MOBILE RESPONSIVE IMPROVEMENTS =====
+function improveMobileResponsive() {
+  // Mobile CSS is now embedded in the stylesheet. This function exists for compatibility.
+}
+
+// ===== BARCODE SCANNER =====
+function scanBarcode() {
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    alert('La cámara no está disponible en este dispositivo/navegador.');
+    return;
+  }
+  var html = '<video id="barcodeVideo" autoplay playsinline style="width:100%;max-width:400px;border-radius:8px;background:#000;"></video>' +
+    '<p style="font-size:0.82em;color:#666;margin-top:8px;text-align:center;">Enfoque el código de barras del paciente (DNI, pulsera).</p>' +
+    '<div id="barcodeResult" style="margin-top:10px;padding:10px;text-align:center;font-weight:600;color:#2e7d32;"></div>' +
+    '<button class="btn-cancel" onclick="stopBarcodeScan()" style="margin-top:10px;display:block;width:100%;">Detener cámara</button>';
+  openModal('&#x1f4f7; Escanear código de barras', html, null);
+  document.getElementById('modalSaveBtn').style.display = 'none';
+  // Start camera
+  navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } }).then(function(stream) {
+    window._barcodeStream = stream;
+    var video = document.getElementById('barcodeVideo');
+    if (video) video.srcObject = stream;
+  }).catch(function(err) { alert('Error al acceder a la cámara: ' + err.message); });
+  // Poll for barcode from input (manual fallback)
+  setTimeout(function() {
+    var existing = document.getElementById('barcodeResult');
+    if (!existing) return;
+    var manualHtml = '<hr style="margin:12px 0;border:none;border-top:1px solid #eee;"><p style="font-size:0.82em;color:#999;margin-bottom:6px;">O ingrese manualmente:</p>' +
+      '<div style="display:flex;gap:6px;"><input type="text" id="barcodeManual" placeholder="Código de barras..." style="flex:1;padding:8px;" onkeydown="if(event.key===\'Enter\')searchByBarcode()"><button class="btn-search" onclick="searchByBarcode()">Buscar</button></div>';
+    existing.insertAdjacentHTML('afterend', manualHtml);
+  }, 1000);
+}
+function stopBarcodeScan() {
+  if (window._barcodeStream) {
+    window._barcodeStream.getTracks().forEach(function(t) { t.stop(); });
+    window._barcodeStream = null;
+  }
+  closeModal();
+}
+function searchByBarcode() {
+  var code = document.getElementById('barcodeManual').value.trim();
+  if (!code) return;
+  const data = getData();
+  var p = data.patients.find(function(x) { return x.citizenNumber === code || x.id === parseInt(code); });
+  if (p) {
+    stopBarcodeScan();
+    viewPatient(p.id);
+  } else {
+    document.getElementById('barcodeResult').textContent = 'Paciente no encontrado con código: ' + code;
+    document.getElementById('barcodeResult').style.color = '#c62828';
+  }
+}
 function escHtml(str) {
   if (!str) return '';
   const d = document.createElement('div');
