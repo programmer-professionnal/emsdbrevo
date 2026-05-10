@@ -2510,7 +2510,7 @@ function showProtocols(onConfirm) {
   if (needsConfirm) {
     window._protocolConfirmCallback = onConfirm;
     document.getElementById('modalOverlay').style.pointerEvents = 'none';
-    document.getElementById('modalContent').style.pointerEvents = 'auto';
+    document.getElementById('modalBody').style.pointerEvents = 'auto';
   }
 }
 function confirmProtocols() {
