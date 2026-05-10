@@ -1079,6 +1079,21 @@ function setLoggedInUI(doc) {
       sendBrowserNotif('SAMU - ' + urgent.length + ' notificaci\u00f3n' + (urgent.length > 1 ? 'es' : '') + ' urgente' + (urgent.length > 1 ? 's' : ''), urgent[0].msg);
     }
   }, 500);
+  // Force protocol confirmation on login
+  setTimeout(function() {
+    const data = getData();
+    if (!data.protocols) return;
+    if (!data.lastProtocolUpdate) data.lastProtocolUpdate = new Date().toISOString();
+    if (!data.protocolConfirmations) data.protocolConfirmations = [];
+    var confirmed = data.protocolConfirmations.some(function(c) {
+      return c.doctorId === currentDoctor.id && c.lastUpdate === data.lastProtocolUpdate;
+    });
+    if (!confirmed) {
+      showProtocols(function() {
+        renderDailySummary();
+      });
+    }
+  }, 100);
 }
 
 function restoreSession() {
@@ -2456,7 +2471,7 @@ function addInventoryItem() {
 }
 
 // ===== PROTOCOLS =====
-function showProtocols() {
+function showProtocols(onConfirm) {
   const data = getData();
   if (!data.protocols) {
     data.protocols = {
@@ -2465,6 +2480,9 @@ function showProtocols() {
       verde: 'Paciente leve. Atención no urgente. Evaluación básica. Alta con indicaciones o derivación ambulatoria.'
     };
   }
+  var needsConfirm = typeof onConfirm === 'function';
+  if (needsConfirm && !data.protocolConfirmations) data.protocolConfirmations = [];
+  if (needsConfirm && !data.lastProtocolUpdate) data.lastProtocolUpdate = new Date().toISOString();
   var editable = currentDoctor && currentDoctor.username === 'LVargas';
   var html = '<div class="protocol-card prot-rojo"><h4>&#128308; Rojo — Crítico</h4><p>' + escHtml(data.protocols.rojo) + '</p></div>' +
     '<div class="protocol-card prot-amarillo"><h4>&#128993; Amarillo — Moderado</h4><p>' + escHtml(data.protocols.amarillo) + '</p></div>' +
@@ -2478,9 +2496,40 @@ function showProtocols() {
       '<div class="form-group"><label>Protocolo Amarillo</label><textarea id="fProtA" rows="3">' + escHtml(data.protocols.amarillo) + '</textarea></div>' +
       '<div class="form-group"><label>Protocolo Verde</label><textarea id="fProtV" rows="3">' + escHtml(data.protocols.verde) + '</textarea></div>';
   }
+  if (needsConfirm) {
+    html += '<div style="margin-top:15px;padding:12px;background:#e8f5e9;border-radius:6px;text-align:center;border:1px solid #c8e6c9;">' +
+      '<p style="margin:0 0 8px;font-size:0.85em;color:#2e7d32;"><strong>Debe confirmar que ha leído y comprendido los protocolos para acceder al sistema.</strong></p>' +
+      '<button class="btn-add" onclick="confirmProtocols()" style="padding:8px 24px;">&#x2714; Confirmar lectura</button></div>';
+  }
   openModal('&#x1fa7a; Protocolos de tratamiento SAMU', html, editable ? function() { saveProtocols(); } : null);
-  if (editable) document.getElementById('modalSaveBtn').textContent = 'Guardar protocolos';
-  else document.getElementById('modalSaveBtn').style.display = 'none';
+  if (editable) {
+    document.getElementById('modalSaveBtn').textContent = 'Guardar protocolos';
+  } else {
+    document.getElementById('modalSaveBtn').style.display = 'none';
+  }
+  if (needsConfirm) {
+    window._protocolConfirmCallback = onConfirm;
+    document.getElementById('modalOverlay').style.pointerEvents = 'none';
+    document.getElementById('modalContent').style.pointerEvents = 'auto';
+  }
+}
+function confirmProtocols() {
+  const data = getData();
+  data.protocolConfirmations.push({
+    doctorId: currentDoctor.id,
+    doctorName: currentDoctor.name,
+    lastUpdate: data.lastProtocolUpdate,
+    timestamp: new Date().toISOString()
+  });
+  addAuditLog(currentDoctor.name + ' confirm\u00f3 lectura de protocolos');
+  saveData(data);
+  closeModal();
+  document.getElementById('modalOverlay').style.pointerEvents = '';
+  if (typeof window._protocolConfirmCallback === 'function') {
+    var cb = window._protocolConfirmCallback;
+    window._protocolConfirmCallback = null;
+    cb();
+  }
 }
 
 function saveProtocols() {
