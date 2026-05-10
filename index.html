@@ -4905,7 +4905,11 @@ function renderDischargeSummaries() {
       (s.derivation ? '<div class="dc-row"><strong>Derivación a:</strong> ' + escHtml(s.derivation) + '</div>' : '') +
       (s.medicationOnDischarge ? '<div class="dc-row"><strong>Medicación al alta:</strong> ' + escHtml(s.medicationOnDischarge) + '</div>' : '') +
       (s.signedConsent ? '<div class="dc-row" style="margin-top:6px;"><span style="display:inline-block;background:#e8f5e9;color:#2e7d32;padding:2px 8px;border-radius:4px;font-weight:600;">&#x2714; Firmado digitalmente</span></div>' : '') +
-      '<div style="margin-top:8px;"><button class="btn-view" onclick="printDischargeSummary(' + s.id + ')">&#x1f5a8; Imprimir</button></div></div>';
+          '<div style="margin-top:8px;display:flex;gap:6px;">' +
+          '<button class="btn-view" onclick="printDischargeSummary(' + s.id + ')">&#x1f5a8; Imprimir</button>' +
+          '<button class="btn-small btn-small-edit" onclick="editDischargeSummary(' + s.id + ')">Editar</button>' +
+          '<button class="btn-small btn-small-delete" onclick="deleteDischargeSummary(' + s.id + ')">Eliminar</button>' +
+          '</div></div>';
   });
   list.innerHTML = html;
 }
@@ -4968,6 +4972,99 @@ function saveDischargeSummary() {
   closeModal();
   renderDischargeSummaries();
 }
+
+function editDischargeSummary(id) {
+  const data = getData();
+  const index = data.dischargeSummaries.findIndex(s => s.id === id);
+  if (index === -1) return;
+  const s = data.dischargeSummaries[index];
+  
+  window._editDischargeIndex = index;
+  
+  var html =
+    '<div class="form-group"><label>Fecha de alta</label><input type="date" id="fDCDate" value="' + escAttr(s.date) + '"></div>' +
+    '<div class="form-group"><label>Diagnóstico principal</label><input type="text" id="fDCDiagnosis" value="' + escAttr(s.diagnosis) + '"></div>' +
+    '<div class="form-group"><label>Diagnósticos secundarios</label><input type="text" id="fDCSecondary" value="' + escAttr(s.secondaryDiagnoses || '') + '"></div>' +
+    '<div class="form-group"><label>Resumen de evolución</label><textarea id="fDCEvolution" rows="3">' + escAttr(s.evolution || '') + '</textarea></div>' +
+    '<div class="form-group"><label>Tratamiento recibido</label><textarea id="fDCTreatment" rows="2">' + escAttr(s.treatment || '') + '</textarea></div>' +
+    '<div class="form-group"><label>Recomendaciones al alta</label><textarea id="fDCRecom" rows="2">' + escAttr(s.recommendations || '') + '</textarea></div>' +
+    '<div class="form-row"><div class="form-group"><label>Derivación a</label><select id="fDCDerivation">' +
+    '<option value="">-- No aplica --</option>' +
+    '<option value="Hospital Central"' + (s.derivation === 'Hospital Central' ? ' selected' : '') + '>Hospital Central</option>' +
+    '<option value="Hospital del Este"' + (s.derivation === 'Hospital del Este' ? ' selected' : '') + '>Hospital del Este</option>' +
+    '<option value="Hospital Universitario"' + (s.derivation === 'Hospital Universitario' ? ' selected' : '') + '>Hospital Universitario</option>' +
+    '<option value="Clínica Privada"' + (s.derivation === 'Clínica Privada' ? ' selected' : '') + '>Clínica Privada</option>' +
+    '<option value="Centro de Salud"' + (s.derivation === 'Centro de Salud' ? ' selected' : '') + '>Centro de Salud</option>' +
+    '<option value="Domicilio"' + (s.derivation === 'Domicilio' ? ' selected' : '') + '>Domicilio</option>' +
+    '</select></div>' +
+    '<div class="form-group"><label>Medicación al alta</label><input type="text" id="fDCMed" value="' + escAttr(s.medicationOnDischarge || '') + '"></div>' +
+    '<div class="form-group"><label><input type="checkbox" id="fDCSigned"' + (s.signedConsent ? ' checked' : '') + '> Firma digital del médico</label></div>' +
+    '<div class="form-group" style="margin-top:8px;"><label><input type="checkbox" id="fDCCoSigned"' + (s.coSignedConsent ? ' checked' : '') + '> Co-firma de otro médico</label></div>' +
+    '<div class="form-group" id="fDCCoSignedGroup" style="display:' + (s.coSignedConsent ? 'block' : 'none') + ';"><label>Médico co-firmante</label><select id="fDCCoDoctor">' + data.doctors.map(function(d) { return '<option value="' + escAttr(d.name) + '">' + escHtml(d.name) + '</option>'; }).join('') + '</select></div>';
+  
+  openModal('Editar informe de alta', html, function() { saveEditedDischargeSummary(); });
+  
+  // Set co-doctor if exists
+  if (s.coSignedConsent) {
+    setTimeout(function() {
+      document.getElementById('fDCCoDoctor').value = s.coSignedConsent.doctor;
+    }, 100);
+  }
+}
+
+function saveEditedDischargeSummary() {
+  const date = document.getElementById('fDCDate').value;
+  const diagnosis = document.getElementById('fDCDiagnosis').value.trim();
+  const secondaryDiagnoses = document.getElementById('fDCSecondary').value.trim();
+  const evolution = document.getElementById('fDCEvolution').value.trim();
+  const treatment = document.getElementById('fDCTreatment').value.trim();
+  const recommendations = document.getElementById('fDCRecom').value.trim();
+  const derivation = document.getElementById('fDCDerivation').value;
+  const medicationOnDischarge = document.getElementById('fDCMed').value.trim();
+  const signed = document.getElementById('fDCSigned') && document.getElementById('fDCSigned').checked;
+  const coSigned = document.getElementById('fDCCoSigned') && document.getElementById('fDCCoSigned').checked && document.getElementById('fDCCoDoctor');
+  
+  if (!date || !diagnosis || !evolution) { alert('Fecha, diagnóstico y evolución son obligatorios.'); return; }
+  
+  const data = getData();
+  if (!data.dischargeSummaries || !data.dischargeSummaries[window._editDischargeIndex]) return;
+  
+  data.dischargeSummaries[window._editDischargeIndex] = {
+    id: data.dischargeSummaries[window._editDischargeIndex].id,
+    patientId: data.dischargeSummaries[window._editDischargeIndex].patientId,
+    date: date,
+    diagnosis: diagnosis,
+    secondaryDiagnoses: secondaryDiagnoses,
+    evolution: evolution,
+    treatment: treatment,
+    recommendations: recommendations,
+    derivation: derivation,
+    medicationOnDischarge: medicationOnDischarge,
+    doctor: data.dischargeSummaries[window._editDischargeIndex].doctor,
+    signedConsent: signed && currentDoctor ? { doctor: currentDoctor.name, date: new Date().toISOString() } : null,
+    coSignedConsent: coSigned ? { doctor: document.getElementById('fDCCoDoctor').value, date: new Date().toISOString() } : null,
+    createdAt: data.dischargeSummaries[window._editDischargeIndex].createdAt
+  };
+  
+  addAuditLog('Informe de alta editado');
+  saveData(data);
+  closeModal();
+  renderDischargeSummaries();
+}
+
+function deleteDischargeSummary(id) {
+  if (!confirm('¿Está seguro de eliminar este informe de alta?')) return;
+  
+  const data = getData();
+  const index = data.dischargeSummaries.findIndex(s => s.id === id);
+  if (index === -1) return;
+  
+  data.dischargeSummaries.splice(index, 1);
+  addAuditLog('Informe de alta eliminado');
+  saveData(data);
+  renderDischargeSummaries();
+}
+
 function printDischargeSummary(id) {
   const data = getData();
   var s = (data.dischargeSummaries || []).find(function(x) { return x.id === id; });
