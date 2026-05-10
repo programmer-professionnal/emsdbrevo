@@ -545,14 +545,27 @@ body { background: var(--bg); color: var(--text); }
   </div>
   <div class="form-group">
     <label for="loginPass">Contraseña</label>
-    <input type="password" id="loginPass" placeholder="Contraseña" onkeydown="if(event.key==='Enter')doLogin()">
+    <input type="password" id="loginPass" placeholder="Contraseña" onkeydown="if(event.key==='Enter')document.getElementById('btnLogin').click()">
   </div>
-  <button class="btn-primary" onclick="doLogin()">Iniciar sesión</button>
+  <button class="btn-primary" id="btnLogin" onclick="doLogin()">Iniciar sesión</button>
   <div class="login-error" id="loginError"></div>
   <div class="login-footer">
     <a onclick="showPublicSearch()">&#x1f50d; Buscar paciente (sin sesión)</a>
   </div>
 </div>
+<script>
+(function(){
+  var btn = document.getElementById('btnLogin');
+  if (!btn) return;
+  btn.addEventListener('click', function(e) {
+    if (typeof doLogin !== 'function') {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      location.reload();
+    }
+  });
+})();
+</script>
 
 <!-- DASHBOARD -->
 <div class="dashboard hidden" id="dashboardContainer">
@@ -1214,6 +1227,7 @@ function viewPatient(id) {
 }
 
 function showDashboard() {
+  document.getElementById('dashboardContainer').classList.remove('hidden');
   document.getElementById('patientDetailView').classList.remove('active');
   document.getElementById('patientListView').style.display = 'block';
   document.getElementById('emergencySectionView').style.display = 'none';
@@ -4229,6 +4243,58 @@ function deleteSOAPNote(idx) {
 }
 
 // ===== INFORME DE ALTA / DERIVACIÓN =====
+function showDischargeSummary() {
+  const data = getData();
+  var list = data.dischargeSummaries || [];
+  var html = '<div style="margin-bottom:12px;"><strong>Informes de alta</strong> <span style="color:var(--text-muted);font-size:0.82em;">(' + list.length + ')</span></div>';
+  if (list.length === 0) {
+    html += '<div class="no-data" style="padding:15px;">No hay informes de alta registrados.</div>';
+  } else {
+    var sorted = list.slice().sort(function(a, b) { return b.date < a.date ? -1 : 1; });
+    sorted.forEach(function(s) {
+      var p = data.patients.find(function(x) { return x.id === s.patientId; });
+      var pName = p ? escHtml(p.firstName + ' ' + p.lastName) : 'Desconocido';
+      html += '<div class="discharge-card"><div class="dc-header">' + escHtml(pName) + '</div>' +
+        '<div class="dc-row"><strong>Fecha:</strong> ' + escHtml(s.date) + ' | <strong>Médico:</strong> ' + escHtml(s.doctor) + '</div>' +
+        '<div class="dc-row"><strong>Diagnóstico:</strong> ' + escHtml(s.diagnosis) + '</div>' +
+        (s.derivation ? '<div class="dc-row"><strong>Derivación:</strong> ' + escHtml(s.derivation) + '</div>' : '') +
+        '<div style="margin-top:6px;"><button class="btn-view" onclick="printDischargeSummary(' + s.id + ')">🖨 Imprimir</button></div></div>';
+    });
+  }
+  html += '<hr style="margin:15px 0;border:none;border-top:1px solid var(--border);">' +
+    '<h5 style="margin-bottom:10px;">Nuevo informe de alta</h5>' +
+    '<div class="form-group"><label>Paciente</label><select id="fDCSPatient"><option value="">Seleccionar...</option>';
+  data.patients.forEach(function(p) { html += '<option value="' + p.id + '">' + escHtml(p.firstName + ' ' + p.lastName + ' (DNI: ' + p.citizenNumber + ')') + '</option>'; });
+  html += '</select></div><div class="form-group"><label>Fecha de alta</label><input type="date" id="fDCSDate"></div>' +
+    '<div class="form-group"><label>Diagnóstico principal</label><input type="text" id="fDCSDiagnosis" placeholder="Diagnóstico principal"></div>' +
+    '<div class="form-group"><label>Resumen de evolución</label><textarea id="fDCSEvolution" rows="2" placeholder="Evolución del paciente..."></textarea></div>' +
+    '<div class="form-group"><label>Recomendaciones</label><textarea id="fDCSRecom" rows="2" placeholder="Recomendaciones al alta..."></textarea></div>' +
+    '<button class="btn-add" onclick="addDischargeFromSummary()">+ Generar informe</button>';
+  openModal('&#x1f4c4; Informes de alta / Derivación', html, null);
+  document.getElementById('modalSaveBtn').style.display = 'none';
+  document.getElementById('fDCSDate').value = new Date().toISOString().split('T')[0];
+}
+function addDischargeFromSummary() {
+  var patientId = parseInt(document.getElementById('fDCSPatient').value);
+  var date = document.getElementById('fDCSDate').value;
+  var diagnosis = document.getElementById('fDCSDiagnosis').value.trim();
+  var evolution = document.getElementById('fDCSEvolution').value.trim();
+  var recommendations = document.getElementById('fDCSRecom').value.trim();
+  if (!patientId || !date || !diagnosis || !evolution) { alert('Paciente, fecha, diagnóstico y evolución son obligatorios.'); return; }
+  const data = getData();
+  if (!data.dischargeSummaries) data.dischargeSummaries = [];
+  if (!data.dischargeNextId) data.dischargeNextId = 1;
+  data.dischargeSummaries.push({
+    id: data.dischargeNextId++, patientId: patientId, date: date,
+    diagnosis: diagnosis, evolution: evolution, recommendations: recommendations,
+    doctor: currentDoctor ? currentDoctor.name : '',
+    createdAt: new Date().toISOString()
+  });
+  addAuditLog('Informe de alta generado desde panel general', patientId);
+  saveData(data);
+  closeModal();
+  showDischargeSummary();
+}
 function renderDischargeSummaries() {
   const data = getData();
   var list = document.getElementById('dischargeSummaryList');
