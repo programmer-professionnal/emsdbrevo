@@ -5846,10 +5846,16 @@ function renderInterconsultas() {
   if (!p) { container.innerHTML = '<div class="no-data">Seleccione un paciente.</div>'; return; }
   if (!p.interconsultas || p.interconsultas.length === 0) { container.innerHTML = '<div class="no-data">Sin interconsultas.</div>'; return; }
   var html = '';
-  p.interconsultas.slice().reverse().forEach(function(ic) {
+  p.interconsultas.slice().reverse().forEach(function(ic, index) {
+    var actualIndex = p.interconsultas.length - 1 - index;
     html += '<div class="lab-card"><div class="lab-date">' + escHtml(ic.date) + ' | ' + escHtml(ic.fromDoctor) + ' &rarr; ' + escHtml(ic.toSpecialty) + '</div>' +
       '<div class="lab-test"><strong>' + escHtml(ic.reason) + '</strong></div>' +
-      (ic.response ? '<div style="font-size:0.85em;color:var(--text-secondary);margin:4px 0;padding:8px;background:var(--item-bg);border-radius:4px;"><strong>Respuesta:</strong> ' + escHtml(ic.response) + '</div>' : '<div style="margin-top:6px;"><button class="btn-small btn-small-edit" onclick="respondInterconsulta(' + ic.id + ')">Responder</button></div>') +
+      (ic.response ? '<div style="font-size:0.85em;color:var(--text-secondary);margin:4px 0;padding:8px;background:var(--item-bg);border-radius:4px;"><strong>Respuesta:</strong> ' + escHtml(ic.response) + '</div>' : 
+        '<div style="margin-top:6px;display:flex;gap:6px;">' +
+        '<button class="btn-small btn-small-edit" onclick="editInterconsulta(' + actualIndex + ')">Editar</button>' +
+        '<button class="btn-small btn-small-delete" onclick="deleteInterconsulta(' + actualIndex + ')">Eliminar</button>' +
+        '<button class="btn-small btn-small-edit" onclick="respondInterconsulta(' + ic.id + ')">Responder</button>' +
+        '</div>') +
       '</div>';
   });
   container.innerHTML = html;
@@ -5895,6 +5901,80 @@ function saveICResponse(id) {
   addAuditLog('Interconsulta respondida');
   saveData(data);
   closeModal();
+  renderInterconsultas();
+}
+
+function editInterconsulta(idx) {
+  const data = getData();
+  const p = data.patients.find(function(x) { return x.id === currentPatientId; });
+  if (!p || !p.interconsultas || !p.interconsultas[idx]) return;
+  const ic = p.interconsultas[idx];
+  window._editICIdx = idx;
+  
+  const docOpts = data.doctors.map(function(d) { 
+    return '<option value="' + escAttr(d.name) + '">' + escHtml(d.name) + ' (' + escHtml(d.specialty) + ')</option>'; 
+  }).join('');
+  
+  var html = '<div class="form-group"><label>Fecha</label><input type="date" id="fICDate" value="' + escAttr(ic.date) + '"></div>' +
+    '<div class="form-group"><label>Especialidad / Servicio solicitado</label><select id="fICSpecialty">' +
+    '<option value="Cardiología"' + (ic.toSpecialty === 'Cardiología' ? ' selected' : '') + '>Cardiología</option>' +
+    '<option value="Neurología"' + (ic.toSpecialty === 'Neurología' ? ' selected' : '') + '>Neurología</option>' +
+    '<option value="Traumatología"' + (ic.toSpecialty === 'Traumatología' ? ' selected' : '') + '>Traumatología</option>' +
+    '<option value="Pediatría"' + (ic.toSpecialty === 'Pediatría' ? ' selected' : '') + '>Pediatría</option>' +
+    '<option value="Cirugía General"' + (ic.toSpecialty === 'Cirugía General' ? ' selected' : '') + '>Cirugía General</option>' +
+    '<option value="Terapia Intensiva"' + (ic.toSpecialty === 'Terapia Intensiva' ? ' selected' : '') + '>Terapia Intensiva</option>' +
+    '<option value="Medicina Interna"' + (ic.toSpecialty === 'Medicina Interna' ? ' selected' : '') + '>Medicina Interna</option>' +
+    '<option value="Psiquiatría"' + (ic.toSpecialty === 'Psiquiatría' ? ' selected' : '') + '>Psiquiatría</option>' +
+    '</select></div>' +
+    '<div class="form-group"><label>Médico consultor (opcional)</label><select id="fICDoctor"><option value="">-- Cualquier disponible --</option>' + docOpts + '</select></div>' +
+    '<div class="form-group"><label>Motivo de interconsulta</label><textarea id="fICReason" rows="3">' + escHtml(ic.reason) + '</textarea></div>';
+  
+  openModal('&#x1f91d; Editar interconsulta', html, function() { saveEditedInterconsulta(); });
+  if (ic.toDoctor) {
+    document.getElementById('fICDoctor').value = ic.toDoctor;
+  }
+}
+
+function saveEditedInterconsulta() {
+  const date = document.getElementById('fICDate').value;
+  const toSpecialty = document.getElementById('fICSpecialty').value;
+  const toDoctor = document.getElementById('fICDoctor').value;
+  const reason = document.getElementById('fICReason').value.trim();
+  
+  if (!date || !reason) { alert('Fecha y motivo son obligatorios.'); return; }
+  
+  const data = getData();
+  const p = data.patients.find(function(x) { return x.id === currentPatientId; });
+  if (!p || !p.interconsultas || !p.interconsultas[window._editICIdx]) return;
+  
+  p.interconsultas[window._editICIdx] = {
+    id: p.interconsultas[window._editICIdx].id,
+    date: date,
+    toSpecialty: toSpecialty,
+    toDoctor: toDoctor || null,
+    reason: reason,
+    fromDoctor: p.interconsultas[window._editICIdx].fromDoctor,
+    response: p.interconsultas[window._editICIdx].response,
+    respondedAt: p.interconsultas[window._editICIdx].respondedAt,
+    createdAt: p.interconsultas[window._editICIdx].createdAt
+  };
+  
+  addAuditLog('Interconsulta editada');
+  saveData(data);
+  closeModal();
+  renderInterconsultas();
+}
+
+function deleteInterconsulta(idx) {
+  if (!confirm('¿Está seguro de eliminar esta interconsulta?')) return;
+  
+  const data = getData();
+  const p = data.patients.find(function(x) { return x.id === currentPatientId; });
+  if (!p || !p.interconsultas || !p.interconsultas[idx]) return;
+  
+  p.interconsultas.splice(idx, 1);
+  addAuditLog('Interconsulta eliminada');
+  saveData(data);
   renderInterconsultas();
 }
 
