@@ -4,6 +4,7 @@ const path = require('path');
 const src = path.join(__dirname, '..', 'index.html');
 const distDir = path.join(__dirname, '..', 'dist');
 const dist = path.join(distDir, 'index.html');
+const filesToCopy = ['manifest.json', 'sw.js'];
 
 const config = {
   apiKey: process.env.FIREBASE_API_KEY || null,
@@ -50,6 +51,17 @@ if (doctorsSeed) {
 } else {
   console.log('DOCTORS_SEED no configurada. Usando médicos por defecto.');
 }
+
+filesToCopy.forEach(file => {
+  const srcFile = path.join(__dirname, '..', file);
+  const dstFile = path.join(distDir, file);
+  if (fs.existsSync(srcFile)) {
+    fs.copyFileSync(srcFile, dstFile);
+    console.log('Copiado: ' + file);
+  } else {
+    console.warn('Advertencia: ' + file + ' no encontrado');
+  }
+});
 
 fs.writeFileSync(dist, html, 'utf8');
 console.log('Build completado: dist/index.html');
