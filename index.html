@@ -2633,6 +2633,11 @@ function getFavorites() {
   } catch(e) { return []; }
 }
 
+function isFavorite(patientId) {
+  var favs = getFavorites();
+  return favs.indexOf(patientId) >= 0;
+}
+
 function toggleFavorite(patientId) {
   if (!currentDoctor) return;
   var all = {};
