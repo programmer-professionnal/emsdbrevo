@@ -2469,11 +2469,11 @@ function showProtocols() {
   var html = '<div class="protocol-card prot-rojo"><h4>&#128308; Rojo — Crítico</h4><p>' + escHtml(data.protocols.rojo) + '</p></div>' +
     '<div class="protocol-card prot-amarillo"><h4>&#128993; Amarillo — Moderado</h4><p>' + escHtml(data.protocols.amarillo) + '</p></div>' +
     '<div class="protocol-card prot-verde"><h4>&#128994; Verde — Leve</h4><p>' + escHtml(data.protocols.verde) + '</p></div>';
-  if (!editable && currentDoctor) {
-    if (!ensureProtocolConfirmed()) { return; }
+  if (currentDoctor && !editable) {
+    html += '<div style="margin:12px 0 0;padding:10px;background:#fff3e0;border-radius:6px;font-size:0.82em;color:#e65100;text-align:center;">Solo lectura — contacte a Dr. Lucas Vargas para modificar los protocolos.</div>';
   }
   if (editable) {
-    html += '<hr style="margin:15px 0;border:none;border-top:1px solid #eee;"><p style="color:#666;font-size:0.85em;margin-bottom:10px;">Solo LVargas puede editar los protocolos:</p>' +
+    html += '<hr style="margin:15px 0;border:none;border-top:1px solid #eee;"><p style="color:#666;font-size:0.85em;margin-bottom:10px;">Editar protocolos:</p>' +
       '<div class="form-group"><label>Protocolo Rojo</label><textarea id="fProtR" rows="3">' + escHtml(data.protocols.rojo) + '</textarea></div>' +
       '<div class="form-group"><label>Protocolo Amarillo</label><textarea id="fProtA" rows="3">' + escHtml(data.protocols.amarillo) + '</textarea></div>' +
       '<div class="form-group"><label>Protocolo Verde</label><textarea id="fProtV" rows="3">' + escHtml(data.protocols.verde) + '</textarea></div>';
