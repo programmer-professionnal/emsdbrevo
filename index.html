@@ -1329,6 +1329,7 @@ function viewPatient(id) {
   renderPatientInvoices();
   renderTimeline();
   renderAnamnesis();
+  renderDischargeSummaries();
   switchTab('diagnoses');
 }
 
@@ -1347,6 +1348,7 @@ function switchTab(tab) {
   document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
   document.querySelectorAll('.tab-pane').forEach(t => t.classList.toggle('active', t.id === 'tab-' + tab));
   if (tab === 'timeline') renderTimeline();
+  if (tab === 'discharge') renderDischargeSummaries();
 }
 
 // ===== VITAL SIGNS TREND =====
@@ -1470,8 +1472,9 @@ function renderPatientEmergencies() {
     html += '<div class="emergency-item ' + triageBgClass + '">' +
       '<div class="em-header"><span class="em-date">' + escHtml(r.date) + ' ' + escHtml(r.time || '') + '</span>' +
       '<span><span class="' + triageClass + '" style="margin-right:6px;">' + triageLabel + '</span><span class="em-type">' + escHtml(r.type) + '</span></span></div>' +
-      '<div><button class="btn-small btn-small-edit" onclick="editEmergency(' + r.id + ')">Editar</button> ' +
-      '<button class="btn-small btn-small-delete" onclick="deleteEmergency(' + r.id + ')">Eliminar</button></div>' +
+       '<div><button class="btn-small btn-small-edit" onclick="editEmergency(' + r.id + ')">Editar</button> ' +
+       '<button class="btn-small btn-small-delete" onclick="deleteEmergency(' + r.id + ')">Eliminar</button> ' +
+       '<button class="btn-small btn-small-view" onclick="printEmergencyReport(' + r.id + ')">&#x1f5a8; Imprimir</button></div>' +
       '<p style="margin-top:6px;"><strong>Ubicación:</strong> ' + escHtml(r.location || '-') + '</p>' +
       '<p><strong>Descripción:</strong> ' + escHtml(r.description) + '</p>' +
       (r.vitalSigns ? '<div class="em-vitals">' +
@@ -4847,11 +4850,22 @@ function showDischargeSummary() {
     sorted.forEach(function(s) {
       var p = data.patients.find(function(x) { return x.id === s.patientId; });
       var pName = p ? escHtml(p.firstName + ' ' + p.lastName) : 'Desconocido';
-      html += '<div class="discharge-card"><div class="dc-header">' + escHtml(pName) + '</div>' +
+      html += '<div class="discharge-card"><div class="dc-header">INFORME DE ALTA / DERIVACIÓN - ' + pName + '</div>' +
         '<div class="dc-row"><strong>Fecha:</strong> ' + escHtml(s.date) + ' | <strong>Médico:</strong> ' + escHtml(s.doctor) + '</div>' +
-        '<div class="dc-row"><strong>Diagnóstico:</strong> ' + escHtml(s.diagnosis) + '</div>' +
+        '<div class="dc-row"><strong>Diagnóstico principal:</strong> ' + escHtml(s.diagnosis) + '</div>' +
+        (s.secondaryDiagnoses ? '<div class="dc-row"><strong>Diagnósticos secundarios:</strong> ' + escHtml(s.secondaryDiagnoses) + '</div>' : '') +
+        '<div class="dc-row"><strong>Resumen de evolución:</strong> ' + escHtml(s.evolution) + '</div>' +
+        (s.treatment ? '<div class="dc-row"><strong>Tratamiento recibido:</strong> ' + escHtml(s.treatment) + '</div>' : '') +
+        '<div class="dc-row"><strong>Recomendaciones:</strong> ' + escHtml(s.recommendations) + '</div>' +
         (s.derivation ? '<div class="dc-row"><strong>Derivación:</strong> ' + escHtml(s.derivation) + '</div>' : '') +
-        '<div style="margin-top:6px;"><button class="btn-view" onclick="printDischargeSummary(' + s.id + ')">&#x1f5a8; Imprimir</button></div></div>';
+        (s.medicationOnDischarge ? '<div class="dc-row"><strong>Medicación al alta:</strong> ' + escHtml(s.medicationOnDischarge) + '</div>' : '') +
+        (s.signedConsent ? '<div class="dc-row" style="margin-top:6px;"><span style="display:inline-block;background:#e8f5e9;color:#2e7d32;padding:2px 8px;border-radius:4px;font-weight:600;">&#x2714; Firmado digitalmente</span></div>' : '') +
+        (s.coSignedConsent ? '<div class="dc-row" style="margin-top:6px;"><span style="display:inline-block;background:#fff3e0;color:#e65100;padding:2px 8px;border-radius:4px;font-weight:600;">&#x2714; Co-firmado por: ' + escHtml(s.coSignedConsent.doctor) + '</span></div>' : '') +
+        '<div style="margin-top:8px;display:flex;gap:6px;">' +
+        '<button class="btn-view" onclick="printDischargeSummary(' + s.id + ')">&#x1f5a8; Imprimir</button>' +
+        '<button class="btn-small btn-small-edit" onclick="editDischargeSummary(' + s.id + ')">Editar</button>' +
+        '<button class="btn-small btn-small-delete" onclick="deleteDischargeSummary(' + s.id + ')">Eliminar</button>' +
+        '</div></div>';
     });
   }
   html += '<hr style="margin:15px 0;border:none;border-top:1px solid var(--border);">' +
@@ -4859,28 +4873,54 @@ function showDischargeSummary() {
     '<div class="form-group"><label>Paciente</label><select id="fDCSPatient"><option value="">Seleccionar...</option>';
   data.patients.forEach(function(p) { html += '<option value="' + p.id + '">' + escHtml(p.firstName + ' ' + p.lastName + ' (DNI: ' + p.citizenNumber + ')') + '</option>'; });
   html += '</select></div><div class="form-group"><label>Fecha de alta</label><input type="date" id="fDCSDate"></div>' +
-    '<div class="form-group"><label>Diagnóstico principal</label><input type="text" id="fDCSDiagnosis" placeholder="Diagnóstico principal"></div>' +
+    '<div class="form-row"><div class="form-group"><label>Diagnóstico principal</label><input type="text" id="fDCSDiagnosis" placeholder="Diagnóstico principal"></div>' +
+    '<div class="form-group"><label>Diagnósticos secundarios</label><input type="text" id="fDCSecondaryAlt" placeholder="Separados por coma"></div></div>' +
     '<div class="form-group"><label>Resumen de evolución</label><textarea id="fDCSEvolution" rows="2" placeholder="Evolución del paciente..."></textarea></div>' +
+    '<div class="form-group"><label>Tratamiento recibido</label><textarea id="fDCSTreatment" rows="2" placeholder="Tratamiento administrado..."></textarea></div>' +
     '<div class="form-group"><label>Recomendaciones</label><textarea id="fDCSRecom" rows="2" placeholder="Recomendaciones al alta..."></textarea></div>' +
+    '<div class="form-row"><div class="form-group"><label>Derivación a</label><select id="fDCSDerivation"><option value="">-- No aplica --</option><option value="Hospital Central">Hospital Central</option><option value="Hospital del Este">Hospital del Este</option><option value="Hospital Universitario">Hospital Universitario</option><option value="Clínica Privada">Clínica Privada</option><option value="Centro de Salud">Centro de Salud</option><option value="Domicilio">Domicilio</option></select></div>' +
+    '<div class="form-group"><label>Medicación al alta</label><input type="text" id="fDCSMed" placeholder="Ej: Amoxicilina 500mg c/8h x7d"></div></div>' +
+    '<div class="form-group"><label><input type="checkbox" id="fDCSigned"> Firma digital del médico</label></div>' +
+    '<div class="form-group" style="margin-top:8px;"><label><input type="checkbox" id="fDCCoSignedAlt"> Co-firma de otro médico</label></div>' +
+    '<div class="form-group" id="fDCCoSignedAltGroup" style="display:none;"><label>Médico co-firmante</label><select id="fDCCoDoctorAlt">' + data.doctors.map(function(d) { return '<option value="' + escAttr(d.name) + '">' + escHtml(d.name) + '</option>'; }).join('') + '</select></div>' +
     '<button class="btn-add" onclick="addDischargeFromSummary()">+ Generar informe</button>';
   openModal('&#x1f4c4; Informes de alta / Derivación', html, null);
   document.getElementById('modalSaveBtn').style.display = 'none';
   document.getElementById('fDCSDate').value = new Date().toISOString().split('T')[0];
+  setTimeout(function() {
+    var coCb = document.getElementById('fDCCoSignedAlt');
+    if (coCb) {
+      coCb.addEventListener('change', function() {
+        var g = document.getElementById('fDCCoSignedAltGroup');
+        if (g) g.style.display = this.checked ? 'block' : 'none';
+      });
+    }
+  }, 100);
 }
 function addDischargeFromSummary() {
   var patientId = parseInt(document.getElementById('fDCSPatient').value);
   var date = document.getElementById('fDCSDate').value;
   var diagnosis = document.getElementById('fDCSDiagnosis').value.trim();
+  var secondaryDiagnoses = document.getElementById('fDCSecondaryAlt') ? document.getElementById('fDCSecondaryAlt').value.trim() : '';
   var evolution = document.getElementById('fDCSEvolution').value.trim();
+  var treatment = document.getElementById('fDCSTreatment') ? document.getElementById('fDCSTreatment').value.trim() : '';
   var recommendations = document.getElementById('fDCSRecom').value.trim();
+  var derivation = document.getElementById('fDCSDerivation') ? document.getElementById('fDCSDerivation').value : '';
+  var medicationOnDischarge = document.getElementById('fDCSMed') ? document.getElementById('fDCSMed').value.trim() : '';
   if (!patientId || !date || !diagnosis || !evolution) { alert('Paciente, fecha, diagnóstico y evolución son obligatorios.'); return; }
+  var signed = document.getElementById('fDCSigned') && document.getElementById('fDCSigned').checked;
+  var coSigned = document.getElementById('fDCCoSignedAlt') && document.getElementById('fDCCoSignedAlt').checked && document.getElementById('fDCCoDoctorAlt');
   const data = getData();
   if (!data.dischargeSummaries) data.dischargeSummaries = [];
   if (!data.dischargeNextId) data.dischargeNextId = 1;
   data.dischargeSummaries.push({
     id: data.dischargeNextId++, patientId: patientId, date: date,
-    diagnosis: diagnosis, evolution: evolution, recommendations: recommendations,
+    diagnosis: diagnosis, secondaryDiagnoses: secondaryDiagnoses, evolution: evolution,
+    treatment: treatment, recommendations: recommendations, derivation: derivation,
+    medicationOnDischarge: medicationOnDischarge,
     doctor: currentDoctor ? currentDoctor.name : '',
+    signedConsent: signed && currentDoctor ? { doctor: currentDoctor.name, date: new Date().toISOString() } : null,
+    coSignedConsent: coSigned ? { doctor: document.getElementById('fDCCoDoctorAlt').value, date: new Date().toISOString() } : null,
     createdAt: new Date().toISOString()
   });
   addAuditLog('Informe de alta generado desde panel general', patientId);
@@ -4904,12 +4944,13 @@ function renderDischargeSummaries() {
       '<div class="dc-row"><strong>Recomendaciones:</strong> ' + escHtml(s.recommendations) + '</div>' +
       (s.derivation ? '<div class="dc-row"><strong>Derivación a:</strong> ' + escHtml(s.derivation) + '</div>' : '') +
       (s.medicationOnDischarge ? '<div class="dc-row"><strong>Medicación al alta:</strong> ' + escHtml(s.medicationOnDischarge) + '</div>' : '') +
-      (s.signedConsent ? '<div class="dc-row" style="margin-top:6px;"><span style="display:inline-block;background:#e8f5e9;color:#2e7d32;padding:2px 8px;border-radius:4px;font-weight:600;">&#x2714; Firmado digitalmente</span></div>' : '') +
-          '<div style="margin-top:8px;display:flex;gap:6px;">' +
-          '<button class="btn-view" onclick="printDischargeSummary(' + s.id + ')">&#x1f5a8; Imprimir</button>' +
-          '<button class="btn-small btn-small-edit" onclick="editDischargeSummary(' + s.id + ')">Editar</button>' +
-          '<button class="btn-small btn-small-delete" onclick="deleteDischargeSummary(' + s.id + ')">Eliminar</button>' +
-          '</div></div>';
+       (s.signedConsent ? '<div class="dc-row" style="margin-top:6px;"><span style="display:inline-block;background:#e8f5e9;color:#2e7d32;padding:2px 8px;border-radius:4px;font-weight:600;">&#x2714; Firmado digitalmente</span></div>' : '') +
+       (s.coSignedConsent ? '<div class="dc-row" style="margin-top:6px;"><span style="display:inline-block;background:#fff3e0;color:#e65100;padding:2px 8px;border-radius:4px;font-weight:600;">&#x2714; Co-firmado por: ' + escHtml(s.coSignedConsent.doctor) + '</span></div>' : '') +
+           '<div style="margin-top:8px;display:flex;gap:6px;">' +
+           '<button class="btn-view" onclick="printDischargeSummary(' + s.id + ')">&#x1f5a8; Imprimir</button>' +
+           '<button class="btn-small btn-small-edit" onclick="editDischargeSummary(' + s.id + ')">Editar</button>' +
+           '<button class="btn-small btn-small-delete" onclick="deleteDischargeSummary(' + s.id + ')">Eliminar</button>' +
+           '</div></div>';
   });
   list.innerHTML = html;
 }
@@ -5085,7 +5126,76 @@ function printDischargeSummary(id) {
   win.document.write('<div class="section"><h2>Recomendaciones</h2><p>' + escHtml(s.recommendations) + '</p></div>');
   if (s.medicationOnDischarge) win.document.write('<div class="section"><h2>Medicación al alta</h2><p>' + escHtml(s.medicationOnDischarge) + '</p></div>');
   if (s.derivation) win.document.write('<div class="section"><h2>Derivación</h2><p>' + escHtml(s.derivation) + '</p></div>');
-  if (s.signedConsent) win.document.write('<div class="signature"><strong>Firma digital:</strong> ' + escHtml(s.signedConsent.doctor) + ' - ' + s.signedConsent.date.split('T')[0] + '</div>');
+   if (s.signedConsent) win.document.write('<div class="signature"><strong>Firma digital:</strong> ' + escHtml(s.signedConsent.doctor) + ' - ' + s.signedConsent.date.split('T')[0] + '</div>');
+   if (s.coSignedConsent) win.document.write('<div class="signature"><strong>Co-firmado por:</strong> ' + escHtml(s.coSignedConsent.doctor) + ' - ' + s.coSignedConsent.date.split('T')[0] + '</div>');
+  win.document.write('<p style="margin-top:40px;color:#999;font-size:0.8em;border-top:1px solid #eee;padding-top:10px;">SAMU RevoRP - Sistema de Atención Médica</p>');
+  win.document.write('</body></html>');
+  win.document.close();
+  win.print();
+}
+
+function printEmergencyReport(id) {
+  const data = getData();
+  const report = (data.emergencyReports || []).find(r => r.id === id);
+  if (!report) return;
+  const patient = data.patients.find(p => p.id === report.patientId);
+  const pName = patient ? escHtml(patient.firstName + ' ' + patient.lastName) : 'Desconocido';
+  const pDNI = patient ? escHtml(patient.citizenNumber) : '-';
+  
+  var win = window.open('', '_blank');
+  win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Informe de Emergencia - ' + pName + '</title><style>body{font-family:Segoe UI,sans-serif;padding:40px;color:#333;}h1{color:#1a237e;border-bottom:2px solid #1a237e;padding-bottom:8px;}h2{color:#2e7d32;font-size:1.1em;margin-top:20px;}.meta{color:#666;margin:8px 0;}.section{margin:12px 0;padding:10px;background:#f8f9fa;border-radius:6px;}@media print{body{padding:20px;}}</style></head><body>');
+  win.document.write('<h1>INFORME DE ATENCIÓN DE EMERGENCIA</h1>');
+  win.document.write('<div class="meta"><strong>Paciente:</strong> ' + pName + ' | <strong>DNI:</strong> ' + pDNI + ' | <strong>Fecha:</strong> ' + escHtml(report.date) + ' ' + escHtml(report.time || '') + '</div>');
+  win.document.write('<div class="meta"><strong>Médico:</strong> ' + escHtml(report.doctor) + '</div>');
+  win.document.write('<hr>');
+  win.document.write('<div class="section"><h2>Datos de la Emergencia</h2>');
+  win.document.write('<p><strong>Tipo:</strong> ' + escHtml(report.type) + '</p>');
+  win.document.write('<p><strong>Triaje:</strong> ' + 
+    (report.triage === 'rojo' ? '<span style="color:#d32f2f;font-weight:bold;">ROJO (Crítico)</span>' :
+     report.triage === 'amarillo' ? '<span style="color:#f57c00;font-weight:bold;">AMARILLO (Urgente)</span>' :
+     '<span style="color:#388e3c;font-weight:bold;">VERDE (Leve)</span>') + '</p>');
+  win.document.write('<p><strong>Ubicación:</strong> ' + escHtml(report.location || '-') + '</p>');
+  win.document.write('</div>');
+  
+  if (report.description) {
+    win.document.write('<div class="section"><h2>Descripción del Evento</h2><p>' + escHtml(report.description) + '</p></div>');
+  }
+  
+  if (report.vitalSigns && Object.keys(report.vitalSigns).length > 0) {
+    win.document.write('<div class="section"><h2>Signos Vitales</h2>');
+    if (report.vitalSigns.bp) win.document.write('<p><strong>Presión Arterial:</strong> ' + escHtml(report.vitalSigns.bp) + '</p>');
+    if (report.vitalSigns.hr) win.document.write('<p><strong>Frecuencia Cardíaca:</strong> ' + escHtml(report.vitalSigns.hr) + '</p>');
+    if (report.vitalSigns.temp) win.document.write('<p><strong>Temperatura:</strong> ' + escHtml(report.vitalSigns.temp) + ' °C</p>');
+    if (report.vitalSigns.sat) win.document.write('<p><strong>Saturación de O2:</strong> ' + escHtml(report.vitalSigns.sat) + ' %</p>');
+    if (report.vitalSigns.rr) win.document.write('<p><strong>Frecuencia Respiratoria:</strong> ' + escHtml(report.vitalSigns.rr) + '</p>');
+    win.document.write('</div>');
+  }
+  
+  if (report.treatment) {
+    win.document.write('<div class="section"><h2>Tratamiento Administrado</h2><p>' + escHtml(report.treatment) + '</p></div>');
+  }
+  
+  if (report.outcome) {
+    var outcomeClass = '';
+    var outcomeLabel = '';
+    switch(report.outcome.toLowerCase()) {
+      case 'atendido': outcomeClass = '#2e7d32'; outcomeLabel = 'ATENDIDO'; break;
+      case 'estabilizado': outcomeClass = '#f57c00'; outcomeLabel = 'ESTABILIZADO'; break;
+      case 'trasladado': outcomeClass = '#1565c0'; outcomeLabel = 'TRASLADADO'; break;
+      case 'fallecido': outcomeClass = '#d32f2f'; outcomeLabel = 'FALLECIDO'; break;
+      default: outcomeClass = '#666'; outcomeLabel = report.outcome.toUpperCase();
+    }
+    win.document.write('<div class="section"><h2>Estado Final</h2><p style="color:' + outcomeClass + ';"><strong>' + outcomeLabel + '</strong></p></div>');
+  }
+  
+  if (report.derivation) {
+    win.document.write('<div class="section"><h2>Derivación</h2><p>' + escHtml(report.derivation) + '</p></div>');
+  }
+  
+  if (report.observations) {
+    win.document.write('<div class="section"><h2>Observaciones</h2><p>' + escHtml(report.observations) + '</p></div>');
+  }
+  
   win.document.write('<p style="margin-top:40px;color:#999;font-size:0.8em;border-top:1px solid #eee;padding-top:10px;">SAMU RevoRP - Sistema de Atención Médica</p>');
   win.document.write('</body></html>');
   win.document.close();
