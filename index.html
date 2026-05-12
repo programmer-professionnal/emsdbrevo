@@ -786,7 +786,7 @@ body { background: var(--bg); color: var(--text); }
         <div id="timelineContainer"><div class="no-data">Seleccione un paciente para ver su historial.</div></div>
       </div>
       <div class="tab-pane" id="tab-laborders">
-        <h4>&#x1f9ea; órdenes de laboratorio
+        <h4>&#x1f9ea; Órdenes de laboratorio
           <button class="btn-small btn-small-add" onclick="openAddLabOrder()">+ Nueva orden</button>
         </h4>
         <div id="labOrdersList"><div class="no-data">Sin órdenes de laboratorio.</div></div>
@@ -6006,6 +6006,7 @@ function initDarkMode() {
 }
 
 // ===== NOTAS DE ENFERMERÍA =====
+let editingNursingNoteIdx = -1;
 function renderNursingNotes() {
   const data = getData();
   const p = data.patients.find(function(x) { return x.id === currentPatientId; });
@@ -6015,32 +6016,89 @@ function renderNursingNotes() {
   var html = '';
   p.nursingNotes.slice().reverse().forEach(function(n, i) {
     var idx = p.nursingNotes.length - 1 - i;
+    var badges = '';
+    if (n.signed) badges += '<span style="display:inline-block;background:#e8f5e9;color:#2e7d32;padding:2px 8px;border-radius:4px;font-size:11px;margin-right:4px;">&#x2714; Firmado</span>';
+    if (n.coSignedConsent) badges += '<span style="display:inline-block;background:#fff3e0;color:#e65100;padding:2px 8px;border-radius:4px;font-size:11px;">&#x2714; Co-firmado por: ' + escHtml(n.coSignedConsent.doctor) + '</span>';
     html += '<div class="soap-card" style="border-left-color:#00897b;"><div class="soap-meta">' + escHtml(n.date) + ' | ' + escHtml(n.nurse) + '</div>' +
+      (badges ? '<div style="margin:4px 0;">' + badges + '</div>' : '') +
       (n.observation ? '<div class="soap-text">' + escHtml(n.observation) + '</div>' : '') +
       (n.plan ? '<div class="soap-text" style="margin-top:4px;"><strong>Plan:</strong> ' + escHtml(n.plan) + '</div>' : '') +
-      '<div style="margin-top:6px;"><button class="btn-small btn-small-delete" onclick="deleteNursingNote(' + idx + ')">Eliminar</button></div></div>';
+      '<div style="margin-top:6px;"><button class="btn-small btn-small-edit" onclick="editNursingNote(' + idx + ')">Editar</button> <button class="btn-small btn-small-delete" onclick="deleteNursingNote(' + idx + ')">Eliminar</button></div></div>';
   });
   container.innerHTML = html;
 }
 function addNursingNote() {
+  editingNursingNoteIdx = -1;
+  var data = getData();
+  var docOpts = data.doctors.map(function(d) { return '<option value="' + escAttr(d.name) + '">' + escHtml(d.name) + '</option>'; }).join('');
   var html = '<div class="form-group"><label>Fecha</label><input type="date" id="fNurseDate"></div>' +
     '<div class="form-group"><label>Observaciones</label><textarea id="fNurseObs" rows="3" placeholder="Signos, cuidados, respuesta al tratamiento..."></textarea></div>' +
     '<div class="form-group"><label>Plan de cuidados</label><textarea id="fNursePlan" rows="2" placeholder="Próximas acciones de enfermería..."></textarea></div>' +
-    '<div class="form-group" style="margin-top:8px;"><label><input type="checkbox" id="fNurseSigned"> Firma digital de enfermería</label></div>';
+    '<div class="form-group" style="margin-top:8px;"><label><input type="checkbox" id="fNurseSigned"> Firma digital de enfermería</label></div>' +
+    '<div class="form-group"><label><input type="checkbox" id="fNurseCoSign"> Co-firma de otro médico</label></div>' +
+    '<div class="form-group" id="fNurseCoSignGroup" style="display:none;"><label>Médico co-firmante</label><select id="fNurseCoDoctor">' + docOpts + '</select></div>';
   openModal('&#x1fa7a; Nueva nota de enfermería', html, function() { saveNursingNote(); });
   document.getElementById('fNurseDate').value = new Date().toISOString().split('T')[0];
+  var coSignCb = document.getElementById('fNurseCoSign');
+  if (coSignCb) coSignCb.addEventListener('change', function() {
+    document.getElementById('fNurseCoSignGroup').style.display = this.checked ? 'block' : 'none';
+  });
+}
+function editNursingNote(idx) {
+  const data = getData();
+  const p = data.patients.find(function(x) { return x.id === currentPatientId; });
+  if (!p || !p.nursingNotes || !p.nursingNotes[idx]) return;
+  editingNursingNoteIdx = idx;
+  var n = p.nursingNotes[idx];
+  var docOpts = data.doctors.map(function(d) { return '<option value="' + escAttr(d.name) + '">' + escHtml(d.name) + '</option>'; }).join('');
+  var html = '<div class="form-group"><label>Fecha</label><input type="date" id="fNurseDate"></div>' +
+    '<div class="form-group"><label>Observaciones</label><textarea id="fNurseObs" rows="3" placeholder="Signos, cuidados, respuesta al tratamiento..."></textarea></div>' +
+    '<div class="form-group"><label>Plan de cuidados</label><textarea id="fNursePlan" rows="2" placeholder="Próximas acciones de enfermería..."></textarea></div>' +
+    '<div class="form-group" style="margin-top:8px;"><label><input type="checkbox" id="fNurseSigned"' + (n.signed ? ' checked' : '') + '> Firma digital de enfermería</label></div>' +
+    '<div class="form-group"><label><input type="checkbox" id="fNurseCoSign"' + (n.coSignedConsent ? ' checked' : '') + '> Co-firma de otro médico</label></div>' +
+    '<div class="form-group" id="fNurseCoSignGroup" style="display:' + (n.coSignedConsent ? 'block' : 'none') + ';"><label>Médico co-firmante</label><select id="fNurseCoDoctor">' + docOpts + '</select></div>';
+  openModal('&#x1fa7a; Editar nota de enfermería', html, function() { saveNursingNote(); });
+  document.getElementById('fNurseDate').value = n.date;
+  document.getElementById('fNurseObs').value = n.observation || '';
+  document.getElementById('fNursePlan').value = n.plan || '';
+  if (n.coSignedConsent) {
+    document.getElementById('fNurseCoDoctor').value = n.coSignedConsent.doctor;
+  }
+  var coSignCb = document.getElementById('fNurseCoSign');
+  if (coSignCb) coSignCb.addEventListener('change', function() {
+    document.getElementById('fNurseCoSignGroup').style.display = this.checked ? 'block' : 'none';
+  });
 }
 function saveNursingNote() {
   var date = document.getElementById('fNurseDate').value;
   var observation = document.getElementById('fNurseObs').value.trim();
   var plan = document.getElementById('fNursePlan').value.trim();
   if (!date || !observation) { alert('Fecha y observaciones son obligatorios.'); return; }
+  var signed = document.getElementById('fNurseSigned') && document.getElementById('fNurseSigned').checked;
+  var coSigned = document.getElementById('fNurseCoSign') && document.getElementById('fNurseCoSign').checked && document.getElementById('fNurseCoDoctor');
   const data = getData();
   const p = data.patients.find(function(x) { return x.id === currentPatientId; });
   if (!p) return;
   if (!p.nursingNotes) p.nursingNotes = [];
-  p.nursingNotes.push({ date: date, observation: observation, plan: plan, nurse: currentDoctor ? currentDoctor.name : '', createdAt: new Date().toISOString() });
-  addAuditLog('Nota de enfermería agregada');
+  var note = {
+    date: date,
+    observation: observation,
+    plan: plan,
+    nurse: currentDoctor ? currentDoctor.name : '',
+    signed: signed,
+    coSignedConsent: coSigned ? { doctor: document.getElementById('fNurseCoDoctor').value, date: new Date().toISOString() } : null,
+    updatedAt: new Date().toISOString()
+  };
+  if (editingNursingNoteIdx >= 0 && p.nursingNotes[editingNursingNoteIdx]) {
+    note.createdAt = p.nursingNotes[editingNursingNoteIdx].createdAt || new Date().toISOString();
+    p.nursingNotes[editingNursingNoteIdx] = note;
+    addAuditLog('Nota de enfermería editada');
+  } else {
+    note.createdAt = new Date().toISOString();
+    p.nursingNotes.push(note);
+    addAuditLog('Nota de enfermería agregada');
+  }
+  editingNursingNoteIdx = -1;
   saveData(data);
   closeModal();
   renderNursingNotes();
