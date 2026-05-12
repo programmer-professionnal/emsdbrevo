@@ -6023,7 +6023,7 @@ function renderNursingNotes() {
       (badges ? '<div style="margin:4px 0;">' + badges + '</div>' : '') +
       (n.observation ? '<div class="soap-text">' + escHtml(n.observation) + '</div>' : '') +
       (n.plan ? '<div class="soap-text" style="margin-top:4px;"><strong>Plan:</strong> ' + escHtml(n.plan) + '</div>' : '') +
-      '<div style="margin-top:6px;"><button class="btn-small btn-small-edit" onclick="editNursingNote(' + idx + ')">Editar</button> <button class="btn-small btn-small-delete" onclick="deleteNursingNote(' + idx + ')">Eliminar</button></div></div>';
+      '<div style="margin-top:6px;"><button class="btn-small btn-small-edit" onclick="editNursingNote(' + idx + ')">Editar</button> <button class="btn-small btn-small-delete" onclick="deleteNursingNote(' + idx + ')">Eliminar</button> <button class="btn-small btn-view" style="background:#2e7d32;color:#fff;" onclick="printNursingNote(' + idx + ')">&#x1f5a8; Imprimir</button></div></div>';
   });
   container.innerHTML = html;
 }
@@ -6111,6 +6111,26 @@ function deleteNursingNote(idx) {
   p.nursingNotes.splice(idx, 1);
   saveData(data);
   renderNursingNotes();
+}
+function printNursingNote(idx) {
+  const data = getData();
+  const p = data.patients.find(function(x) { return x.id === currentPatientId; });
+  if (!p || !p.nursingNotes || !p.nursingNotes[idx]) return;
+  var n = p.nursingNotes[idx];
+  var win = window.open('', '_blank');
+  win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Nota de Enfermería</title><style>body{font-family:Georgia,serif;padding:40px;color:#333;max-width:700px;margin:0 auto;}h1{text-align:center;font-size:1.3em;color:#00695c;border-bottom:2px solid #00695c;padding-bottom:8px;}h2{text-align:center;font-size:0.9em;color:#666;font-weight:400;margin-bottom:30px;}.meta{font-size:0.85em;color:#999;margin-bottom:20px;}.section{margin:16px 0;}.section strong{color:#00695c;}.signature{margin-top:30px;padding-top:15px;border-top:1px solid #eee;font-size:0.85em;color:#555;}.footer{margin-top:40px;text-align:center;font-size:0.8em;color:#aaa;border-top:1px solid #eee;padding-top:10px;}@media print{body{padding:20px;}}</style></head><body>');
+  win.document.write('<h1>NOTA DE ENFERMERÍA</h1>');
+  win.document.write('<h2>SAMU RevoRP - Sistema de Atención Médica</h2>');
+  win.document.write('<div class="meta"><strong>Paciente:</strong> ' + escHtml(p.firstName + ' ' + p.lastName) + ' | <strong>DNI:</strong> ' + escHtml(p.citizenNumber) + ' | <strong>Fecha:</strong> ' + escHtml(n.date) + '</div>');
+  win.document.write('<div class="section"><strong>Observaciones:</strong><br>' + escHtml(n.observation) + '</div>');
+  if (n.plan) win.document.write('<div class="section"><strong>Plan de cuidados:</strong><br>' + escHtml(n.plan) + '</div>');
+  win.document.write('<div class="signature"><strong>Enfermero/a:</strong> ' + escHtml(n.nurse) + '</div>');
+  if (n.signed) win.document.write('<div class="signature"><strong>&#x2714; Firmado digitalmente por:</strong> ' + escHtml(n.nurse) + '</div>');
+  if (n.coSignedConsent) win.document.write('<div class="signature"><strong>&#x2714; Co-firmado por:</strong> ' + escHtml(n.coSignedConsent.doctor) + ' - ' + n.coSignedConsent.date.split('T')[0] + '</div>');
+  win.document.write('<div class="footer">Documento generado por SAMU RevoRP</div>');
+  win.document.write('</body></html>');
+  win.document.close();
+  win.print();
 }
 
 // ===== INTERCONSULTAS / DERIVACIONES INTERNAS =====
